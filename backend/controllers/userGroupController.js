@@ -28,8 +28,9 @@ const getUserGroup = async (req, res) => {
 
 //Create User Group
 const createUserGroup = async (req, res) => {
+    const {name} = req.body
     //Check user provided a Name
-    if (!req.body.name) {
+    if (!name) {
         res.status(400)
         res.status(400).json({
             message: "User Group Name is required"
@@ -39,14 +40,15 @@ const createUserGroup = async (req, res) => {
 
     try {
         //Check if User Group Name previously assigned
-        const fetchGroup = await UserGroup.find({ name: req.body.name})
-        if(fetchGroup.length === 0) {
+        const checkGroup = await UserGroup.find({name})
+        if(checkGroup.length === 0) {
            const userGroup = await UserGroup.create({
-            name: req.body.name
+            name: name,
+            createdById: req.user.id
         })
         res.status(201).json(userGroup) 
         } else {
-            res.status(400).json({message: `Another Group with the name "${req.body.name}" exists`})
+            res.status(400).json({message: `Another Group with the name "${name}" exists`})
         }
     } catch (err) {
         console.log(err)
@@ -54,6 +56,7 @@ const createUserGroup = async (req, res) => {
     }
 }
 
+//Update existing User Group
 const updateUserGroup = async (req, res) => {
     try {
         //Fetch User Group by Id
@@ -74,6 +77,7 @@ const updateUserGroup = async (req, res) => {
     }
 }
 
+//Remove User Group
 const deleteUserGroup = async (req, res) => {
     try {
         //Fetch User Group By Id

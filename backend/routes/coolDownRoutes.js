@@ -8,8 +8,13 @@ const {
     deleteCoolDown
 } = require('../controllers/coolDownController')
 
-router.route('/').get(getAllCoolDowns).post(createCoolDown)
+const {secure} = require('../middleware/authenticate')
 
-router.route('/:id').get(getCoolDown).put(updateCoolDown).delete(deleteCoolDown)
+router.get('/:id', secure, getCoolDown)
+router.put('/:id', secure, updateCoolDown)
+router.delete('/:id', secure, deleteCoolDown)
+
+router.get('/', secure, getAllCoolDowns)
+router.post('/', secure, createCoolDown)
 
 module.exports = router

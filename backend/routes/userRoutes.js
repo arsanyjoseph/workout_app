@@ -7,25 +7,22 @@ const {
     updateUser,
     deleteUser,
     logInUser,
-    getSigned
 } = require('../controllers/userController')
 
 const {secure} = require('../middleware/authenticate')
 
-router.get('/try', secure, (req, res)=>{
-    res.status(200).json({
-        message: 'Hello'
-    })
-})
+router.post('/login', logInUser)
+
+router.get('/:id', secure, getUser)
+router.put('/:id', secure, updateUser)
+router.delete('/:id', secure, deleteUser)
 
 router.get('/', secure, getAllUsers)
 router.post('/', createUser)
 
-router.post('/login', logInUser)
 
-router.get('/:id', getUser)
-router.put('/:id', updateUser)
-router.delete('/:id', deleteUser)
+
+
 
 
 

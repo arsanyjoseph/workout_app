@@ -70,6 +70,7 @@ const createUser = async (req, res) => {
 //Update User Data
 const updateUser = async (req, res) => {
     try {
+        // Check for User by Id
         const {firstName, lastName, email} = req.body
         const user = await User.findById(req.params.id)
         if (!user){

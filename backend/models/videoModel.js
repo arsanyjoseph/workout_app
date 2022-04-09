@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const userGroupSchema = mongoose.Schema({
+const videoSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -8,16 +8,18 @@ const userGroupSchema = mongoose.Schema({
     createdById: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        immutable: true,
         ref: 'User'
     },
-    usersId: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'User',
-        default: []
-    }
+    link: {
+        type: String,
+        default: ''
+    },
+    description: {
+        type: String,
+        default: ''
+    },
 }, {
     timestamps: true,
 })
 
-module.exports = mongoose.model('UserGroup', userGroupSchema)
+module.exports = mongoose.model('Video', videoSchema)

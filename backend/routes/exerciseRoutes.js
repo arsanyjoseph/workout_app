@@ -8,10 +8,13 @@ const {
     deleteExercise
 } = require('../controllers/exerciseController')
 
+const {secure} = require('../middleware/authenticate')
 
-router.route('/').get(getAllExercises).post(createExercise)
+router.get('/:id', secure, getExercise)
+router.put('/:id', secure, updateExercise)
+router.delete('/:id', secure, deleteExercise)
 
-router.route('/:id').get(getExercise).put(updateExercise).delete(deleteExercise)
-
+router.get('/', secure, getAllExercises)
+router.post('/', secure, createExercise)
 
 module.exports = router

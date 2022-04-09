@@ -7,12 +7,9 @@ const secure = async (req, res, next) => {
         //Extract Token Id
         let token = req.headers.authorization.split(' ')[1]
         //Decode Token
-        console.log(token)
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(decoded)
         //Get User from Token Id
         req.user = await User.findById(decoded.id)
-        console.log(req.id)
         next()
     } 
     if(!req.headers.authorization) {

@@ -8,8 +8,13 @@ const {
     deleteUserGroup
 } = require('../controllers/userGroupController')
 
-router.route('/').get(getAllUserGroups).post(createUserGroup)
+const {secure} = require('../middleware/authenticate')
 
-router.route('/:id').get(getUserGroup).put(updateUserGroup).delete(deleteUserGroup)
+router.get('/', secure, getAllUserGroups)
+router.post('/', secure, createUserGroup)
+
+router.get('/:id', secure, getUserGroup)
+router.put('/:id', secure, updateUserGroup)
+router.delete('/:id', secure, deleteUserGroup)
 
 module.exports = router

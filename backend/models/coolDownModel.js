@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const userGroupSchema = mongoose.Schema({
+const coolDownSchema = mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -11,13 +11,16 @@ const userGroupSchema = mongoose.Schema({
         immutable: true,
         ref: 'User'
     },
-    usersId: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'User',
-        default: []
-    }
+    link: {
+        type: String,
+        default: ''
+    },
+    instruction: {
+        type: String,
+        default: ''
+    },
 }, {
     timestamps: true,
 })
 
-module.exports = mongoose.model('UserGroup', userGroupSchema)
+module.exports = mongoose.model('CoolDown', coolDownSchema)

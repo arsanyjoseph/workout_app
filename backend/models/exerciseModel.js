@@ -7,23 +7,29 @@ const exerciseSchema = mongoose.Schema({
     },
     createdById: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
-        ref: 'User'
+        immutable: true
     },
     link: {
         type: String,
+        default: ''
     },
     instruction: {
         type: String,
+        default: ''
     },
     patterns: {
-        type: String,
+        type: [String],
+        default: []
     },
     planes: {
-        type: String,
+        type: [String],
+        default: []
     },
     primaryMuscles: {
-        type: String,
+        type: [String],
+        default: []
     },
 }, {
     timestamps: true,
