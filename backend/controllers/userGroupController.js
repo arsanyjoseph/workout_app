@@ -1,22 +1,102 @@
-const getAllUserGroups = (req, res) => {
-    res.status(200).json({UserGroup: "all UserGroups"})
+const UserGroup = require('../models/userGroupModel')
+
+// Get All User Groups
+const getAllUserGroups = async (req, res) => {
+    try {
+        const userGroups = await UserGroup.find()
+        res.status(200).json(userGroups)
+    } catch (err) {
+        console.log(err)
+    }
 } 
 
-const getUserGroup = (req, res) => {
-    res.status(201).json({UserGroup: req.params.id})
+//Get Specific User Group
+const getUserGroup = async (req, res) => {
+    try {
+        const userGroup = await UserGroup.findById(req.params.id)
+        if(!userGroup) {
+            res.status(400)
+            throw new Error (`No User Group with ${req.params.id} Id`)
+        }
+        res.status(200).json(userGroup)
+
+    } catch (err) {
+        console.log(err)
+        res.status(400)
+    }
 }
 
+//Create User Group
+const createUserGroup = async (req, res) => {
+    //Check user provided a Name
+    if (!req.body.name) {
+        res.status(400)
+        res.status(400).json({
+            message: "User Group Name is required"
+        })
+        throw new Error ('Please assign a Name to User Group')
+    }
 
-const createUserGroup = (req, res) => {
-    res.status(201).json({UserGroup: "UserGroup created"})
+    try {
+        //Check if User Group Name previously assigned
+        const fetchGroup = await UserGroup.find({ name: req.body.name})
+        if(fetchGroup.length === 0) {
+           const userGroup = await UserGroup.create({
+            name: req.body.name
+        })
+        res.status(201).json(userGroup) 
+        } else {
+            res.status(400).json({message: `Another Group with the name "${req.body.name}" exists`})
+        }
+    } catch (err) {
+        console.log(err)
+        res.status(400)
+    }
 }
 
-const updateUserGroup = (req, res) => {
-    res.status(200).json({UserGroup : req.params.id})
+const updateUserGroup = async (req, res) => {
+    try {
+        //Fetch User Group by Id
+        const updateGroup = await UserGroup.findById(req.params.id)
+        if (!updateGroup){
+            res.status(400).json({
+                message: "User Group Not Found"
+            })
+            throw new Error ('User Group Not Found')
+        }
+        //Update User Group
+        await updateGroup.updateOne(req.body)
+        const updated = await UserGroup.findById(req.params.id)
+        res.status(200).json(updated)
+    } catch (err) {
+        console.log(err)
+        res.status(400)
+    }
 }
 
-const deleteUserGroup = (req, res) => {
-    res.status(200).json({UserGroup : req.params.id})
+const deleteUserGroup = async (req, res) => {
+    try {
+        //Fetch User Group By Id
+        const removedUserGroup = await UserGroup.findById(req.params.id)
+
+        //Check If Group does not exist
+        if(!removedUserGroup) {
+            res.status(400)
+            res.status(400).json({
+                message: "User Group Not Found"
+            })
+            throw new Error (`No User Group with ${req.params.id} Id`)
+        }
+        //Remove User Group
+        await removedUserGroup.remove()
+        res.status(200).json({
+            id: req.params.id
+        })
+
+    } catch (err) {
+        console.log(err)
+        res.status(400)
+    }
 }
 
 module.exports = {
