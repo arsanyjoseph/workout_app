@@ -7,9 +7,14 @@ const {
     updateWarmup,
     deleteWarmup
 } = require('../controllers/warmupController')
+const {secure} = require('../middleware/authenticate')
 
-router.route('/').get(getAllWarmups).post(createWarmup)
+router.get('/:id', secure, getWarmup)
+router.put('/:id', secure, updateWarmup)
+router.delete('/:id', secure, deleteWarmup)
 
-router.route('/:id').get(getWarmup).put(updateWarmup).delete(deleteWarmup)
+router.get('/', secure, getAllWarmups)
+router.post('/', secure, createWarmup)
+
 
 module.exports = router

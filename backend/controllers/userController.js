@@ -32,8 +32,8 @@ const getUser = async (req, res) => {
 
 //Register User
 const createUser = async (req, res) => {
-    const {firstName, lastName, email, password } = req.body
-    if (!firstName || !lastName || !email || !password) {
+    const {firstName, lastName, email, password, height, weight, gender } = req.body
+    if (!firstName || !lastName || !email || !password || !gender || !weight || !height) {
         res.status(400)
         res.status(400).json({
             message: "Please Fill Mandatory Fields"
@@ -51,6 +51,9 @@ const createUser = async (req, res) => {
             lastName: lastName,
             email: email,
             password: hashedPass,
+            height: height,
+            weight: weight,
+            gender: gender
         })
         res.status(201).json({
             id: newUser._id,
@@ -71,7 +74,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Check for User by Id
-        const {firstName, lastName, email} = req.body
+        const {firstName, lastName, gender, phoneNumber, location, userGroup, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, programs, warmUps, coolDowns, exercises} = req.body
         const user = await User.findById(req.params.id)
         if (!user){
             res.status(400).json({
@@ -84,7 +87,23 @@ const updateUser = async (req, res) => {
         await user.updateOne({
             firstName: firstName,
             lastName: lastName,
-            email: email,
+            gender: gender,
+            phoneNumber: phoneNumber,
+            location: location,
+            userGroup: userGroup,
+            avatarLink: avatarLink,
+            height: height,
+            weight: weight,
+            goals: goals,
+            notes: notes,
+            limitations: limitations,
+            equipments: equipments,
+            warmUps: warmUps,
+            coolDowns: coolDowns,
+            exercises: exercises,
+            progressPics: progressPics,
+            programs: programs,
+            nutritionPlan: nutritionPlan
         })
         const updatedUser = await User.findById(req.params.id)
         res.status(200).json({

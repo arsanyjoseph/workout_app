@@ -7,9 +7,13 @@ const {
     updateVideo,
     deleteVideo
 } = require('../controllers/videoController')
+const {secure} = require('../middleware/authenticate')
 
-router.route('/').get(getAllVideos).post(createVideo)
+router.get('/:id', secure, getVideo)
+router.put('/:id', secure, updateVideo)
+router.delete('/:id', secure, deleteVideo)
 
-router.route('/:id').get(getVideo).put(updateVideo).delete(deleteVideo)
+router.get('/', secure, getAllVideos)
+router.post('/', secure, createVideo)
 
 module.exports = router

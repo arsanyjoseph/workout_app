@@ -28,6 +28,8 @@ app.use('/api/usergroups', require('./routes/userGroupRoutes'))
 
 app.use('/api/metricsets', require('./routes/metricSetRoutes'))
 
+app.use('/api/notifications', require('./routes/notificationRoutes'))
+
 app.all('/*', (req, res)=> {
     res.status(400).json({
         message: "404 Not Found"
