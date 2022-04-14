@@ -1,3 +1,8 @@
+.mainDiv {
+    overflow: scroll;
+    padding-bottom: 2em;
+}
+
 .formContainer {
     margin: 0 auto;
     border-radius: 10px;
@@ -17,18 +22,17 @@
     padding: 2em;
 }
 
-.registerBtn {
-    position: absolute;
-    left: 75%;
-    top: 62%;
-}
 
 /*Media Queries*/
-@media only screen and (max-width: 950px) {
+@media only screen and (max-width: 1000px) {
     .registerBox {
         display: flex;
         flex-direction: column;
         align-items: center;
+        flex-wrap: wrap;
+    }
+    .formContainer {
+        height: fit-content;
     }
 }
 

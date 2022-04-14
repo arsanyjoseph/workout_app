@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import {useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -11,7 +11,11 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Header from '../components/header'
-
+import {useSelector, useDispatch} from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+import { login, reset } from '../features/auth/authSlice';
+import CircularIndeterminate from '../components/spinner';
+import CustomizedSnackbars from '../components/alert'
 import {BiLogIn} from 'react-icons/bi'
 import './css/login.css'
 
@@ -33,6 +37,8 @@ export default function Login () {
         email: '',
         password: '',
     })
+
+    const [showAlert, setShowAlert] = useState(false)
 
     const [values, setValues] = useState({
         showPassword: false,
@@ -62,10 +68,47 @@ export default function Login () {
       };
 
     const { email, password} = formData
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const loginUser = (e) => {
+        e.preventDefault()
+        if(email && password) {
+            const userData = {
+                email,
+                password,
+            }
+            dispatch(login(userData))   
+        } else {
+            setShowAlert(true)
+        }
+        
+    }
+
+    const {user, isLoading, isSuccess, isError, message} = useSelector((state) => {
+        return state.auth
+    })
+    useEffect(()=> {
+        if (isError) {
+            console.log(message)
+        }
+     
+        if( isSuccess || user) {
+            navigate('/')
+        }
+
+        dispatch(reset())
+
+    },[user, message,isLoading, isError, isSuccess, navigate, dispatch])
+
+    if(isLoading) {
+        return <CircularIndeterminate/>
+    }
     return (
         <ThemeProvider theme={theme}>
-            <Header/>
         <div className='mainDiv'>
+        <Header/>
         <div className="loginContainer formContainer">
             <div className='formHead'>
                 <h1> <BiLogIn/> Login</h1>
@@ -125,9 +168,10 @@ export default function Login () {
                     />
                     </FormControl>
                     <br/>
-                    <Button className='loginBtn' variant='contained' sx={{color: 'white', backgroundColor: 'black'}}>Login</Button>
-            </Box>
-        </div>
+                    <Button onClick={(e)=> loginUser(e)} className='loginBtn' variant='contained' sx={{color: 'white', backgroundColor: 'black'}}>Login</Button>
+                </Box>
+            </div>
+            <CustomizedSnackbars type='Error, Invalid Login' message='Error' view= {showAlert} />
         </div>
         </ThemeProvider>
     )

@@ -1,4 +1,4 @@
-
+/*Animation*/
 @keyframes slideInFromTop {
     0% {
       transform: translateY(-100%);

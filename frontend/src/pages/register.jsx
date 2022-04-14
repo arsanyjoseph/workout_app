@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -13,7 +13,10 @@ import Button from '@mui/material/Button';
 import Header from '../components/header'
 import {BiUserPlus} from 'react-icons/bi'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import {useSelector, useDispatch} from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+import { register, reset } from '../features/auth/authSlice';
+import CircularIndeterminate from '../components/spinner'
 import './css/register.css'
 
 
@@ -45,6 +48,8 @@ export default function Register () {
         showPassword: false,
       });
 
+    const [reqField, setReqField] = useState(false)
+
       const handleInputs = (e)=> {
           setFormData((prevState)=>( {
             ...prevState,
@@ -69,6 +74,48 @@ export default function Register () {
       };
 
     const {firstName, lastName, email, password, height, weight, gender, phoneNumber } = formData
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const {user, isLoading, isSuccess, isError, message} = useSelector((state) => {
+        return state.auth
+    })
+
+    const submitForm = (e) => {
+        e.preventDefault()
+        if(!firstName || !lastName || !email || !password ) {
+            console.log('Error')
+        } else {
+            const userData = {
+                firstName,
+                lastName,
+                email,
+                password,
+                height,
+                weight,
+                gender,
+                phoneNumber
+            }
+            dispatch(register(userData))
+    }
+}
+
+    useEffect(()=> {
+        if (isError) {
+            console.log(message)
+        }
+
+        if(isSuccess || user) {
+            navigate('/')
+        }
+
+        dispatch(reset())
+    },[user, message, isError, isSuccess, navigate, dispatch])
+
+
+    if(isLoading) {
+        return <CircularIndeterminate/>
+    }
     return (
         <ThemeProvider theme={theme}>
         <div className='mainDiv'>
@@ -114,7 +161,7 @@ export default function Register () {
                         />
 
                         <TextField
-                        id="outlined-email-input"
+                        id="outlined-phoneNumber-input"
                         label="Phone Number"
                         type="number"
                         value={phoneNumber}
@@ -183,8 +230,8 @@ export default function Register () {
                                 <MenuItem key='female' value='female'>Female</MenuItem>                       
                         </TextField>
                         <br/>
-                        <Button variant='contained' className='registerBtn' sx={{ width: 'fit-content', height: '5ch', color: 'white', backgroundColor: 'black'}}>Submit</Button>
                 </Box>
+                <Button onClick={submitForm} variant='contained' className='registerBtn' sx={{ width: 'fit-content', height: '5ch', color: 'white', backgroundColor: 'black'}}>Submit</Button>
             </div>
         </div>
         </ThemeProvider>
