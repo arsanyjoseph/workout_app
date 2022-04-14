@@ -8,9 +8,24 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Button from '@mui/material/Button';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Header from '../components/header'
 
 import {BiLogIn} from 'react-icons/bi'
 import './css/login.css'
+
+const theme = createTheme({
+    components: {
+        MuiOutlinedInput: {
+            styleOverrides : {
+                root: {
+                    fontWeight: 800
+                },
+            }
+        },
+    },
+})
 
 
 export default function Login () {
@@ -48,7 +63,10 @@ export default function Login () {
 
     const { email, password} = formData
     return (
-        <div className="formContainer">
+        <ThemeProvider theme={theme}>
+            <Header/>
+        <div className='mainDiv'>
+        <div className="loginContainer formContainer">
             <div className='formHead'>
                 <h1> <BiLogIn/> Login</h1>
             </div>
@@ -61,6 +79,7 @@ export default function Login () {
                 autoComplete="off"
                 onChange={handleInputs}
                 variant='standard'
+                className='loginBox'
                 >
                     <TextField
                     id="outlined-email-input"
@@ -69,10 +88,15 @@ export default function Login () {
                     value={email}
                     name='email'
                     autoComplete='username'
+                    sx={{ borderRadius: 2}}
+                    className='formField'
+                    InputLabelProps={{
+                        style: { fontWeight: 800, },
+                      }}
                     />
-
-                    <FormControl sx={{ m: 1, width: '25ch' }} color = 'primary' variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                    <br/>
+                    <FormControl sx={{ m: 1, width: '25ch',  }} color = 'primary' variant="outlined" >
+                        <InputLabel sx={{ color: 'black', fontWeight: 800,}} htmlFor="outlined-adornment-password" >Password</InputLabel>
                         <OutlinedInput
                             id="outlined-adornment-password"
                             type={values.showPassword ? 'text' : 'password'}
@@ -93,9 +117,18 @@ export default function Login () {
                         }
                         label="Password"
                         name='password'
+                        sx={{ borderRadius: 2}}
+                        className='formField'
+                        InputLabelProps={{
+                            style: { color: 'black', fontWeight: 800, },
+                          }}
                     />
                     </FormControl>
+                    <br/>
+                    <Button className='loginBtn' variant='contained' sx={{color: 'white', backgroundColor: 'black'}}>Login</Button>
             </Box>
         </div>
+        </div>
+        </ThemeProvider>
     )
 }

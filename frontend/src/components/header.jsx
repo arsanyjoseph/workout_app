@@ -2,9 +2,8 @@ import {BiLogIn} from 'react-icons/bi'
 import {BiUserPlus} from 'react-icons/bi'
 import './header.css'
 import { Link } from 'react-router-dom'
-import LandingPage from '../pages/landingPage'
-import Login from '../pages/login'
-import Register from '../pages/register'
+
+
 
 export default function Header() {
     return (

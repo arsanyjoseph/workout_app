@@ -1,7 +1,5 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'; 
-import ClientHome from '../src/pages/clientHome'
-import Dashboard from '../src/pages/dashboard'
-import LandingPage from '../src/pages/landingPage'
+import LandingPage2 from '../src/pages/landingPage2'
 import Login from '../src/pages/login'
 import Register from './pages/register';
 import './App.css';
@@ -12,9 +10,8 @@ function App() {
     <>
     <Router>
       <div className='container'>
-        <Header/>
         <Routes>
-          <Route path='/' element={<LandingPage/>} />
+          <Route path='/' element={<LandingPage2/>} />
           <Route path='/login' element={<Login/>} />
           <Route path='/register' element={<Register/>} />
         </Routes>

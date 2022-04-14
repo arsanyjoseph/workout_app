@@ -1,0 +1,109 @@
+
+.landingContainer {
+    width: 100%;
+    height: 50rem;
+    background-image: url('../../assets/banner/banner-2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.showContainer {
+    color: white;
+    font-size: 25pt;
+    font-weight: 600;
+    position: absolute;
+    width: 50%;
+    padding: 0.25em;
+    border-radius: 5px;
+}
+
+.showContainer > h1 {
+    animation: puff-in-left 0.7s cubic-bezier(0.470, 0.000, 0.745, 0.715) 1s both;
+}
+
+.showContainer *:not(h1, a) {
+    animation: puff-in-left 0.7s cubic-bezier(0.470, 0.000, 0.745, 0.715) 1.5s both;
+
+}
+
+
+/*Gradient background*/
+.gradientContainer {
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgb(0, 0, 0) , rgba(255, 255, 255, 0));
+}
+
+/*links style*/
+a {
+    text-decoration: none;
+    color: rgb(6, 154, 223);
+}
+
+/*Arrow*/
+.arrowIcon {
+    display: block;
+    position: relative;
+    left: 20%;
+    animation: bounce-top 0.5s 3s infinite alternate-reverse forwards;
+}
+
+/*Arrow Animation*/
+@keyframes bounce-top {
+    0% {
+              transform: translateY(-20px);
+              animation-timing-function: ease-in;
+      opacity: 1;
+    }
+    65% {
+              transform: translateY(-12px);
+              animation-timing-function: ease-in;
+    }
+    93% {
+              transform: translateY(-4px);
+              animation-timing-function: ease-in;
+    }
+    100% {
+              transform: translateY(0px);
+              animation-timing-function: ease-out;
+      opacity: 1;
+    }
+  }
+  
+  /*Animation show container entrance*/
+  @keyframes scale-in-top {
+    0% {
+              transform: scale(0);
+              transform-origin: 50% 0%;
+      opacity: 1;
+    }
+    100% {
+              transform: scale(1);
+              transform-origin: 50% 0%;
+      opacity: 1;
+    }
+  }
+
+  /*Banner Animation*/
+  @keyframes puff-in-left {
+    0% {
+      -webkit-transform: scale(2);
+              transform: scale(2);
+      -webkit-transform-origin: 0% 50%;
+              transform-origin: 0% 50%;
+      -webkit-filter: blur(4px);
+              filter: blur(4px);
+      opacity: 0;
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+      -webkit-transform-origin: 0% 50%;
+              transform-origin: 0% 50%;
+      -webkit-filter: blur(0px);
+              filter: blur(0px);
+      opacity: 1;
+    }
+  }
+  
+  

@@ -1,7 +1,6 @@
-
-
 .container {
   margin: 0 auto;
   box-sizing: border-box;
   align-items: center;
+  width: 100%;
 }

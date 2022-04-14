@@ -1,5 +1,12 @@
+import Carousel from '../components/carousel'
+import Header from '../components/header'
+import './css/landingPage.css'
+
 export default function LandingPage () {
     return (
-        <h1>Landing Page</h1>
+        <div className="mainPageContainer">
+            <Header/>
+            <Carousel/>
+        </div>
     )
 }
