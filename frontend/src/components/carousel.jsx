@@ -25,7 +25,6 @@ export default function Carousel () {
 
     return (
         <div className="carouselContainer" style={{backgroundImage: `url(${images[image]})`}}>
-            <p>Welcome to Catheninces h</p>
             <div className="dots">
                 {images.map((value, index)=> <span onClick={handleClick} id={index} key={index}></span>)}
                 

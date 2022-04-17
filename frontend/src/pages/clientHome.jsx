@@ -1,23 +1,32 @@
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
+import Header from "../components/header";
+import './css/client.css'
+
+
 
 export default function ClientHome () {
     const {user} = useSelector((state)=> {
          return state.auth})
-    const [redirect, setRedirect] = useState(false)
     const navigate = useNavigate()
     useEffect(()=> {
         if(!user) {
-            setRedirect(true)
+            navigate('/login')
         }
-        if (user) {
-            setRedirect(false)
+        if (user && user.isAdimn) {
+            navigate('/dashboard')
         }
-    },[redirect, user])
-    return (
-        <div>
-                { redirect ? navigate('/')  : <h1>Hello Client</h1> }
-        </div>
-    )
+    },[user])
+
+    if(user) {
+        return (
+            <div className="clientContainer">
+                <div className="overlayClient">
+                <Header name={user.firstName}/>
+                </div>
+            </div>
+        )   
+    }
+    
 }

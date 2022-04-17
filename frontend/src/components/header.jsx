@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
 import { useEffect } from 'react'
+import TemporaryDrawer from '../../src/components/drawer'
 
 
 
@@ -32,7 +33,10 @@ export default function Header(props) {
                         <Link className='linkStyle' to='/settings'> <AiFillSetting/></Link>
                     </li>
                     <li>
-                        <Link className='linkStyle' to='/'><a onClick={handleLogout}><BiLogOut/></a></Link>
+                        <TemporaryDrawer/>
+                    </li>
+                    <li>
+                        <a  className='linkStyle' onClick={handleLogout}><BiLogOut/></a>
                     </li>
                 </ul> : <ul>
                     <li>

@@ -39,16 +39,14 @@ export default function Register () {
         email: '',
         password: '',
         gender: '',
-        height: null,
-        weight: null,
-        phoneNumber: null,
+        height: 0,
+        weight: 0,
+        phoneNumber: 0,
     })
 
     const [values, setValues] = useState({
         showPassword: false,
       });
-
-    const [reqField, setReqField] = useState(false)
 
       const handleInputs = (e)=> {
           setFormData((prevState)=>( {
@@ -85,7 +83,11 @@ export default function Register () {
         e.preventDefault()
         if(!firstName || !lastName || !email || !password ) {
             console.log('Error')
-        } else {
+        } else if(firstName === '' || lastName === '' || email === '' || password === ''){
+            console.log('error')
+        }
+        
+        else {
             const userData = {
                 firstName,
                 lastName,

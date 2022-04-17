@@ -1,0 +1,41 @@
+.footerContainer {
+    background-color: black;
+    color: white;
+    padding: 1em 2em;
+}
+
+.footerContainer > h1 {
+    margin: 0;
+}
+.contactContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.contactItem {
+    margin-top: 1em;
+}
+.contactItem > span {
+    margin: 0 1em;
+}
+
+.about {
+    padding: 1em;
+    text-align: left;
+    width: 30em;
+}
+
+.copyright {
+    text-align: center;
+}
+
+.contactSocial {
+    text-align: left;
+}
+
+.footerContainer {
+    text-align: center;
+}

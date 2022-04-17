@@ -6,7 +6,6 @@
     background-repeat: no-repeat;
     width: inherit;
     height: 35em;
-    opacity: 0.5;
     display: flex;
     flex-direction: column;
     place-items: center;

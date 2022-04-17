@@ -1,0 +1,18 @@
+.clientContainer {
+    background-image: url(../../../public/assets/banner/banner-4.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 150vh;
+    width: 100%;
+}
+
+.overlayClient {
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to left, black, rgba(255, 255, 255, 0));
+}
+
+.MuiTypography-root {
+    font-size: 20pt;
+    font-weight: 800;
+}

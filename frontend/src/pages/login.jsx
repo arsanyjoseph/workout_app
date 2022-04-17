@@ -1,4 +1,4 @@
-import {useEffect, useState } from 'react'
+import {useEffect, useState, memo } from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
@@ -15,7 +15,6 @@ import {useSelector, useDispatch} from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { login, reset } from '../features/auth/authSlice';
 import CircularIndeterminate from '../components/spinner';
-import CustomizedSnackbars from '../components/alert'
 import {BiLogIn} from 'react-icons/bi'
 import './css/login.css'
 
@@ -31,14 +30,11 @@ const theme = createTheme({
     },
 })
 
-
-export default function Login () {
+function Login () {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     })
-
-    const [showAlert, setShowAlert] = useState(false)
 
     const [values, setValues] = useState({
         showPassword: false,
@@ -67,40 +63,42 @@ export default function Login () {
         event.preventDefault();
       };
 
-    const { email, password} = formData
+    const {email, password} = formData
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const {user, isLoading, isSuccess, isError, message} = useSelector((state) => {
+            return state.auth
+        })
 
     const loginUser = (e) => {
         e.preventDefault()
-        if(email && password) {
+        if(!email || !password) {
+            console.log('Error')
+        } else if (email === '' || password === '') {
+            console.log('Error')
+        } else {
             const userData = {
                 email,
                 password,
             }
             dispatch(login(userData))   
-        } else {
-            setShowAlert(true)
         }
-        
     }
-
-    const {user, isLoading, isSuccess, isError, message} = useSelector((state) => {
-        return state.auth
-    })
+    
     useEffect(()=> {
+
         if (isError) {
             console.log(message)
-        }
-     
+            dispatch(reset())
+        } 
+
         if( isSuccess || user) {
-            navigate('/')
+            navigate('/home')
+            dispatch(reset())
         }
 
-        dispatch(reset())
-
-    },[user, message,isLoading, isError, isSuccess, navigate, dispatch])
+    },[user, message, isLoading, isError, isSuccess, navigate, dispatch])
 
     if(isLoading) {
         return <CircularIndeterminate/>
@@ -133,7 +131,7 @@ export default function Login () {
                     autoComplete='username'
                     sx={{ borderRadius: 2}}
                     className='formField'
-                    InputLabelProps={{
+                    inputlabelprops={{
                         style: { fontWeight: 800, },
                       }}
                     />
@@ -162,17 +160,19 @@ export default function Login () {
                         name='password'
                         sx={{ borderRadius: 2}}
                         className='formField'
-                        InputLabelProps={{
+                        inputlabelprops ={{
                             style: { color: 'black', fontWeight: 800, },
                           }}
                     />
                     </FormControl>
                     <br/>
-                    <Button onClick={(e)=> loginUser(e)} className='loginBtn' variant='contained' sx={{color: 'white', backgroundColor: 'black'}}>Login</Button>
+                    <Button onClick={(e)=>loginUser(e)} className='loginBtn' variant='contained' sx={{color: 'white', backgroundColor: 'black'}}>Login</Button>
                 </Box>
             </div>
-            <CustomizedSnackbars type='Error, Invalid Login' message='Error' view= {showAlert} />
         </div>
         </ThemeProvider>
     )
 }
+
+
+export default memo(Login)

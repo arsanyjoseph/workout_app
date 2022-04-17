@@ -1,3 +1,7 @@
+:root {
+  --blue: #069ADF;
+}
+
 
 .landingContainer {
     width: 100%;
@@ -8,6 +12,7 @@
 }
 
 .showContainer {
+  margin-left: 1em;
     color: white;
     font-size: 25pt;
     font-weight: 600;
@@ -37,7 +42,7 @@
 /*links style*/
 a {
     text-decoration: none;
-    color: rgb(6, 154, 223);
+    color: var(--blue);
     cursor: pointer;
 }
 
@@ -102,46 +107,40 @@ a {
     }
   }
  
-@keyframes heartbeat {
-from {
-                transform: scale(1);
-                transform-origin: center center;
-                animation-timing-function: ease-out;
+
+  /*Section Personal Animation*/
+@keyframes scale-in-hor-center {
+  0% {
+            transform: scaleX(0);
+            opacity: 1;
+  }
+  100% {
+            transform: scaleX(1);
+            opacity: 1;
+  }
 }
-10% {
-                transform: scale(0.91);
-                animation-timing-function: ease-in;
-}
-17% {
-                transform: scale(0.98);
-                animation-timing-function: ease-out;
-}
-33% {
-                transform: scale(0.87);
-                animation-timing-function: ease-in;
-}
-45% {
-                transform: scale(1);
-                animation-timing-function: ease-out;
-}
-}
-  
+
+      
+ /*Cards Container*/ 
 .cardsContainer {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          justify-content: space-evenly;
-          margin: 0;
-          padding: 5em 0;
-          background-image: linear-gradient(to bottom, rgb(255, 255, 255) , rgb(0, 0, 0));
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        margin: 0;
+        padding: 5em 0;
+        background-image: linear-gradient(to bottom, rgb(136, 136, 136) , rgb(0, 0, 0));
         }
 
-.showCard * {
-        animation: heartbeat 1.5s ease-in-out both;
+
+/*Active Class*/
+.showCard > aside * {
+  animation: scale-in-hor-center 0.7s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 
+/*Quote Section*/
 .quoteContainer {
-        background-image: linear-gradient(to bottom, rgb(0, 0, 0) , rgb(255, 255, 255));
+        background-image: linear-gradient(to bottom, rgb(0, 0, 0) , rgb(136, 136, 136));
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -149,27 +148,69 @@ from {
         padding: 1em;
         padding-top: 5em;
 }
+
+/*Quote Section (Image)*/
 .personalImg {
         width: fit-content;
         height: fit-content;
         border-radius: 5px;
-        border: 2px solid black;
         padding: 0;
+        filter: grayscale(50%);
 }
 
+.personalImg:hover {
+  filter: grayscale(0);
+  box-shadow: 2px 2px 5px 5px rgb(119, 119, 119);
+}
+
+
+/*Quote Section (Words)*/
 .quoteDetails {
-        color: white ;
         width: 30%;
         font-size: larger;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
+        color: white;
 }
 
 .quoteDetails > aside {
         padding-left: 1em;
-        border-left: 4px solid rgb(6, 154, 223);
+        border-left: 4px solid var(--blue);
 }
 
+#testimonials {
+  padding-top: 1em ;
+  background-image: linear-gradient(to bottom, rgb(0, 0, 0) , rgb(136, 136, 136));
+}
 
+.ratesContainer {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  background-image: url(../../../public/assets/testimonial/dumbells.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: grayscale(50%);
+  filter: blur(1);
+}
 
+.gradientOverlay {
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to bottom, rgb(0, 0, 0) , rgba(0, 0, 0, 0));
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  justify-items: center;
+}
+
+.arrowT {
+  color: var(--blue);
+  flex: 1;
+}
+
+.testDetails {
+  flex: 4;
+}
