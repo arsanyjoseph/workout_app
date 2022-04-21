@@ -1,25 +1,16 @@
-import {BiLogIn, BiLogOut, BiUserPlus} from 'react-icons/bi'
-import {AiFillSetting} from 'react-icons/ai'
+import {BiLogIn, BiUserPlus} from 'react-icons/bi'
 import './header.css'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { logout, reset } from '../features/auth/authSlice'
 import { useEffect } from 'react'
 import TemporaryDrawer from '../../src/components/drawer'
 import CustomizedMenus from './settingsIcon'
-import ImageAvatars from './avatar'
 
 
 export default function Header(props) {
-    const dispatch = useDispatch()
-    const handleLogout = ()=> {
-        dispatch(logout())
-        dispatch(reset())
-    }
 
     useEffect(()=> {
 
-    },[dispatch, props])
+    },[ props])
     return (
         <header className='header'>
             <div className='logo'>
@@ -35,9 +26,6 @@ export default function Header(props) {
                     </li>
                     <li>
                         <TemporaryDrawer/>
-                    </li>
-                    <li>
-                        <a  className='linkStyle' onClick={handleLogout}><BiLogOut/></a>
                     </li>
                 </ul> : <ul>
                     <li>

@@ -2,16 +2,17 @@ import handleDate from './utils/dateHandler'
 import { useSelector } from "react-redux"
 import searchArray from './utils/extractName' 
 import { useEffect } from 'react'
+import './table.css'
 
 export default function Table (props) {
     return (
-        <div>
+        <div className='tableContainer'>
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Created By</th>
-                        <th>Created At</th>   
+                        <th className='tableHead'>Name</th>
+                        <th className='tableHead'>Created By</th>
+                        <th className='tableHead'>Created At</th>   
                     </tr>
                 </thead>
                 <tbody>
@@ -39,8 +40,8 @@ function GenerateTR (data) {
             const creationDate = handleDate(item.createdAt)
             const idName = searchArray(item._id, users)
             return (
-          <tr key={index}>
-            <td><button onClick={handleClick} value={item._id}>{item.name}</button></td>
+          <tr className='tableData' key={index}>
+            <td><button className='names' onClick={handleClick} value={item._id}>{item.name}</button></td>
             <td>{idName}</td>
             <td>{creationDate}</td>
         </tr>

@@ -49,12 +49,12 @@ function Login2 () {
             console.log(message)
         } 
 
-        if( isSuccess || user) {
+        if(isSuccess || user) {
             navigate('/home')
         }
         dispatch(reset())
 
-    },[user, message, isLoading, isError, isSuccess, navigate, dispatch])
+    },[user, message, isError, isSuccess, navigate, dispatch])
 
     if(isLoading) {
         return <CircularIndeterminate/>
@@ -65,10 +65,10 @@ function Login2 () {
         <div className="loginContainer">
             <div className="formHead"> <BiLogIn/> Login</div>
             <div className="formBody">
-                <form  onSubmit={(e)=> loginUser(e)} className="formLogin" onChange={(e)=> handleInputs(e)}>
-                    <input type='email' autoComplete="username" name="email" value={email} placeholder='Email' />
-                    <input type='password' autoComplete="current-password" name="password" value={password} placeholder='Password' />
-                    <button type="submit">Create</button>
+                <form className="formLogin">
+                    <input  onChange={(e)=> handleInputs(e)} type='email' autoComplete="username" name="email" value={email} placeholder='Email' />
+                    <input  onChange={(e)=> handleInputs(e)} type='password' autoComplete="current-password" name="password" value={password} placeholder='Password' />
+                    <button onClick={loginUser} type="submit">Login</button>
                 </form>
             </div>
         </div>

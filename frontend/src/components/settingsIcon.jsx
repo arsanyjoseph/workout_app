@@ -11,7 +11,26 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {AiFillSetting} from 'react-icons/ai'
 import ImageAvatars from './avatar'
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {BiLogOut} from 'react-icons/bi'
+import {logout, reset} from '../features/auth/authSlice'
+import { useDispatch } from 'react-redux';
 
+
+const theme = createTheme({
+  components: {
+      MuiButton: {
+          styleOverrides : {
+              root: {
+                  backgroundColor: 'transparent',
+                  '&:hover': {
+                    backgroundColor: 'grey'
+                  }
+              },
+          }
+      },
+  },
+})
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -57,6 +76,7 @@ const StyledMenu = styled((props) => (
 export default function CustomizedMenus(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch()
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -64,7 +84,12 @@ export default function CustomizedMenus(props) {
     setAnchorEl(null);
   };
 
+  const handleLogout = ()=> {
+    dispatch(logout())
+    dispatch(reset())
+  }
   return (
+    <ThemeProvider theme={theme}>
     <div>
       <Button
         id="demo-customized-button"
@@ -97,14 +122,16 @@ export default function CustomizedMenus(props) {
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>
-          <ArchiveIcon />
-          Archive
-        </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
           <MoreHorizIcon />
           More
         </MenuItem>
+
+        <MenuItem onClick={handleClose} disableRipple>
+          <BiLogOut />
+           <span style={{marginLeft: '0.8em'}} onClick={handleLogout}>Logout</span>
+        </MenuItem>
       </StyledMenu>
     </div>
+    </ThemeProvider>
   );
 }

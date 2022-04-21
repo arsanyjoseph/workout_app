@@ -30,7 +30,7 @@ const theme = createTheme({
       MuiPaper: {
         styleOverrides: {
           root : {
-            backgroundColor: ' rgb(136, 136, 136, 0.5)',
+            backgroundColor: ' var(--grey)',
             paddingTop: '3em',
             paddingLeft: '0.25em'
           }
@@ -54,7 +54,7 @@ export default function SwipeableTemporaryDrawer(props) {
   const handleClick = (i)=> {
     if(typeof(i)=== 'string') {
       const pathRoute = i.toLowerCase()
-      navigate(`/${pathRoute}`)
+      navigate(`/dashboard/${pathRoute}`)
   }}
 
   const toggleDrawer = (anchor, open) => (event) => {

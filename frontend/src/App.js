@@ -7,6 +7,8 @@ import ClientHome from './pages/clientHome';
 import Dashboard from './pages/dashboard';
 import CoolDownList from './components/coolDowns/coolDownList';
 import CreateCoolDown from './components/coolDowns/coolDownCreate';
+import {Navigate} from 'react-router-dom'
+import CoolDownView from './components/coolDowns/coolDownView';
 
 function App() {
   return (
@@ -19,8 +21,10 @@ function App() {
           <Route path='/login' element={<Login2/>} />
           <Route path='/register' element={<Register/>} />
           <Route path='/dashboard' element={<Dashboard/>}>
-            <Route path='cooldown/' element={<CoolDownList/>} />
-            <Route path='cooldown/new' element={<CreateCoolDown/>} />
+            <Route path='home/' element={<Navigate replace to="/home"/>} />
+            <Route path='cooldowns/' element={<CoolDownList/>} />
+            <Route path='cooldowns/:id' element={<CoolDownView/>} />
+            <Route path='cooldowns/new' element={<CreateCoolDown/>} />
           </Route>
         </Routes>
       </div>
