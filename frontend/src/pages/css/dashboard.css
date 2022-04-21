@@ -8,4 +8,5 @@
     place-items: center;
     place-content: center;
     color: white;
+    backdrop-filter: 200px;
 }

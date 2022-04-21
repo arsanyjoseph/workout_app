@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import './coolDownCreate.css'
-import axios from "axios"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import coolDown from "../utils/asyncFuncs/asyncCoolDown"
 
 export default function CreateCoolDown () {
     const {user} = useSelector((state)=> state.auth)
@@ -10,8 +10,10 @@ export default function CreateCoolDown () {
         name: '',
         instruction: '',
         link: '',
-        token: user.token
+        token: user.token,
     })
+
+    const [err, setErr] = useState(false)
 
     const navigate = useNavigate()
     const [redirect, setRedirect] = useState(false)
@@ -20,8 +22,12 @@ export default function CreateCoolDown () {
 
     const handleClick = (e)=> {
         e.preventDefault()
-        createCoolDown(formData, token)
+        if(name === '' || link === '') {
+            handleErr()
+        } else {
+        coolDown.createCoolDown(formData, token)
         setRedirect(true)
+        }
     }
 
     const handleChange = (e)=> {
@@ -31,33 +37,33 @@ export default function CreateCoolDown () {
         }) )
     }
 
-    const createCoolDown = async (formData, token)=> {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
-        const response = await axios.post('/api/cooldowns/', formData, config)
-        console.log(response.data)
-        return response.data
+    const handleErr = ()=> {
+        setErr(true)
+        setTimeout(() => {
+            setErr(false)
+        }, 5000);
     }
 
     useEffect(()=> {
         if (redirect) {
-            navigate('/dashboard/cooldown')
+            navigate('/dashboard/cooldowns')
         }
-    },[redirect, navigate])
+    },[redirect, navigate, formData])
     return (
         <div className="newCoolDownContainer">
             <div className="formHead">New Cool Down</div>
             <div className="formBody">
                 <form className="formCoolDown" onSubmit={handleClick}>
-                    <input type='text' name="name" value={name} placeholder='Cool Down Name' onChange={handleChange}/>
-                    <input type='text' name="link" value={link} placeholder='Cool Down Link' onChange={handleChange}/>
-                    <textarea type='text' name="instruction" value={instruction} placeholder='Cool Down Instructions' onChange={handleChange}/>
-                    <button type="submit">Create</button>
+                    <input type='text' name="name" value={name} placeholder='* Name' onChange={handleChange}/>
+                    <input type='text' name="link" value={link} placeholder='* Link' onChange={handleChange}/>
+                    <textarea type='text' name="instruction" value={instruction} placeholder='Instructions' onChange={handleChange}/>
+                    <div className="buttons">
+                      <button onClick={()=>setRedirect(true)}>Back</button> 
+                      <button type="submit">Create</button>
+                    </div>
                 </form>
             </div>
+            {err && <div className='errMessage' >Please Fill Mandatory Fields</div>}
         </div>
     )
 }

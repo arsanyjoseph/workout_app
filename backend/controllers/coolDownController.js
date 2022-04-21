@@ -3,7 +3,7 @@ const CoolDown = require('../models/coolDownModel')
 // Get All Cool Downs
 const getAllCoolDowns = async (req, res) => {
     try {
-        const coolDowns = await CoolDown.find().select(['name' , 'createdById', 'createdAt', '_id'])
+        const coolDowns = await CoolDown.find().select(['name' , 'createdById', 'createdAt', '_id']).sort([['createdAt', -1]])
         res.status(200).json(coolDowns)
     } catch (err) {
         console.log(err)

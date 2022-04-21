@@ -14,7 +14,7 @@ export default function CoolDownList () {
     const {user} = useSelector((state)=> state.auth)
     
     const navigate = useNavigate()
-
+    //Get All CoolDown List
     const getCoolDowns = async (token)=> {
         const config = {
             headers: {
@@ -41,7 +41,8 @@ export default function CoolDownList () {
     if(coolDowns.length > 0){
      return (
         <div className="coolDownListContainer">
-           <Table data={coolDowns}/>
+            <a href='/dashboard/cooldowns/new'>Create</a>
+            <Table data={coolDowns}/>
         </div>
     )   
     }

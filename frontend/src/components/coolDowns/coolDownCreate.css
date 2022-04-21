@@ -5,7 +5,8 @@
     margin: 0 auto;
     border-radius: 10px;
     font-size: 20pt;
-    font-family: 'fredoka', sans-serif;
+    font-family: var(--fredoka);
+    animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 
 .newCoolDownContainer > .formHead {
@@ -37,9 +38,16 @@
     font-weight: bold;
     box-shadow: 2px 2px 2px 2px grey;
     resize: none;
+    font-family: 'Courier New', Courier, monospace;
+    text-indent: 5%;
 }
 
-.formCoolDown > button {
+.formCoolDown > textarea {
+    height: 5em;
+    padding-top: 1em;
+}
+
+.buttons > button {
     background-color: black;
     color: white;
     font-size: large;
@@ -47,15 +55,57 @@
     padding: 1em 1.5em; 
     border-radius: 10px;
     width: fit-content;
-    font-family: 'fredoka', sans-serif;
+    min-width: 2em;
     align-self:flex-end;
     cursor: pointer;
+    margin: 0;
 }
 
+.buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.errMessage {
+    color: black;
+    margin: '0.25em';
+    font-weight: bold;
+    background-color: red;
+    animation: fade-in-bottom 0.25s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+
 @media only screen and (max-width: 300px) {
-    .formCoolDown > button {
+    .formCoolDown > .buttons > button {
         width: fit-content;
         height: fit-content;
         font-size: 0.6rem;
     }
 }
+
+/*Error Alert Animation*/
+@keyframes fade-in-bottom {
+0% {
+            transform: translateY(50px);
+    opacity: 0;
+}
+100% {
+            transform: translateY(0);
+    opacity: 1;
+}
+}
+
+/*Form Animation*/
+@keyframes fade-in {
+0% {
+    opacity: 0;
+}
+100% {
+    opacity: 1;
+}
+}
+  

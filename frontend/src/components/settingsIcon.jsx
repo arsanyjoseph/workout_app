@@ -14,7 +14,7 @@ import ImageAvatars from './avatar'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {BiLogOut} from 'react-icons/bi'
 import {logout, reset} from '../features/auth/authSlice'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const theme = createTheme({
@@ -74,6 +74,7 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function CustomizedMenus(props) {
+  const {user} = useSelector((state)=> state.auth)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch()
@@ -101,7 +102,7 @@ export default function CustomizedMenus(props) {
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
       >
-        <ImageAvatars/>
+        <ImageAvatars name={user.firstName}/>
       </Button>
       <StyledMenu
         id="demo-customized-menu"

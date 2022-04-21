@@ -3,8 +3,8 @@ import Avatar from '@mui/material/Avatar';
 
 
 
-export default function ImageAvatars() {
+export default function ImageAvatars({name}) {
   return (
-        <Avatar alt="Remy Sharp" src="../../public/assets/avatar-1.png" />
+        <Avatar alt={name} src="../../public/assets/avatar-1.png" />
   );
 }

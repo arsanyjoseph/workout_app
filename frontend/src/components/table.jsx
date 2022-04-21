@@ -3,6 +3,7 @@ import { useSelector } from "react-redux"
 import searchArray from './utils/extractName' 
 import { useEffect } from 'react'
 import './table.css'
+import { useNavigate } from 'react-router-dom'
 
 export default function Table (props) {
     return (
@@ -13,6 +14,7 @@ export default function Table (props) {
                         <th className='tableHead'>Name</th>
                         <th className='tableHead'>Created By</th>
                         <th className='tableHead'>Created At</th>   
+                        <th className='tableHead'>Assigned Users</th>   
                     </tr>
                 </thead>
                 <tbody>
@@ -25,10 +27,11 @@ export default function Table (props) {
 
 function GenerateTR (data) {
     const {users} = useSelector((state)=> state.users)
+    const navigate = useNavigate()
 
     const handleClick = (e)=> {
         e.preventDefault()
-        console.log(e.target.value)
+        navigate(`${e.target.value}`)
     }
 
     useEffect(()=> {
@@ -43,6 +46,7 @@ function GenerateTR (data) {
           <tr className='tableData' key={index}>
             <td><button className='names' onClick={handleClick} value={item._id}>{item.name}</button></td>
             <td>{idName}</td>
+            <td>{creationDate}</td>
             <td>{creationDate}</td>
         </tr>
             )  
