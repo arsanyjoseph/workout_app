@@ -1,0 +1,61 @@
+.newCoolDownContainer {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
+    border-radius: 10px;
+    font-size: 20pt;
+    font-family: 'fredoka', sans-serif;
+}
+
+.newCoolDownContainer > .formHead {
+    padding: 0.25em;
+    border-radius: 5px 5px;
+    background-color: black;
+    color: white;
+}
+
+.formBody {
+    background-color: var(--white);
+    text-align: center;
+    padding: 1em 0;
+
+}
+
+.formCoolDown {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.formCoolDown > input, textarea {
+    margin: 0.5em 0;
+    border-radius: 8px;
+    height: 3em;
+    font-size: large;
+    font-weight: bold;
+    box-shadow: 2px 2px 2px 2px grey;
+    resize: none;
+}
+
+.formCoolDown > button {
+    background-color: black;
+    color: white;
+    font-size: large;
+    font-weight: 800;
+    padding: 1em 1.5em; 
+    border-radius: 10px;
+    width: fit-content;
+    font-family: 'fredoka', sans-serif;
+    align-self:flex-end;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 300px) {
+    .formCoolDown > button {
+        width: fit-content;
+        height: fit-content;
+        font-size: 0.6rem;
+    }
+}

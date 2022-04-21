@@ -25,9 +25,6 @@ export default function ImgMediaCard(props) {
           {props.paragraph}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
     </Card>
   );
 }

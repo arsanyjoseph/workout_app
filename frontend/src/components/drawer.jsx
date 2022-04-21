@@ -17,7 +17,13 @@ const theme = createTheme({
               root: {
                   fontWeight: 800,
                   fontSize: 20,
-                  color: 'white'
+                  color: 'white',
+                  borderLeft: '4px solid white',
+                  paddingLeft: '0.5em',
+                  '&:hover' : {
+                    color: 'var(--blue)',
+                    borderColor: 'var(--blue)',
+                  }
               },
           }
       },
@@ -26,7 +32,7 @@ const theme = createTheme({
           root : {
             backgroundColor: ' rgb(136, 136, 136, 0.5)',
             paddingTop: '3em',
-            paddingLeft: '0.5em'
+            paddingLeft: '0.25em'
           }
         }
       }
@@ -41,7 +47,7 @@ export default function SwipeableTemporaryDrawer(props) {
     right: false,
   });
 
-  const navItems = ['Home','Exercises','Warm Ups','Cool Downs','Programs'];
+  const navItems = ['Home','Exercises','WarmUps','CoolDowns','Programs'];
 
   const navigate = useNavigate();
 
@@ -84,7 +90,7 @@ export default function SwipeableTemporaryDrawer(props) {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button variant='primary' sx={{color: 'white', height: '2em'}} onClick={toggleDrawer(anchor, true)}><FaBars/></Button>
+          <Button className='linkStyle' variant='primary' sx={{color: 'white', height: '2em'}} onClick={toggleDrawer(anchor, true)}><FaBars/></Button>
           <SwipeableDrawer
             anchor={anchor}
             open={state[anchor]}

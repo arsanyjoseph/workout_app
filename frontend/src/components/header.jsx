@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux'
 import { logout, reset } from '../features/auth/authSlice'
 import { useEffect } from 'react'
 import TemporaryDrawer from '../../src/components/drawer'
-
+import CustomizedMenus from './settingsIcon'
+import ImageAvatars from './avatar'
 
 
 export default function Header(props) {
@@ -22,15 +23,15 @@ export default function Header(props) {
     return (
         <header className='header'>
             <div className='logo'>
-                <Link  className='linkStyle' to='/'>Header</Link>
+                <Link  className='linkStyle' to='/'>Calisthenics Engineer</Link>
             </div>
             <div className='optionsContainer'>
             { props.name ? <ul>
                     <li>
-                        <Link className='linkStyle' to='/'> Hello, {props.name}</Link>
+                        <span className='linkStyle' >{'Hello, ' + props.name}</span>
                     </li>
                     <li>
-                        <Link className='linkStyle' to='/settings'> <AiFillSetting/></Link>
+                        <span className='linkStyle'><CustomizedMenus/></span>
                     </li>
                     <li>
                         <TemporaryDrawer/>

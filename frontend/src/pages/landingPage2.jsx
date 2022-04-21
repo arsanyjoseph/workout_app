@@ -5,9 +5,6 @@ import { FaArrowDown } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import ImgMediaCard from '../components/card'
-import {MdKeyboardArrowRight} from "react-icons/md";
-import {MdKeyboardArrowLeft} from "react-icons/md";
-import Carousel from '../components/carousel'
 import scrollFunc from '../components/utils/scrollFunc';
 
 function useOnScreen(options) {
@@ -46,8 +43,8 @@ export default function LandingPage2 () {
         <div className='gradientContainer'>
              {user ? <Header name={user.firstName}/> : <Header/>}
             <div className="showContainer" id='banner'>
-                <h1>Hello World</h1>
-                <p>You are Welcome to <a href='/login'>Join Us</a></p>
+                <h1>Welcome to Calisthenics World</h1>
+                <p>Start Your Journey Safely, <a href='/login'>Join Us</a></p>
                 <p>Explore More</p>
                 <a className='arrowIcon' onClick={()=>scrollFunc('personal')}><FaArrowDown/></a>
             </div>  
@@ -59,12 +56,13 @@ export default function LandingPage2 () {
                 </div>
                 <div  ref={ref} className={visible ? 'quoteDetails showCard' : 'quoteDetails'}>
                     <aside>
-                        <h1>Hello Wolrd</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur recusandae fugit distinctio odit error blanditiis minus non, nesciunt ipsa mollitia exercitationem. Minus, voluptatem voluptate nisi nemo ut magni error consequuntur.</p>
+                        <h1>Provide Impairing Training And Best Fitness Motivations</h1>
+                        <p>Hey everyone! I am Mohammed, your new Trainer. I am ISA a certified strength, conditioning and sports nutrition Specialist. I started Calisthenincs back in 2015 with zero knowledge.</p>
                     </aside>
                     <aside>
-                        <h1>Hello Wolrd</h1>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur recusandae fugit distinctio odit error blanditiis minus non, nesciunt ipsa mollitia exercitationem. Minus, voluptatem voluptate nisi nemo ut magni error consequuntur.</p>
+                        <h1>How Did I start ?</h1>
+                        <p>I spent quite time confused about where to begin, trying a bunch of different ways to get on top of my fitness and life. </p>
+                        <p>But now -by My Coaching- you will never be left frustrated about your transformation journey, calisthenincs skills and nutrition. Because We are Different, every Client has a customized plan. Each will have a great potential with a clear plan</p>
                     </aside>
                 </div>
             </div>
@@ -77,9 +75,7 @@ export default function LandingPage2 () {
         <section id='testimonials'>
             <div className='ratesContainer'>
                 <div className='gradientOverlay'>
-                    <div className='arrowT'><MdKeyboardArrowLeft/></div>
                     <div className='testDetails'></div>
-                    <div className='arrowT'><MdKeyboardArrowRight/></div> 
                 </div>
             </div>
         </section> 

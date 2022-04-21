@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
@@ -17,7 +17,7 @@ export default function ClientHome () {
         if (user && user.isAdimn) {
             navigate('/dashboard')
         }
-    },[user])
+    },[user, navigate])
 
     if(user) {
         return (

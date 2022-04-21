@@ -1,5 +1,28 @@
+import { useEffect } from "react";
+import { useSelector, useDispatch} from "react-redux"
+import { Outlet, useNavigate } from "react-router-dom";
+import './css/dashboard.css'
+import Header from '../components/header'
+
+import { getAllUsers, reset } from '../features/users/usersSlice';
+
 export default function Dashboard () {
+    const {user} = useSelector((status)=> status.auth)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    useEffect(()=> {
+        if(!user) {
+            navigate('/login')
+        }
+        dispatch(getAllUsers(user.token))
+        dispatch(reset())
+    },[user])
     return (
-        <h1>Dashboard</h1>
+        <div className="dashboardContainer">
+            <Header name={user.firstName} />
+            <h1>Dashboard</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae obcaecati aliquid nesciunt sit quos aspernatur asperiores aut amet ducimus fugit quaerat, dolorem, ipsum consequuntur ea quae exercitationem expedita, reprehenderit voluptates.</p>
+            <Outlet/>
+        </div>
     )
 }

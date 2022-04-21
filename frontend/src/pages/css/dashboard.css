@@ -1,0 +1,11 @@
+.dashboardContainer {
+    background-image: url(../../../public/assets/banner/banner-4.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 150vh;
+    width: 100%;
+    text-align: center;
+    place-items: center;
+    place-content: center;
+    color: white;
+}

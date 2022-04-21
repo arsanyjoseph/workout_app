@@ -90,13 +90,12 @@ function Login () {
 
         if (isError) {
             console.log(message)
-            dispatch(reset())
         } 
 
         if( isSuccess || user) {
             navigate('/home')
-            dispatch(reset())
         }
+        dispatch(reset())
 
     },[user, message, isLoading, isError, isSuccess, navigate, dispatch])
 

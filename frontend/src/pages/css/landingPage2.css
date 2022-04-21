@@ -1,5 +1,6 @@
 :root {
   --blue: #069ADF;
+  --white: rgba(255, 255, 255, 0.555);
 }
 
 
@@ -176,6 +177,7 @@ a {
 
 .quoteDetails > aside {
         padding-left: 1em;
+        font-size: x-large;
         border-left: 4px solid var(--blue);
 }
 

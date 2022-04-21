@@ -1,0 +1,10 @@
+.coolDownListContainer {
+    background-color: rgb(255, 255, 255);
+    max-width: 70%;
+    min-width: fit-content;
+    min-height: fit-content;
+    margin: 0 auto;
+    color: rgb(0, 0, 0);
+    padding: 1em;
+    border-radius: 5px;
+}
