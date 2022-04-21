@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 //getAllUsers
 const getAllUsers = async (req, res) => {
     try {
-        const allUsers = await User.find().select(['-password', '-isAdmin'])
+        const allUsers = await User.find().select(['_id', 'firstName', 'lastName'])
         res.status(200).json(allUsers)
     } catch(err) {
         console.log(err)
@@ -33,7 +33,7 @@ const getUser = async (req, res) => {
 //Register User
 const createUser = async (req, res) => {
     const {firstName, lastName, email, password, height, weight, gender } = req.body
-    if (!firstName || !lastName || !email || !password || !gender || !weight || !height) {
+    if (!firstName || !lastName || !email || !password ) {
         res.status(400)
         res.status(400).json({
             message: "Please Fill Mandatory Fields"
@@ -134,6 +134,8 @@ const logInUser = async (req, res) => {
         res.status(200).json({ 
             message: "login successful",
             user: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
             token: generateToken(user._id)
         })
     } else {

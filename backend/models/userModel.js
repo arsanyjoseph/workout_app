@@ -25,7 +25,6 @@ const userSchema = mongoose.Schema({
     },
     gender: {
         type: String,
-        required: true
     },
     phoneNumber: {
         type: Number,
@@ -46,11 +45,9 @@ const userSchema = mongoose.Schema({
     },
     height: {
         type: Number,
-        required: true
     },
     weight: {
         type: Number,
-        required: true
     },
     goals: {
         type: [String],
