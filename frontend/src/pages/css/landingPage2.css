@@ -7,11 +7,16 @@
 
 
 .landingContainer {
-    width: 100%;
+    width: inherit;
     height: 50rem;
     background-image: url(../../../public/assets/banner/banner-2.jpg);
     background-repeat: no-repeat;
     background-size: cover;
+    margin: 0 auto;
+}
+
+.gradientContainer {
+  width: 100%;
 }
 
 .showContainer {

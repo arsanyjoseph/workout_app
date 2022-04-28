@@ -9,16 +9,22 @@
   }
   
 .header {
+    width: 98%;
+    margin: 0 auto;
     background-color: var(--grey);
     height: fit-content;
-    padding: 1em;
-    margin: 0 auto;
+    padding: 0.25em 1em;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
     box-shadow: 0.15em 0.15em 0.15em 0.15em rgb(83, 75, 75);
     animation: 0.5s ease-in-out 0s 1 slideInFromTop;
+}
+
+.header > .logo {
+  margin-left: 1em;
 }
 
 .optionsContainer > ul {
@@ -50,3 +56,13 @@
   color: var(--blue);
 }
 
+.logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.logo > img {
+  max-width: 6em;
+  max-height: 4em;
+}

@@ -7,13 +7,13 @@ import CustomizedMenus from './settingsIcon'
 
 
 export default function Header(props) {
-
     useEffect(()=> {
 
     },[ props])
     return (
         <header className='header'>
             <div className='logo'>
+                <img src='/assets/logo-2.png' alt='logo' />
                 <Link  className='linkStyle' to='/'>Calisthenics Engineer</Link>
             </div>
             <div className='optionsContainer'>
@@ -24,9 +24,9 @@ export default function Header(props) {
                     <li>
                         <span className='linkStyle'><CustomizedMenus/></span>
                     </li>
-                    <li>
+                    {props.validate && <li>
                         <TemporaryDrawer/>
-                    </li>
+                    </li>}
                 </ul> : <ul>
                     <li>
                         <Link className='linkStyle' to='/login'><BiLogIn/> Login  </Link>

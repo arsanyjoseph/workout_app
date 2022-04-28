@@ -3,6 +3,7 @@ import './coolDownCreate.css'
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import coolDown from "../utils/asyncFuncs/asyncCoolDown"
+import handleErr from '../utils/errorAlert'
 
 export default function CreateCoolDown () {
     const {user} = useSelector((state)=> state.auth)
@@ -23,7 +24,7 @@ export default function CreateCoolDown () {
     const handleClick = (e)=> {
         e.preventDefault()
         if(name === '' || link === '') {
-            handleErr()
+            handleErr(setErr)
         } else {
         coolDown.createCoolDown(formData, token)
         setRedirect(true)
@@ -37,12 +38,6 @@ export default function CreateCoolDown () {
         }) )
     }
 
-    const handleErr = ()=> {
-        setErr(true)
-        setTimeout(() => {
-            setErr(false)
-        }, 5000);
-    }
 
     useEffect(()=> {
         if (redirect) {

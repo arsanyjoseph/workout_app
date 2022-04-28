@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { register, reset } from '../features/auth/authSlice';
 import CircularIndeterminate from '../components/spinner'
 import './css/register.css'
+import handleErr from '../components/utils/errorAlert'
 
 
 const theme = createTheme({
@@ -43,6 +44,10 @@ export default function Register () {
         weight: 0,
         phoneNumber: 0,
     })
+
+    const [err, setErr] = useState(false)
+
+    const [invalid, setInvalid] = useState(false)
 
     const [values, setValues] = useState({
         showPassword: false,
@@ -82,9 +87,9 @@ export default function Register () {
     const submitForm = (e) => {
         e.preventDefault()
         if(!firstName || !lastName || !email || !password ) {
-            console.log('Error')
+            handleErr(setErr)
         } else if(firstName === '' || lastName === '' || email === '' || password === ''){
-            console.log('error')
+            handleErr(setErr)
         }
         
         else {
@@ -102,9 +107,10 @@ export default function Register () {
     }
 }
 
+
     useEffect(()=> {
         if (isError) {
-            console.log(message)
+            setInvalid(true)
         }
 
         if(isSuccess || user) {
@@ -118,13 +124,32 @@ export default function Register () {
     if(isLoading) {
         return <CircularIndeterminate/>
     }
+
+    if(invalid) {
+        return (
+            <div className="loginBack">
+            <Header/>
+            <div className="loginContainer">
+            <div className="formHead"> <BiUserPlus/> Register</div>
+            <div className="formBody">
+               <h1>Invalid SignUp Attempt</h1>
+               <h4>The E-mail Provided Already Exists</h4>
+               <h4>Please, Assign Different E-mail <button className='retryBtn' onClick={()=> setInvalid(false)}>Here</button></h4>
+               <p>Or Return to <a className='retryBtn' href="/">Home Page</a></p>
+            </div>
+        </div>
+        </div>
+        )
+    }
+ 
+    if (!invalid) {
     return (
         <ThemeProvider theme={theme}>
         <div className='mainDiv'>
             <Header/>
             <div className="formContainer">
                 <div className='formHead'>
-                    <h1> <BiUserPlus/> Register</h1>
+                    <h1><BiUserPlus/> Register</h1>
                 </div>
                 <Box
                     component="form"
@@ -200,10 +225,11 @@ export default function Register () {
                             <OutlinedInput
                                 id="outlined-adornment-weight"
                                 value={weight}
-                                onChange={handleChange('weight')}
+                                onChange={(e)=>handleInputs(e)}
                                 endAdornment={<InputAdornment position="end">kg</InputAdornment>}
                                 label='weight'
                                 type='number'
+                                name='weight'
                             />
                         </FormControl>
 
@@ -212,10 +238,11 @@ export default function Register () {
                             <OutlinedInput
                                 id="outlined-adornment-height"
                                 value={height}
-                                onChange={handleChange('height')}
+                                onChange={(e)=> handleInputs(e)}
                                 endAdornment={<InputAdornment position="end">cm</InputAdornment>}
                                 label='height'
                                 type='number'
+                                name='height'
                             />
                         </FormControl>
 
@@ -232,10 +259,13 @@ export default function Register () {
                                 <MenuItem key='female' value='female'>Female</MenuItem>                       
                         </TextField>
                         <br/>
+
                 </Box>
-                <Button onClick={submitForm} variant='contained' className='registerBtn' sx={{ width: 'fit-content', height: '5ch', color: 'white', backgroundColor: 'black'}}>Submit</Button>
+                {err && <div className='errMessage' style={{width: '100%', fontSize: '2em',textAlign: 'center', fontWeight: '800'}} >Please, Fill Mandatory Fields</div>}
+                <Button onClick={(e)=>submitForm(e)} variant='contained' className='registerBtn' sx={{ width: 'fit-content', height: '6ch', color: 'white', backgroundColor: 'black', padding: '1.5em', fontSize: '1em', fontWeight: 'bolder'}}>Submit</Button>
             </div>
         </div>
         </ThemeProvider>
     )
+}
 }

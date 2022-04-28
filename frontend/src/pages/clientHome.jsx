@@ -19,11 +19,25 @@ export default function ClientHome () {
         }
     },[user, navigate])
 
+    if(user.isPending) {
+        return (
+            <div className="clientContainer">
+                <div className="overlayClient">
+                <Header name={user.firstName} validate={user.isAdmin}/>
+                    <div className="pendingContainer" style={{maxWidth: '50%', margin: '0 auto', backgroundColor: 'var(--white)', borderRadius: '5px', marginTop: '5em'}}>
+                        <h1 style={{textAlign: 'center', color: 'white', backgroundColor: 'black', padding: '0.25em', }}>Pending</h1>
+                        <p style={{fontSize: '3em', textAlign: 'center', fontWeight: 800, padding: '1em', margin: 0}}>Waiting For Admin Approval</p>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     if(user) {
         return (
             <div className="clientContainer">
                 <div className="overlayClient">
-                <Header name={user.firstName}/>
+                <Header name={user.firstName} validate={user.isAdmin}/>
                 </div>
             </div>
         )   

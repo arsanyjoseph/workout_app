@@ -15,6 +15,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {BiLogOut} from 'react-icons/bi'
 import {logout, reset} from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 const theme = createTheme({
@@ -78,6 +79,7 @@ export default function CustomizedMenus(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -88,6 +90,7 @@ export default function CustomizedMenus(props) {
   const handleLogout = ()=> {
     dispatch(logout())
     dispatch(reset())
+    navigate('/')
   }
   return (
     <ThemeProvider theme={theme}>

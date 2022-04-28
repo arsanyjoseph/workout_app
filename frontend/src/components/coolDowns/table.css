@@ -1,0 +1,56 @@
+.tableContainer {
+    font-family: var(--fredoka);
+    padding: 0.5em 2em;
+    font-size: large;
+}
+
+.tableContainer > table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+
+.tableHead {
+    font-weight: 800;
+    border-bottom: 1px solid var(--grey);
+    width: fit-content;
+    font-size: 1.5em;
+    border-left: 1px solid var(--grey);
+    border-top: 1px solid var(--grey);
+    border-right: 1px solid var(--grey);
+    padding: 0.25em;
+    background-color: black;
+    color: white;
+}
+
+.names {
+    text-decoration: none;
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+    float: left;
+    padding: 0;
+    font-size: large;
+    font-weight: bolder;
+    padding-left: 1em;
+    padding: 0.5em;
+}
+
+.names:hover {
+    color: var(--blue);
+}
+
+.assignedUsers {
+    border-right: 1px solid var(--grey);
+}
+
+.tableData > td {
+    border-bottom: 2px solid black;
+    border-left: 1px solid var(--grey);
+    padding: 0 0.5em;
+
+}
+
+.tableData:hover {
+    background-color: rgba(185, 210, 248, 0.596);
+}

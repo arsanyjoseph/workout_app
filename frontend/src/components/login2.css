@@ -8,7 +8,7 @@
     }
   }
 
-.loginBack {
+.loginBack, .mainDiv {
     background-image: url(../../public/assets/banner/banner-4.jpg);
     background-repeat: no-repeat;
     background-size: cover;
@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0 auto;
 }
 
 .loginContainer {
@@ -72,6 +73,19 @@
     font-family: 'fredoka', sans-serif;
     align-self:flex-end;
     cursor: pointer;
+}
+
+.retryBtn {
+    border: none;
+    font-size: inherit;
+    color: var(--blue);
+    background-color: transparent;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.formContainer > input, textarea:focus {
+    box-shadow: 1px 1px 4px 4px var(--blue);
 }
 
 @media only screen and (max-width: 300px) {

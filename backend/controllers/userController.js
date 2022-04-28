@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs')
 //getAllUsers
 const getAllUsers = async (req, res) => {
     try {
-        const allUsers = await User.find().select(['_id', 'firstName', 'lastName'])
+        const allUsers = await User.find().select(['_id', 'firstName', 'lastName', 'isAdmin', 'isPending'])
         res.status(200).json(allUsers)
     } catch(err) {
         console.log(err)
@@ -136,7 +136,9 @@ const logInUser = async (req, res) => {
             user: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            token: generateToken(user._id)
+            token: generateToken(user._id),
+            isAdmin: user.isAdmin,
+            isPending: user.isPending
         })
     } else {
         //If Wrong Password

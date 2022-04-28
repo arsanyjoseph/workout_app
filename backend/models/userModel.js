@@ -23,6 +23,11 @@ const userSchema = mongoose.Schema({
         required: true,
         default: false
     },
+    isPending: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
     gender: {
         type: String,
     },

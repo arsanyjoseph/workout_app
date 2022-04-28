@@ -19,6 +19,17 @@ const coolDownSchema = mongoose.Schema({
         type: String,
         default: ''
     },
+    assignedUsersId: {
+        type: [{
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+            isComplete: Boolean,
+            setDate: Date,
+        }],
+        default: []
+    }
 }, {
     timestamps: true,
 })

@@ -8,6 +8,7 @@ import {BiLogIn} from 'react-icons/bi'
 import Header from './header'
 
 function Login2 () {
+    const [invalid, setInvalid] = useState(false)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -46,7 +47,7 @@ function Login2 () {
     useEffect(()=> {
 
         if (isError) {
-            console.log(message)
+            setInvalid(true)
         } 
 
         if(isSuccess || user) {
@@ -54,26 +55,46 @@ function Login2 () {
         }
         dispatch(reset())
 
-    },[user, message, isError, isSuccess, navigate, dispatch])
+    },[user, isSuccess, navigate, dispatch, isError, message])
 
     if(isLoading) {
         return <CircularIndeterminate/>
     }
+
+    if (invalid) {
+        return (
+            <div className="loginBack">
+            <Header/>
+            <div className="loginContainer">
+            <div className="formHead"> <BiLogIn/> Login</div>
+            <div className="formBody">
+               <h1>Invalid Login Attempt</h1>
+               <h4>The E-mail or Password entered may be Incorrect</h4>
+               <p>Return to <a href="/">Home Page</a> or <button className='retryBtn' onClick={()=> setInvalid(false)}>Retry</button> using Valid Credentials</p>
+               <p>If not Registered ? <a href='/register'>Sign Up</a></p>
+            </div>
+        </div>
+        </div>
+        )
+    }
+
+    if (!invalid) {
     return (
         <div className="loginBack">
         <Header/>
         <div className="loginContainer">
             <div className="formHead"> <BiLogIn/> Login</div>
             <div className="formBody">
-                <form className="formLogin">
+                <form onSubmit={(e)=> loginUser(e)} className="formLogin">
                     <input  onChange={(e)=> handleInputs(e)} type='email' autoComplete="username" name="email" value={email} placeholder='Email' />
-                    <input  onChange={(e)=> handleInputs(e)} type='password' autoComplete="current-password" name="password" value={password} placeholder='Password' />
-                    <button onClick={loginUser} type="submit">Login</button>
+                    <input  onChange={(e)=> handleInputs(e)} type='password' autoComplete="current-password" name="password" value={password} placeholder='Password'/>
+                    <button type="submit">Login</button>
                 </form>
             </div>
         </div>
         </div>
     )
+}
 }
 
 export default memo(Login2)

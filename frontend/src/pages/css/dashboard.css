@@ -10,3 +10,7 @@
     color: white;
     backdrop-filter: 200px;
 }
+
+.dashboardContainer > input, textarea:focus {
+    box-shadow: 1px 1px 4px 4px var(--blue);
+}

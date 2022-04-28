@@ -3,7 +3,7 @@ const CoolDown = require('../models/coolDownModel')
 // Get All Cool Downs
 const getAllCoolDowns = async (req, res) => {
     try {
-        const coolDowns = await CoolDown.find().select(['name' , 'createdById', 'createdAt', '_id']).sort([['createdAt', -1]])
+        const coolDowns = await CoolDown.find().select(['name' , 'createdById', 'createdAt', '_id', 'assignedUsersId']).sort([['createdAt', -1]])
         res.status(200).json(coolDowns)
     } catch (err) {
         console.log(err)
@@ -46,7 +46,8 @@ const createCoolDown = async (req, res) => {
             name: name,
             createdById: req.user.id,
             link: link,
-            instruction: instruction
+            instruction: instruction,
+            assignedUsersId: []
         })
         res.status(201).json(coolDown) 
         } else {
@@ -64,13 +65,31 @@ const updateCoolDown = async (req, res) => {
         //Fetch Cool Down by Id
         const updateCoolDown = await CoolDown.findById(req.params.id)
         if (!updateCoolDown){
-            res.status(400).json({
+            return res.status(400).json({
                 message: "Cool Down Not Found"
             })
-            throw new Error ('Cool Down Not Found')
         }
+
         //Update Cool Down
-        await updateCoolDown.updateOne(req.body)
+        if(req.body.name || req.body.link || req.body.instruction) {
+        await updateCoolDown.updateOne({
+                    name: req.body.name,
+                    link: req.body.link,
+                    instruction: req.body.instruction,
+                })
+        }
+
+        //Assign User & Date
+        if (req.body.userId || req.body.isComplete || req.body.setDate) {
+            await updateCoolDown.updateOne({
+                $push: {assignedUsersId : [{
+                    userId: req.body.userId,
+                    isComplete: req.body.isComplete,
+                    setDate: req.body.setDate
+                }]}
+            })
+        }
+        
         const updated = await CoolDown.findById(req.params.id)
         res.status(200).json(updated)
     } catch (err) {
@@ -79,7 +98,7 @@ const updateCoolDown = async (req, res) => {
     }
 }
 
-//Remove User Group
+//Remove Cool Down
 const deleteCoolDown = async (req, res) => {
     try {
         //Fetch Cool Down By Id

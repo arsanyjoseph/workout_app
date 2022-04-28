@@ -1,5 +1,5 @@
 import Header from '../components/header'
-import Footer from '../components/footer'
+import Footer from '../components/footer/footer'
 import './css/landingPage2.css'
 import { FaArrowDown } from "react-icons/fa";
 import { useSelector } from 'react-redux';
@@ -41,7 +41,7 @@ export default function LandingPage2 () {
     return <>
     <div className='landingContainer'>
         <div className='gradientContainer'>
-             {user ? <Header name={user.firstName}/> : <Header/>}
+             {user ? <Header name={user.firstName} validate={user.isAdmin}/> : <Header/>}
             <div className="showContainer" id='banner'>
                 <h1>Welcome to Calisthenics World</h1>
                 <p>Start Your Journey Safely, <a href='/login'>Join Us</a></p>

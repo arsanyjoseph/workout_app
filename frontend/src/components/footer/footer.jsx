@@ -1,6 +1,6 @@
 import './footer.css'
 import {FaFacebook, FaInstagram, FaYoutube, FaAngleDoubleUp} from "react-icons/fa";
-import scrollFunc from './utils/scrollFunc';
+import scrollFunc from '../utils/scrollFunc';
 
 
 export default function Footer() {
