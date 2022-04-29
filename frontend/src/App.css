@@ -3,3 +3,20 @@
   align-items: center;
   width: inherit;
 }
+
+.submitBtn {
+    background-color: black;
+    color: white;
+    font-size: large;
+    font-weight: 800;
+    padding: 1em 1.5em; 
+    border-radius: 10px;
+    width: fit-content;
+    cursor: pointer;
+    margin: 0;
+}
+.submitBtn:hover {
+  background-color: var(--blue);
+  color: black;
+  box-shadow: 2px 2px 4px 4px var(--grey);
+}

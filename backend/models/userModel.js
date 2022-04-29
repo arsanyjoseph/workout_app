@@ -39,11 +39,6 @@ const userSchema = mongoose.Schema({
         type: String,
         default: ''
     },
-    userGroup: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: 'UserGroup',
-        default:[]
-    },
     avatarLink: {
         type: String,
         default: ''
@@ -90,47 +85,7 @@ const userSchema = mongoose.Schema({
             fat: null,
             protein: null
         }]
-    },
-    programs: {
-        type: [{
-            programId: mongoose.Schema.Types.ObjectId,
-            isComplete: Boolean,
-            startDate: Date,
-            endDate: Date
-        }],
-        ref: 'Program',
-        default: [{}]
-    },
-    warmUps: {
-        type: [{
-            programId: mongoose.Schema.Types.ObjectId,
-            isComplete: Boolean,
-            startDate: Date,
-            endDate: Date
-        }],
-        ref: 'WarmUp',
-        default: [{}]
-    },
-    coolDowns: {
-        type: [{
-            programId: mongoose.Schema.Types.ObjectId,
-            isComplete: Boolean,
-            startDate: Date,
-            endDate: Date
-        }],
-        ref: 'CoolDown',
-        default: [{}]
-    },
-    exercises: {
-        type: [{
-            programId: mongoose.Schema.Types.ObjectId,
-            isComplete: Boolean,
-            startDate: Date,
-            endDate: Date
-        }],
-        ref: 'Exercise',
-        default: [{}]
-    }
+    }, 
 }, {
     timestamps: true,
 })

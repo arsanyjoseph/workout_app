@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
-import MaterialUIPickers from "../datePicker/datePicker";
+import MaterialUIPickers from "./datePicker/datePicker";
 
-export default function CoolDownAssign ({submitUser, handleSelect, handleBack, userAssigned, message, handleChange, value}) {
+export default function UserAssign ({submitUser, handleSelect, handleBack, isAssigned, message, handleChange, value, datePicker}) {
     const {users} = useSelector((state)=> state.users)
     
     return (
@@ -13,16 +13,16 @@ export default function CoolDownAssign ({submitUser, handleSelect, handleBack, u
                         <option disabled selected>Select User to Assign</option>
                         {users.map((item, index)=> <option name='selectedUser' key={index} value={item._id}>{item.firstName + ' ' + item.lastName}</option>)}
                     </select>
-                    <br/>
+                    {datePicker && <><br/>
                     <MaterialUIPickers label='Date' value={value} handleChange={handleChange}/>
-                    <br/>
+                    <br/></>}
                     <div className="buttons">
-                        <button onClick={handleBack}>Back</button>
-                        <button id="submitBtn" disabled type="submit">Assign</button>
+                        <button className='submitBtn' onClick={handleBack}>Back</button>
+                        <button className='submitBtn' id="submitBtn" type="submit">Assign</button>
                     </div>
                 </form>
             </div>
-            {userAssigned && <div className='errMessage' >{message}</div>}
+            {isAssigned && <div className='errMessage' >{message}</div>}
         </div>
     )
 }

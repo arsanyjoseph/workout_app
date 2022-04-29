@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import './css/client.css'
-
+import { Outlet} from "react-router-dom";
 
 
 export default function ClientHome () {
@@ -38,6 +38,7 @@ export default function ClientHome () {
             <div className="clientContainer">
                 <div className="overlayClient">
                 <Header name={user.firstName} validate={user.isAdmin}/>
+                <Outlet/>
                 </div>
             </div>
         )   

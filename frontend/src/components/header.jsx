@@ -1,4 +1,5 @@
 import {BiLogIn, BiUserPlus} from 'react-icons/bi'
+import {FaHome} from 'react-icons/fa'
 import './header.css'
 import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
@@ -14,7 +15,7 @@ export default function Header(props) {
         <header className='header'>
             <div className='logo'>
                 <img src='/assets/logo-2.png' alt='logo' />
-                <Link  className='linkStyle' to='/'>Calisthenics Engineer</Link>
+                <Link  className='linkStyle' to='/'><FaHome/> Home</Link>
             </div>
             <div className='optionsContainer'>
             { props.name ? <ul>

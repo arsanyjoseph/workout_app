@@ -1,4 +1,4 @@
-.coolDownListContainer {
+.coolDownListContainer, .userGroupListContainer, .usersContainer {
     background-color: rgb(255, 255, 255);
     max-width: 70%;
     min-width: fit-content;

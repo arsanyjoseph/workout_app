@@ -28,6 +28,15 @@ const programSchema = mongoose.Schema({
             ref: 'Exercise'
         },
         isRest: Boolean
+    }],
+    usersIds : [{
+        userId : {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        startDate: Date,
+        endDate: Date,
+        isComplete: Boolean
     }]
 }, {
     timestamps: true,

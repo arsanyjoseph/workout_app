@@ -1,11 +1,15 @@
 const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const multer = require('multer')
+const storage = require('../multer/config')
+const checkFileType = require('../multer/fileCheck')
+
 
 //getAllUsers
 const getAllUsers = async (req, res) => {
     try {
-        const allUsers = await User.find().select(['_id', 'firstName', 'lastName', 'isAdmin', 'isPending'])
+        const allUsers = await User.find().select(['_id', 'firstName', 'lastName', 'isAdmin', 'isPending', 'createdAt'])
         res.status(200).json(allUsers)
     } catch(err) {
         console.log(err)
@@ -60,7 +64,9 @@ const createUser = async (req, res) => {
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             email: newUser.email,
-            token: generateToken(newUser._id)
+            token: generateToken(newUser._id),
+            isAdmin: newUser.isAdmin,
+            isPending: newUser.isPending
         }) 
         } else {
             res.status(400).json({message: `Another User with the same email "${email}" exists`})
@@ -74,7 +80,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Check for User by Id
-        const {firstName, lastName, gender, phoneNumber, location, userGroup, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, programs, warmUps, coolDowns, exercises} = req.body
+        const {firstName, lastName, gender, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan} = req.body
         const user = await User.findById(req.params.id)
         if (!user){
             res.status(400).json({
@@ -90,7 +96,6 @@ const updateUser = async (req, res) => {
             gender: gender,
             phoneNumber: phoneNumber,
             location: location,
-            userGroup: userGroup,
             avatarLink: avatarLink,
             height: height,
             weight: weight,
@@ -98,11 +103,7 @@ const updateUser = async (req, res) => {
             notes: notes,
             limitations: limitations,
             equipments: equipments,
-            warmUps: warmUps,
-            coolDowns: coolDowns,
-            exercises: exercises,
             progressPics: progressPics,
-            programs: programs,
             nutritionPlan: nutritionPlan
         })
         const updatedUser = await User.findById(req.params.id)
@@ -179,17 +180,31 @@ const deleteUser = async (req, res) => {
     }
 }
 
-//Get Signed Used Data
-const getSigned = async (req, res) =>  {
-    res.json({
-        message: "signed"
-    })
-}
-
 //Generate JWT
 const generateToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET, {
         expiresIn: '3d'
+    })
+}
+
+const upload = multer({
+    storage: storage,
+    fileFilter: function (req, file, cb) {
+        checkFileType(file, cb)
+    }
+}).single('myImage');
+
+const uploadAvatar = async (req, res) => {
+    upload(req, res, (err)=> {
+        if(err) {
+            res.json(err.message)
+            console.log(err)   
+        } else {
+            console.log(req.file)
+            res.json({
+                message: "Done"
+            })
+        }
     })
 }
 
@@ -201,6 +216,6 @@ module.exports = {
     updateUser,
     deleteUser,
     logInUser,
-    getSigned
+    uploadAvatar
 }
 

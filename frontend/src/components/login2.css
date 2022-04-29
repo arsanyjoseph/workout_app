@@ -63,16 +63,7 @@
 }
 
 .formLogin > button {
-    background-color: black;
-    color: white;
-    font-size: large;
-    font-weight: 800;
-    padding: 1em 1.5em; 
-    border-radius: 10px;
-    width: fit-content;
-    font-family: 'fredoka', sans-serif;
     align-self:flex-end;
-    cursor: pointer;
 }
 
 .retryBtn {

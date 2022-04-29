@@ -1,38 +1,38 @@
 import axios from 'axios'
 
 
-//Get All CoolDown List
-const getCoolDowns = async (token, setState)=> {
+//Get All Items List
+const getItems = async (url, token, setState)=> {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
         }
     }
-    const response = await axios.get('/api/cooldowns/', config)
+    const response = await axios.get(url, config)
     setState(response.data)
     return response.data
 }
 
-//Get CoolDown By Id
-const getCoolDown = async (id, token, setState)=> {
+//Get Item By Id
+const getItem = async (url, id, token, setState)=> {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
         }
     }
-    const response = await axios.get('/api/cooldowns/' + id, config)
+    const response = await axios.get(url + id, config)
     setState(response.data)
     return response.data
 }
 
-//Create New CoolDown
-const createCoolDown = async (data, token)=> {
+//Create New Item
+const createItem = async (url, data, token)=> {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
         }
     }
-    const response = await axios.post('/api/cooldowns/', data, config)
+    const response = await axios.post(url, data, config)
     console.log(response.data)
     return response.data
 }
@@ -42,35 +42,35 @@ const linkVid = (i)=> {
     return 'https://www.youtube.com/embed/' + i.split('=')[1]
 }
 
-//Update CoolDown Data
-const updateCoolDown = async (id, data, token, setState) => {
+//Update Item Data
+const updateItem = async (url, id, data, token, setState) => {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
         }
     } 
-    const response = await axios.put('/api/cooldowns/' + id, data, config)
+    const response = await axios.put(url + id, data, config)
     setState(response.data)
     return response.data
 }
 
-//Delete CoolDown
-const handleDelete = async (id, token)=> {
+//Delete Item
+const handleDelete = async (url, id, token)=> {
     const config = {
         headers: {
             Authorization: `Bearer ${token}`
         }
     }
-    const response = await axios.delete('/api/cooldowns/' + id, config)
+    const response = await axios.delete(url + id, config)
     return response.data}
 
-const coolDownAsyncFunc = {
-    createCoolDown,
-    getCoolDown,
+const asyncFunc = {
+    createItem,
+    getItem,
     linkVid,
-    updateCoolDown,
+    updateItem,
     handleDelete,
-    getCoolDowns
+    getItems
 }
 
-export default coolDownAsyncFunc
+export default asyncFunc

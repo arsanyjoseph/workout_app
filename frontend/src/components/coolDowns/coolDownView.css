@@ -30,12 +30,6 @@
     box-shadow: 2px 2px 5px 5px var(--grey);
 }
 
-.buttons > button:hover {
-    background-color: var(--blue);
-    color: black;
-    box-shadow: 2px 2px 4px 4px var(--grey);
-}
-
 .successDelete {
     color: black;
     margin: '0.25em';

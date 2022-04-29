@@ -1,4 +1,4 @@
-import { useEffect, useState,memo } from "react"
+import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { login, reset } from '../features/auth/authSlice';
@@ -7,7 +7,7 @@ import CircularIndeterminate from "./spinner";
 import {BiLogIn} from 'react-icons/bi'
 import Header from './header'
 
-function Login2 () {
+export default function Login2 () {
     const [invalid, setInvalid] = useState(false)
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -88,7 +88,7 @@ function Login2 () {
                 <form onSubmit={(e)=> loginUser(e)} className="formLogin">
                     <input  onChange={(e)=> handleInputs(e)} type='email' autoComplete="username" name="email" value={email} placeholder='Email' />
                     <input  onChange={(e)=> handleInputs(e)} type='password' autoComplete="current-password" name="password" value={password} placeholder='Password'/>
-                    <button type="submit">Login</button>
+                    <button className="submitBtn" type="submit">Login</button>
                 </form>
             </div>
         </div>
@@ -96,5 +96,3 @@ function Login2 () {
     )
 }
 }
-
-export default memo(Login2)

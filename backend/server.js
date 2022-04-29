@@ -12,12 +12,9 @@ app.use(express.urlencoded({extended: false}))
 
 app.use(errorHandler)
 
-app.use("/", express.static(path.resolve(path.join(__dirname, 'frontend'), 'build')));
+app.use("/", express.static(path.resolve(path.join(__dirname, '../'), 'frontend', 'build')));
+app.use("/", express.static(path.resolve(__dirname, 'uploads')))
 
-
-app.get('/', (req,res)=> {
-    res.sendFile(path.resolve(path.join(__dirname, '../'), 'frontend', 'build', 'index.html' ))
-})
 
 app.use('/api/users', require('./routes/userRoutes'))
 
@@ -36,6 +33,10 @@ app.use('/api/usergroups', require('./routes/userGroupRoutes'))
 app.use('/api/metricsets', require('./routes/metricSetRoutes'))
 
 app.use('/api/notifications', require('./routes/notificationRoutes'))
+
+app.get('/*', (req,res)=> {
+    res.sendFile(path.resolve(path.join(__dirname, '../'), 'frontend', 'build', 'index.html' ))
+})
 
 app.all('/*', (req, res)=> {
     res.status(400).json({

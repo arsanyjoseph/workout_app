@@ -87,6 +87,11 @@ export default function CustomizedMenus(props) {
     setAnchorEl(null);
   };
 
+  const handleEdit = ()=> {
+    handleClose();
+    navigate('/home/editavatar')
+  }
+
   const handleLogout = ()=> {
     dispatch(logout())
     dispatch(reset())
@@ -116,9 +121,9 @@ export default function CustomizedMenus(props) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleEdit} disableRipple>
           <EditIcon />
-          Edit
+          Edit Avatar
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
           <FileCopyIcon />

@@ -3,14 +3,17 @@ import {useNavigate, useParams} from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import Spinner from '../spinner'
 import './coolDownView.css'
-import coolDownAsyncFunc from '../utils/asyncFuncs/asyncCoolDown'
-import CoolDownAssign from './coolDownAssign';
+import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
+
+import UserAssign from '../userAssign';
 import handleErr from '../utils/errorAlert';
-import { setDate } from 'date-fns';
+import searchArray from '../utils/extractName';
 
 export default function CoolDownView () {
     const {id}= useParams();
     const {user} = useSelector((state)=> state.auth)
+    const {users} = useSelector((state)=> state.users)
+
     const [selectedCoolDown, setSelectedCoolDown] = useState({})
     const [edit, setEdit] = useState(false)
     const [err, setErr] = useState(false)
@@ -21,8 +24,8 @@ export default function CoolDownView () {
         isComplete: false,
         setDate: Date.now(),
     })
-    const [message, setMessage] = useState('')
-
+    const [message, setMessage] = useState('Please, Select a User')
+    const url = '/api/cooldowns/'
     const navigate = useNavigate()
 
     const handleChangeDate = (newValue) => {
@@ -37,11 +40,12 @@ export default function CoolDownView () {
         e.preventDefault()
         if(!selectUser.userId || selectUser.userId === '' || selectUser.userId === undefined || !selectUser.setDate || selectUser.setDate === null) {
             handleErr(setErr)
+        } else {
+            asyncFunc.updateItem(url, id, selectUser, user.token, setSelectedCoolDown)
+            asyncFunc.getItem(url, id, user.token, setSelectedCoolDown)
+            setAssignUser(false)
+    
         }
-        coolDownAsyncFunc.updateCoolDown(id, selectUser, user.token, setSelectedCoolDown)
-        coolDownAsyncFunc.getCoolDown(id, user.token, setSelectedCoolDown)
-        document.getElementById('submitBtn').disabled = true;
-        setAssignUser(false)
     }
 
     //Select A User
@@ -55,8 +59,6 @@ export default function CoolDownView () {
                 ...prevState,
                     userId: e.target.value
               }))
-              console.log(selectUser)
-            document.getElementById('submitBtn').disabled = false;
         }
     }
     
@@ -77,7 +79,7 @@ export default function CoolDownView () {
     //Delete Cool Down
     const deleteCoolDown = (e)=> {
         e.preventDefault()
-        coolDownAsyncFunc.handleDelete(id, user.token)
+        asyncFunc.handleDelete(url, id, user.token)
         setSuccessDelete(true)
         setTimeout(()=> {
             setSelectedCoolDown({})
@@ -91,15 +93,15 @@ export default function CoolDownView () {
         if(selectedCoolDown.name === '' || selectedCoolDown.link === '') {
             handleErr(setErr)
         }
-        coolDownAsyncFunc.updateCoolDown(id, selectedCoolDown, user.token, setSelectedCoolDown)
-        coolDownAsyncFunc.getCoolDown(id, user.token, setSelectedCoolDown)
+        asyncFunc.updateItem(url, id, selectedCoolDown, user.token, setSelectedCoolDown)
+        asyncFunc.getItem(url, id, user.token, setSelectedCoolDown)
         setEdit(false)
     }
 
 
     useEffect(()=> {
         if(id) {
-            coolDownAsyncFunc.getCoolDown(id, user.token, setSelectedCoolDown)
+            asyncFunc.getItem(url, id, user.token, setSelectedCoolDown)
         }
     },[edit, assignUser, err, selectUser])
 
@@ -107,7 +109,7 @@ export default function CoolDownView () {
     if(assignUser) {
         return (
             <>
-              <CoolDownAssign value={selectUser.setDate} handleChange={handleChangeDate} submitUser={handleAssign} message={message} userAssigned={err} handleSelect={defineUser} handleBack={handleBackButton}/>
+              <UserAssign datePicker={true} value={selectUser.setDate} handleChange={handleChangeDate} submitUser={handleAssign} message= {message} isAssigned={err} handleSelect={defineUser} handleBack={handleBackButton}/>
             </>
         )
     }
@@ -131,8 +133,8 @@ export default function CoolDownView () {
                 <textarea type='text' value={selectedCoolDown.instruction} name="instruction"  placeholder='Instructions' onChange={(e)=>handleChange(e)} />
                 
                 <div className="buttons">
-                    <button onClick={()=>navigate('/dashboard/cooldowns')}>Back</button>
-                    <button id='submitButton' type="submit">Save</button>
+                    <button className='submitBtn' onClick={()=>navigate('/dashboard/cooldowns')}>Back</button>
+                    <button className='submitBtn' id='submitButton' type="submit">Save</button>
                 </div>
             </form>
         </div>
@@ -140,20 +142,21 @@ export default function CoolDownView () {
     </div>)
     }
 
-    if (selectedCoolDown.link) {
+    if (selectedCoolDown.link && !edit) {
     return ( 
         <div className='cooldownViewContainer'>
             <div className="buttons">
-                <button onClick={()=>navigate('/dashboard/cooldowns')}>Back</button>
-                <button onClick={()=> setEdit(true)}>Edit</button>
-                <button onClick={(e)=> deleteCoolDown(e)}>Delete</button>
-                <button onClick={()=> setAssignUser(true)}>Assign</button>
+                <button className='submitBtn' onClick={()=>navigate('/dashboard/cooldowns')}>Back</button>
+                <button className='submitBtn' onClick={()=> setEdit(true)}>Edit</button>
+                <button className='submitBtn' onClick={(e)=> deleteCoolDown(e)}>Delete</button>
+                <button className='submitBtn' onClick={()=> setAssignUser(true)}>Assign</button>
 
             </div>
             <h1>{selectedCoolDown.name}</h1>
             <h2>{selectedCoolDown.instruction}</h2>
+            <h3>{selectedCoolDown.assignedUsersId.length > 0 ? selectedCoolDown.assignedUsersId.map((item, index)=> <span key={index + item}>{searchArray(item.userId, users) + ', '}</span>) : 'No Users Assigned yet'}</h3>
             <div className='vidContainer'> 
-                <iframe width='100%' height='100%' src={coolDownAsyncFunc.linkVid(selectedCoolDown.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
+                <iframe width='100%' height='100%' src={asyncFunc.linkVid(selectedCoolDown.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
             </div>
             {successDelete && <div style={{marginTop: '1em', padding: '0.7em', width: '90%', borderRadius: '5px', fontSize: '18pt', fontWeight: 'bolder'}} className='errMessage' >Item Deleted Successfully</div>}
         </div>

@@ -3,7 +3,7 @@ const UserGroup = require('../models/userGroupModel')
 // Get All User Groups
 const getAllUserGroups = async (req, res) => {
     try {
-        const userGroups = await UserGroup.find()
+        const userGroups = await UserGroup.find().sort([['createdAt', -1]])
         res.status(200).json(userGroups)
     } catch (err) {
         console.log(err)
@@ -65,10 +65,19 @@ const updateUserGroup = async (req, res) => {
             res.status(400).json({
                 message: "User Group Not Found"
             })
-            throw new Error ('User Group Not Found')
         }
         //Update User Group
-        await updateGroup.updateOne(req.body)
+        if(req.body.name) {
+            await updateGroup.updateOne({
+                name: req.body.name
+            })
+        }
+
+        if(req.body.userId) {
+            await updateGroup.updateOne({
+                $push : {usersId : [req.body.userId]}
+            })
+        }
         const updated = await UserGroup.findById(req.params.id)
         res.status(200).json(updated)
     } catch (err) {

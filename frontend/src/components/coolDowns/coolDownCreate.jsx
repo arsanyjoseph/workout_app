@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import './coolDownCreate.css'
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import coolDown from "../utils/asyncFuncs/asyncCoolDown"
+import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import handleErr from '../utils/errorAlert'
 
 export default function CreateCoolDown () {
@@ -20,13 +20,13 @@ export default function CreateCoolDown () {
     const [redirect, setRedirect] = useState(false)
 
     const {name, instruction, link, token} = formData
-
+    const url = '/api/cooldowns/'
     const handleClick = (e)=> {
         e.preventDefault()
         if(name === '' || link === '') {
             handleErr(setErr)
         } else {
-        coolDown.createCoolDown(formData, token)
+        asyncFunc.createItem(url ,formData, token)
         setRedirect(true)
         }
     }
@@ -53,12 +53,12 @@ export default function CreateCoolDown () {
                     <input type='text' name="link" value={link} placeholder='* Link' onChange={handleChange}/>
                     <textarea type='text' name="instruction" value={instruction} placeholder='Instructions' onChange={handleChange}/>
                     <div className="buttons">
-                      <button onClick={()=>setRedirect(true)}>Back</button> 
-                      <button type="submit">Create</button>
+                      <button className='submitBtn' onClick={()=>setRedirect(true)}>Back</button> 
+                      <button className='submitBtn' type="submit">Create</button>
                     </div>
                 </form>
             </div>
-            {err && <div className='errMessage' >Please Fill Mandatory Fields</div>}
+            {err && <div className='errMessage' >Please, Fill Mandatory Fields</div>}
         </div>
     )
 }

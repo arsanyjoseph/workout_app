@@ -162,6 +162,7 @@ export default function Register () {
                     variant='standard'
                     className='registerBox'
                     >
+
                         <TextField
                         id="outlined-firstName-input"
                         label="First Name"

@@ -1,19 +1,20 @@
 import handleDate from '../utils/dateHandler'
 import { useSelector } from "react-redux"
 import searchArray from '../utils/extractName' 
-import './table.css'
+import '../coolDowns/table.css'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
-export default function Table ({data}) {
+export default function UsersTable ({data}) {
     return (
         <div className='tableContainer'>
             <table>
                 <thead>
                     <tr>
                         <th className='tableHead'>Name</th>
-                        <th className='tableHead'>Created By</th>
-                        <th className='tableHead'>Created At</th>   
-                        <th className='tableHead'>Assigned Users</th>   
+                        <th className='tableHead'>Joined</th>
+                        <th className='tableHead'>User Group</th>   
+                        <th className='tableHead'>Details</th>   
                     </tr>
                 </thead>
                 <tbody>
@@ -38,13 +39,12 @@ function GenerateTR (data) {
             <>
             {data.map((item, index)=> {
                 const creationDate = handleDate(item.createdAt)
-                const idName = searchArray(item.createdById, users)
                 return (
             <tr className='tableData' key={index}>
-                <td><button className='names' onClick={handleClick} value={item._id}>{item.name}</button></td>
-                <td>{idName}</td>
+                <td><button className='names' onClick={handleClick} value={item._id}>{item.firstName + ' ' + item.lastName}</button></td>
                 <td>{creationDate}</td>
-                <td className='assignedUsers'>{item.assignedUsersId.length > 0 ? item.assignedUsersId.map((i, index)=> <span key={index + i.userId}>{searchArray(i.userId, users) + ', '}</span> ) : 'No Users Assigned Yet'}</td>
+                <td>User Groups</td>
+                <td className='assignedUsers'>placeholder</td>
             </tr>
                 )  
             })}

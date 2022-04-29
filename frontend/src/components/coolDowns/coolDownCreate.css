@@ -1,4 +1,4 @@
-.newCoolDownContainer, .coolDownAssignContainer {
+.newCoolDownContainer, .coolDownAssignContainer, .userGroupContainer {
     display: flex;
     flex-direction: column;
     width: 60%;
@@ -48,17 +48,8 @@
 }
 
 .buttons > button {
-    background-color: black;
-    color: white;
-    font-size: large;
-    font-weight: 800;
-    padding: 1em 1.5em; 
-    border-radius: 10px;
-    width: fit-content;
     min-width: 2em;
     align-self:flex-end;
-    cursor: pointer;
-    margin: 0;
 }
 
 .buttons {
