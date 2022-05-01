@@ -8,15 +8,18 @@ import Register from './pages/register';
 import ClientHome from './pages/clientHome';
 import Dashboard from './pages/dashboard';
 
+import WorkoutCreate from './components/workouts/workoutCreate';
+import WorkoutList from './components/workouts/workoutList';
+import WorkoutView from './components/workouts/workoutView';
+
+import Users from './components/users/users';
 import UserView from './components/users/userView';
+
 import UserGroupView from './components/userGroup/userGroupView';
 import UserGroupCreate from './components/userGroup/userGroupCreate';
 import UserGroup from './components/userGroup/userGroupList';
-import Users from './components/users/users';
+
 import UploadAvatar from './components/imageUpload/imageUpload';
-import CoolDownList from './components/coolDowns/coolDownList';
-import CreateCoolDown from './components/coolDowns/coolDownCreate';
-import CoolDownView from './components/coolDowns/coolDownView';
 import NoMatch from './components/nomatch/nomatch'
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
           </Route>
           <Route path='/dashboard' element={<Dashboard/>}>
             <Route path='home/' element={<Navigate replace to="/home"/>} />
+
+            <Route path='' element={<Navigate replace to="/dashboard/users/"/>} />
+
             <Route path='users/' element={<Users/>} />
             <Route path='users/:id' element={<UserView/>} />
 
@@ -40,10 +46,14 @@ function App() {
             <Route path='usergroups/:id' element={<UserGroupView/>} />
             <Route path='usergroups/new' element={<UserGroupCreate/>} />
 
-            <Route path='cooldowns/' element={<CoolDownList/>} />
-            <Route path='cooldowns/:id' element={<CoolDownView/>} />
-            <Route path='cooldowns/new' element={<CreateCoolDown/>} />
+            <Route path=':type' element={<WorkoutList/>} />
+            <Route path=':type/:id' element={<WorkoutView/>} />
+            <Route path=':type/new' element={<WorkoutCreate/>} />
+
+
           </Route>
+
+          <Route path='/notfound' element={<NoMatch/>} />
           <Route path='/*' element={<NoMatch/>} />
         </Routes>
       </div>

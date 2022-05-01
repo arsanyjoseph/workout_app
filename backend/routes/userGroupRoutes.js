@@ -5,11 +5,13 @@ const {
     getUserGroup,
     createUserGroup,
     updateUserGroup,
-    deleteUserGroup
+    deleteUserGroup,
+    getGroupsByUserId
 } = require('../controllers/userGroupController')
 
 const {secure} = require('../middleware/authenticate')
 
+router.post('/groups', secure, getGroupsByUserId)
 router.get('/:id', secure, getUserGroup)
 router.put('/:id', secure, updateUserGroup)
 router.delete('/:id', secure, deleteUserGroup)

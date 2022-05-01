@@ -50,7 +50,9 @@ const updateItem = async (url, id, data, token, setState) => {
         }
     } 
     const response = await axios.put(url + id, data, config)
-    setState(response.data)
+    if (setState) {
+        setState(response.data)
+    }
     return response.data
 }
 
@@ -62,15 +64,29 @@ const handleDelete = async (url, id, token)=> {
         }
     }
     const response = await axios.delete(url + id, config)
-    return response.data}
+    return response.data
+}
 
+//Get Item by Users Id
+const getItemsByUserId = async (url, id, token, setState) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.post(url, id, config)
+    setState(response.data)
+    return response.data
+
+}
 const asyncFunc = {
     createItem,
     getItem,
     linkVid,
     updateItem,
     handleDelete,
-    getItems
+    getItems,
+    getItemsByUserId
 }
 
 export default asyncFunc

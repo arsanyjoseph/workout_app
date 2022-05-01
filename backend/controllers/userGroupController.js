@@ -3,12 +3,30 @@ const UserGroup = require('../models/userGroupModel')
 // Get All User Groups
 const getAllUserGroups = async (req, res) => {
     try {
-        const userGroups = await UserGroup.find().sort([['createdAt', -1]])
-        res.status(200).json(userGroups)
+            const userGroups = await UserGroup.find().sort([['createdAt', -1]])
+            res.status(200).json(userGroups)
     } catch (err) {
         console.log(err)
     }
 } 
+
+//Get Groups By user Id
+const getGroupsByUserId = async (req, res) => {
+    try {
+        const {id} = req.body
+        if(!id) {
+            res.status(400).json({
+                message: 'No User Id'
+            })
+        } else {
+            const userGroups = await UserGroup.find({usersId: id})
+            res.status(200).json(userGroups)    
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 //Get Specific User Group
 const getUserGroup = async (req, res) => {
@@ -112,11 +130,13 @@ const deleteUserGroup = async (req, res) => {
     }
 }
 
+
 module.exports = {
     getAllUserGroups,
     getUserGroup,
     createUserGroup,
     updateUserGroup,
-    deleteUserGroup
+    deleteUserGroup,
+    getGroupsByUserId
 }
 

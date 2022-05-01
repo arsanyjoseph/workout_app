@@ -6,8 +6,9 @@ import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import handleDate from "../utils/dateHandler"
 import searchArray from "../utils/extractName"
 import handleErr from "../utils/errorAlert"
-import '../coolDowns/coolDownView.css'
+import '../workouts/workoutView.css'
 import UserAssign from "../userAssign"
+import { AiFillDelete } from "react-icons/ai";
 
 export default function UserGroupView () {
     const {id} = useParams()
@@ -26,6 +27,11 @@ export default function UserGroupView () {
     
 
     const url = '/api/usergroups/'
+
+    const handleRemove = (e)=> {
+        e.preventDefault()
+        console.log(e.target.value)
+    }
 
     //Select A User
     const defineUser = (e)=> {
@@ -154,7 +160,9 @@ export default function UserGroupView () {
                 <h1>Group Name: {userGroup.name}</h1>
                 <h2>Created At: {handleDate(userGroup.createdAt)}</h2>
                 <h2>Assigned Users:</h2>
-                {userGroup.usersId.length > 0 ? userGroup.usersId.map((item, index)=> <span style={{fontWeight: 800, fontSize: '1.5em', color: 'var(--blue'}} key={index + item}>{searchArray(item, users)}</span>) : <h2>No Users Assigned yet</h2>}
+                <div className="usersAssigned">
+                    {userGroup.usersId.length > 0 ? userGroup.usersId.map((item, index)=> <span style={{fontWeight: 800, fontSize: '1.5em', color: 'var(--blue'}} key={index + item}>{searchArray(item, users)} <button className="deleteBtn" value={item} onClick={(e)=>handleRemove(e)}><AiFillDelete style={{ pointerEvents: 'none'}}/></button></span>) : <h2>No Users Assigned yet</h2>}
+                </div>
                 {successDelete && <div style={{marginTop: '1em', padding: '0.7em', width: '90%', borderRadius: '5px', fontSize: '18pt', fontWeight: 'bolder'}} className='errMessage' >Item Deleted Successfully</div>}
             </div>
             )

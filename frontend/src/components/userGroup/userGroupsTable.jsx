@@ -1,7 +1,7 @@
 import handleDate from '../utils/dateHandler'
 import { useSelector } from "react-redux"
 import searchArray from '../utils/extractName' 
-import '../coolDowns/table.css'
+import '../workouts/table.css'
 import { useNavigate } from 'react-router-dom'
 
 export default function UserGroupTable ({data}) {

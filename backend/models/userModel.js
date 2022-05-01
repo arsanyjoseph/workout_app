@@ -43,6 +43,11 @@ const userSchema = mongoose.Schema({
         type: String,
         default: ''
     },
+    lastLogin: {
+        type: Date,
+        required: true,
+        default: Date.now()
+    },
     height: {
         type: Number,
     },

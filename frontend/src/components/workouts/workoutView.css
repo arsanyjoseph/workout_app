@@ -37,3 +37,22 @@
     background-color: rgb(0, 121, 16);
     animation: fade-in-bottom 0.25s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
+
+
+.deleteBtn {
+    border: none;
+    background-color: transparent;
+    font-weight: 800;
+    font-size: 1em;
+    cursor: pointer;
+    color: var(--grey);
+}
+
+.deleteBtn:hover {
+    color: black;
+}
+
+.usersAssigned {
+    display: flex;
+    flex-direction: column;
+}

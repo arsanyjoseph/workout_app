@@ -18,7 +18,20 @@ export default function UserGroup () {
     },[])
 
     if(!userGroups || userGroups.length == 0) {
-        return <CircularIndeterminate />
+        return (
+        <>
+            <h1 style={{fontWeight: 800}}>User Groups</h1>
+                <div className="coolDownListContainer">
+                    <CircularIndeterminate/>
+                    <div className='buttons' style={{justifyContent: 'center', marginTop: '1em'}}>
+                        <button className='submitBtn' onClick={()=> navigate('/dashboard/usergroups/new')}>New</button>
+                    </div>
+                    <h1>No Items Found</h1>
+                </div>
+
+        </>
+        )
+        
     }
 
     if(userGroups.length > 0) {

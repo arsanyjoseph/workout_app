@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 
-const coolDownSchema = mongoose.Schema({
+const WorkOutSchema = mongoose.Schema({
     name: {
+        type: String,
+        required: true
+    },
+    type: {
         type: String,
         required: true
     },
@@ -34,4 +38,4 @@ const coolDownSchema = mongoose.Schema({
     timestamps: true,
 })
 
-module.exports = mongoose.model('CoolDown', coolDownSchema)
+module.exports = mongoose.model('WorkOut', WorkOutSchema)

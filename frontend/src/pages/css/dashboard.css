@@ -2,7 +2,7 @@
     background-image: url(../../../public/assets/banner/banner-4.jpg);
     background-repeat: no-repeat;
     background-size: cover;
-    height: 150vh;
+    height: 200vh;
     width: 100%;
     text-align: center;
     place-items: center;
@@ -13,4 +13,9 @@
 
 .dashboardContainer > input, textarea:focus {
     box-shadow: 1px 1px 4px 4px var(--blue);
+}
+
+.overlayGradient {
+    height: 100%    ;
+    background-image: linear-gradient(to left, rgb(0, 0, 0) , rgba(0, 0, 0, 0.37));
 }

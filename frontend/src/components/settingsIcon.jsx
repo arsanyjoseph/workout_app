@@ -127,12 +127,12 @@ export default function CustomizedMenus(props) {
         </MenuItem>
         <MenuItem onClick={handleClose} disableRipple>
           <FileCopyIcon />
-          Duplicate
+          Edit Profile
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>
           <MoreHorizIcon />
-          More
+          Notifications
         </MenuItem>
 
         <MenuItem onClick={handleClose} disableRipple>

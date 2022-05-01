@@ -47,7 +47,7 @@ export default function SwipeableTemporaryDrawer(props) {
     right: false,
   });
 
-  const navItems = ['Home', 'Users', 'UserGroups', 'Exercises','WarmUps','CoolDowns','Programs'];
+  const navItems = ['Home', 'Users', 'UserGroups', 'Exercise','WarmUp','CoolDown','Programs'];
 
   const navigate = useNavigate();
 

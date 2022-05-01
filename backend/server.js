@@ -18,15 +18,12 @@ app.use("/", express.static(path.resolve(__dirname, 'uploads')))
 
 app.use('/api/users', require('./routes/userRoutes'))
 
-app.use('/api/exercises', require('./routes/exerciseRoutes'))
+app.use('/api/workouts', require('./routes/workoutRoutes'))
+
 
 app.use('/api/programs', require('./routes/programRoutes'))
 
 app.use('/api/videos', require('./routes/videoRoutes'))
-
-app.use('/api/warmups', require('./routes/warmupRoutes'))
-
-app.use('/api/cooldowns', require('./routes/coolDownRoutes'))
 
 app.use('/api/usergroups', require('./routes/userGroupRoutes'))
 

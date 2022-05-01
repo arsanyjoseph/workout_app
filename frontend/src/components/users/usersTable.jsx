@@ -1,9 +1,9 @@
 import handleDate from '../utils/dateHandler'
 import { useSelector } from "react-redux"
-import searchArray from '../utils/extractName' 
-import '../coolDowns/table.css'
+import '../workouts/table.css'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useState } from 'react'
+import GroupsList from './groupsList'
 
 export default function UsersTable ({data}) {
     return (
@@ -12,8 +12,8 @@ export default function UsersTable ({data}) {
                 <thead>
                     <tr>
                         <th className='tableHead'>Name</th>
-                        <th className='tableHead'>Joined</th>
-                        <th className='tableHead'>User Group</th>   
+                        <th className='tableHead'>Last Login</th>
+                        <th className='tableHead'>User Groups</th>   
                         <th className='tableHead'>Details</th>   
                     </tr>
                 </thead>
@@ -26,6 +26,7 @@ export default function UsersTable ({data}) {
 }
 
 function GenerateTR (data) {
+    const {user} = useSelector((state)=> state.auth)
     const {users} = useSelector((state)=> state.users)
     const navigate = useNavigate()
 
@@ -38,13 +39,13 @@ function GenerateTR (data) {
             return (
             <>
             {data.map((item, index)=> {
-                const creationDate = handleDate(item.createdAt)
+                const lastLoginDate = handleDate(item.lastLogin)
                 return (
             <tr className='tableData' key={index}>
                 <td><button className='names' onClick={handleClick} value={item._id}>{item.firstName + ' ' + item.lastName}</button></td>
-                <td>{creationDate}</td>
-                <td>User Groups</td>
-                <td className='assignedUsers'>placeholder</td>
+                <td>{lastLoginDate}</td>
+                <td><GroupsList token={user.token} url='/api/usergroups/groups' id={{id: item._id}} /></td>
+                <td className='assignedUsers'></td>
             </tr>
                 )  
             })}

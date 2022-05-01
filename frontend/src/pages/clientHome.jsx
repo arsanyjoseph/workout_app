@@ -14,7 +14,7 @@ export default function ClientHome () {
         if(!user) {
             navigate('/login')
         }
-        if (user && user.isAdimn) {
+        if (user && user.isAdmin) {
             navigate('/dashboard')
         }
     },[user, navigate])

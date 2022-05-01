@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react"
-import './coolDownCreate.css'
+import './workoutCreate.css'
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import handleErr from '../utils/errorAlert'
+import handleName from "../utils/handleTypeName"
 
-export default function CreateCoolDown () {
+export default function WorkoutCreate () {
     const {user} = useSelector((state)=> state.auth)
+    const {type} = useParams()
+    const url = `/api/workouts/${type}`
+
     const [formData, setFormData] = useState({
+        type: type,
         name: '',
         instruction: '',
         link: '',
@@ -20,7 +25,7 @@ export default function CreateCoolDown () {
     const [redirect, setRedirect] = useState(false)
 
     const {name, instruction, link, token} = formData
-    const url = '/api/cooldowns/'
+
     const handleClick = (e)=> {
         e.preventDefault()
         if(name === '' || link === '') {
@@ -41,12 +46,12 @@ export default function CreateCoolDown () {
 
     useEffect(()=> {
         if (redirect) {
-            navigate('/dashboard/cooldowns')
+            navigate(`/dashboard/${type}`)
         }
     },[redirect, navigate, formData])
     return (
         <div className="newCoolDownContainer">
-            <div className="formHead">New Cool Down</div>
+            <div className="formHead">New {handleName(type)}</div>
             <div className="formBody">
                 <form className="formCoolDown" onSubmit={handleClick}>
                     <input type='text' name="name" value={name} placeholder='* Name' onChange={handleChange}/>

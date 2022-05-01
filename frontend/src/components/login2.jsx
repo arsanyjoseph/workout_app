@@ -6,6 +6,7 @@ import './login2.css'
 import CircularIndeterminate from "./spinner";
 import {BiLogIn} from 'react-icons/bi'
 import Header from './header'
+import asyncFunc from "./utils/asyncFuncs/asyncFuncs";
 
 export default function Login2 () {
     const [invalid, setInvalid] = useState(false)
@@ -51,6 +52,8 @@ export default function Login2 () {
         } 
 
         if(isSuccess || user) {
+            const logged = Date.now()
+            asyncFunc.updateItem('/api/users/', user.id, { lastLogin: logged}, user.token )
             navigate('/home')
         }
         dispatch(reset())

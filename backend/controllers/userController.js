@@ -5,11 +5,10 @@ const multer = require('multer')
 const storage = require('../multer/config')
 const checkFileType = require('../multer/fileCheck')
 
-
 //getAllUsers
 const getAllUsers = async (req, res) => {
     try {
-        const allUsers = await User.find().select(['_id', 'firstName', 'lastName', 'isAdmin', 'isPending', 'createdAt'])
+        const allUsers = await User.find().select(['_id', 'firstName', 'lastName', 'isAdmin', 'isPending', 'createdAt', 'lastLogin']).sort([['firstName', 1]])
         res.status(200).json(allUsers)
     } catch(err) {
         console.log(err)
@@ -80,7 +79,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Check for User by Id
-        const {firstName, lastName, gender, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan} = req.body
+        const {firstName, lastName, gender, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin} = req.body
         const user = await User.findById(req.params.id)
         if (!user){
             res.status(400).json({
@@ -90,7 +89,8 @@ const updateUser = async (req, res) => {
         }
 
         //Update User
-        await user.updateOne({
+        if(firstName || lastName || gender || phoneNumber || location || avatarLink || height || weight) {
+            await user.updateOne({
             firstName: firstName,
             lastName: lastName,
             gender: gender,
@@ -99,18 +99,35 @@ const updateUser = async (req, res) => {
             avatarLink: avatarLink,
             height: height,
             weight: weight,
-            goals: goals,
-            notes: notes,
-            limitations: limitations,
-            equipments: equipments,
-            progressPics: progressPics,
-            nutritionPlan: nutritionPlan
         })
+        }
+
+        if(lastLogin) {
+            console.log(lastLogin)
+            await user.updateOne({
+                lastLogin: lastLogin
+            })
+        }
+
+        if (goals || equipments || notes | limitations || nutritionPlan || progressPics) {
+            await user.updateOne({
+             $push : {
+                 goals: [goals],
+                 equipments : [equipments],
+                 notes: [notes],
+                 limitations: [limitations],
+                 progressPics: [progressPics],
+                 nutritionPlan: [nutritionPlan]
+             }   
+            })
+        }
+        
         const updatedUser = await User.findById(req.params.id)
         res.status(200).json({
             firstName: updatedUser.firstName,
             lastName: updatedUser.lastName,
             email: updatedUser.email,
+            lastLogin: updatedUser.lastLogin
         })
     } catch(err) {
         console.log(err)
@@ -139,7 +156,8 @@ const logInUser = async (req, res) => {
             lastName: user.lastName,
             token: generateToken(user._id),
             isAdmin: user.isAdmin,
-            isPending: user.isPending
+            isPending: user.isPending,
+            id: user._id
         })
     } else {
         //If Wrong Password
@@ -187,6 +205,7 @@ const generateToken = (id) => {
     })
 }
 
+//Avatar Upload
 const upload = multer({
     storage: storage,
     fileFilter: function (req, file, cb) {
@@ -202,7 +221,10 @@ const uploadAvatar = async (req, res) => {
         } else {
             console.log(req.file)
             res.json({
-                message: "Done"
+                message: "Successful",
+                url: req.file.destination,
+                path: '/uploads/' + req.file.filename
+
             })
         }
     })
@@ -216,6 +238,6 @@ module.exports = {
     updateUser,
     deleteUser,
     logInUser,
-    uploadAvatar
+    uploadAvatar,
 }
 
