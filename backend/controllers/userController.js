@@ -130,6 +130,9 @@ const updateUser = async (req, res) => {
         if(password) {
             const salt = await bcrypt.genSalt(10)
             const hashedPass = await bcrypt.hash(password, salt)
+            await user.updateOne({
+                password: hashedPass
+            })
             
         }
         
