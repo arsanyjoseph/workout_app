@@ -20,6 +20,8 @@ import UserGroupView from './components/userGroup/userGroupView';
 import UserGroupCreate from './components/userGroup/userGroupCreate';
 import UserGroup from './components/userGroup/userGroupList';
 
+import ProgramCreate from './components/programs/programCreate';
+
 import UploadAvatar from './components/imageUpload/imageUpload';
 import NoMatch from './components/nomatch/nomatch'
 
@@ -47,6 +49,10 @@ function App() {
             <Route path='usergroups/' element={<UserGroup/>} />
             <Route path='usergroups/:id' element={<UserGroupView/>} />
             <Route path='usergroups/new' element={<UserGroupCreate/>} />
+
+            <Route path='programs/' element={<UserGroup/>} />
+            <Route path='programs/:id' element={<UserGroupView/>} />
+            <Route path='programs/new' element={<ProgramCreate/>} />
 
             <Route path=':type' element={<WorkoutList/>} />
             <Route path=':type/:id' element={<WorkoutView/>} />

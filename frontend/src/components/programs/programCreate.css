@@ -1,0 +1,21 @@
+.daysContainer {
+    border-bottom: 1px solid rgb(145, 145, 145);
+    max-width: 80%;
+    margin: 0.25em auto;
+    color: black;
+}
+
+.dayLabel {
+    color: black;
+    font-weight: 800;
+}
+
+.restBtn {
+    font-size: small;
+    padding: 0.5em;
+    margin: 0 0.5em;
+}
+
+.selectWorkouts {
+    margin: 0.5em 0.5em;
+}
