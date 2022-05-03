@@ -7,6 +7,7 @@ import NavDash from './nav'
 import {CgMenuGridR}  from 'react-icons/cg'
 import './userView.css'
 import AddDetails from "./assignDetails"
+import Calendar from "./userCalendar"
 
 
 
@@ -23,6 +24,7 @@ export default function UserView () {
         setToggleMenu(!toggleMenu)
     }
 
+    const lowerName = name.toLowerCase()
     const handleEvent = (e)=> {
         e.preventDefault()
         setName(e.target.value)
@@ -31,15 +33,15 @@ export default function UserView () {
 
     const cancelEventForm = (e) => {
         e.preventDefault()
-        setEventForm(false)
+       setEventForm(false)
     }
     useEffect(()=> {
         if(!id) {
             navigate('/dashboard/users')
+        } else {
+            asyncFunc.getItem(url, id, user.token, setUserSelected)
         }
-
-        asyncFunc.getItem(url, id, user.token, setUserSelected)
-    },[toggleMenu, showNavdash, setToggleMenu, eventForm])
+    },[])
 
     if(!userSelected.firstName) {
         return <>
@@ -50,14 +52,16 @@ export default function UserView () {
     if(userSelected) {
        return (
         <div>
-             <h1 onClick={()=>navigate(`/dashboard/users/${id}/view`)}>{userSelected.firstName + ' ' + userSelected.lastName}</h1>
+             <h1 className="userName" onClick={()=>navigate(`/dashboard/users/${id}/view`)}>{userSelected.firstName + ' ' + userSelected.lastName}</h1>
              <div className="showBtnContainer showIcon" onClick={showNavdash}>
                 <CgMenuGridR style={{fontSize: '2em', pointerEvents: 'none'}}/>
             </div>
             <div className="userContainer">
                 <NavDash setEvents={(e)=>handleEvent(e)} show={toggleMenu}/>
-                <div className="userContent" style={{backgroundColor: 'white', color: 'black'}}></div>
-                {eventForm && <AddDetails eventName={name} cancelEvent={(e)=> cancelEventForm(e)} />}
+                <div className="userContent" style={{backgroundColor: 'white', color: 'black'}}>
+                    <Calendar/>
+                </div>
+                {eventForm && <AddDetails data={userSelected[lowerName]} eventName={name} cancelEvent={cancelEventForm} />}
             </div>
         </div>
         ) 

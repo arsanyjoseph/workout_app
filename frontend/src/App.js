@@ -14,6 +14,7 @@ import WorkoutView from './components/workouts/workoutView';
 
 import Users from './components/users/users';
 import UserView from './components/users/userView';
+import ProfileView from './components/users/profileView';
 
 import UserGroupView from './components/userGroup/userGroupView';
 import UserGroupCreate from './components/userGroup/userGroupCreate';
@@ -41,6 +42,7 @@ function App() {
 
             <Route path='users/' element={<Users/>} />
             <Route path='users/:id' element={<UserView/>} />
+            <Route path='users/:id/view' element={<ProfileView/>} />
 
             <Route path='usergroups/' element={<UserGroup/>} />
             <Route path='usergroups/:id' element={<UserGroupView/>} />

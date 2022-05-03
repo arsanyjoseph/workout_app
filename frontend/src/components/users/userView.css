@@ -27,3 +27,8 @@
     flex: 3;
     margin: 1em 1em;
 }
+
+.userName:hover {
+    color: var(--blue);
+    cursor: pointer;
+}

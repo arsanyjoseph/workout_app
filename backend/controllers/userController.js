@@ -79,13 +79,19 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Check for User by Id
-        const {firstName, lastName, gender, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin} = req.body
+        const {firstName, lastName, gender, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin, isPending, password} = req.body
         const user = await User.findById(req.params.id)
         if (!user){
             res.status(400).json({
                 message: "User Not Found"
             })
             throw new Error ('User Not Found')
+        }
+
+        if(isPending === false || isPending === true) {
+            await user.updateOne({
+                isPending: isPending,
+            })
         }
 
         //Update User
@@ -103,7 +109,6 @@ const updateUser = async (req, res) => {
         }
 
         if(lastLogin) {
-            console.log(lastLogin)
             await user.updateOne({
                 lastLogin: lastLogin
             })
@@ -121,13 +126,20 @@ const updateUser = async (req, res) => {
              }   
             })
         }
+
+        if(password) {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPass = await bcrypt.hash(password, salt)
+            
+        }
         
         const updatedUser = await User.findById(req.params.id)
         res.status(200).json({
             firstName: updatedUser.firstName,
             lastName: updatedUser.lastName,
             email: updatedUser.email,
-            lastLogin: updatedUser.lastLogin
+            lastLogin: updatedUser.lastLogin,
+            isPending: updatedUser.isPending
         })
     } catch(err) {
         console.log(err)

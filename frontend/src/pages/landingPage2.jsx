@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import ImgMediaCard from '../components/card'
 import scrollFunc from '../components/utils/scrollFunc';
+import { useNavigate } from 'react-router-dom';
 
 function useOnScreen(options) {
     const ref = useRef()
@@ -32,16 +33,17 @@ function useOnScreen(options) {
      
 export default function LandingPage2 () {
     const [ref, visible] = useOnScreen({rootmargin: '0px', threshold: 0.6})
-    const {user} = useSelector((state)=> { return state.auth})
+    const {user} = useSelector((state)=> state.auth)
     const images = ['plan2.jpg', 'plan3.jpg', 'plan5.jpg']
+    const navigate = useNavigate()
     
     useEffect (()=> {
-        
+    
     },[user])
     return <>
     <div className='landingContainer'>
         <div className='gradientContainer'>
-             {user ? <Header name={user.firstName} validate={user.isAdmin}/> : <Header/>}
+             <Header/>
             <div className="showContainer" id='banner'>
                 <h1>Welcome to Calisthenics World</h1>
                 <p>Start Your Journey Safely, <a href='/login'>Join Us</a></p>

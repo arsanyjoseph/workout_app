@@ -55,20 +55,32 @@ const userSchema = mongoose.Schema({
         type: Number,
     },
     goals: {
-        type: [String],
-        default: ''
+        type: [{
+            title: String,
+            createdAt: Date
+        }],
+        default: []
     },
     equipments: {
-        type: [String],
-        default: ''
+        type: [{
+            title: String,
+            createdAt: Date
+        }],
+        default: []
     },
     notes: {
-        type: [String],
-        default: ''  
+        type: [{
+            title: String,
+            createdAt: Date
+        }],
+        default: []  
     },
     limitations: {
-        type: [String],
-        default: ''
+        type: [{
+            title: String,
+            createdAt: Date
+        }],
+        default: []
     },
     metricSetsId: {
         type: [mongoose.Schema.Types.ObjectId],

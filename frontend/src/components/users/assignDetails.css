@@ -14,3 +14,19 @@
     width: 50%;
     animation: 0.5s ease-in-out 0s 1 slideInFromTop;
 }
+
+
+.closeIcon {
+    margin-top: 0.5em;
+    margin-right: 0.5em;
+    color: white;
+    position: relative;
+    top: 0;
+    right: 0;
+    float: right;
+    cursor: pointer;
+}
+
+.closeIcon:hover {
+    color: var(--blue);
+}
