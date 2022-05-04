@@ -24,16 +24,6 @@ const login = async (userData) => {
     return response.data
 }
 
-const setAvatar = async (url, id, token) => {
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    }
-    const response = await axios.get(url + id, config)
-    setState(response.data)
-    return response.data
-}
 
 const authService = {
     register,

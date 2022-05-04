@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {useSelector} from 'react-redux'
 import ImageAvatars from '../avatar';
+import handleErr from '../utils/errorAlert'
 
 export default function UploadAvatar() {
     const {user} = useSelector((state)=> state.auth)
     const [file, setFile] = useState(null)
     const [fileUploaded, setFileUploaded] = useState({})
     const [showMsg, setShowMsg] = useState(false)
+    const [err, setErr] = useState(false)
     const handleChange = (e)=> {
         e.preventDefault()
         setFile(e.target.files[0])
@@ -30,7 +32,7 @@ export default function UploadAvatar() {
     const handleSubmit = (e)=> {
         e.preventDefault()
         if (file === null) {
-            console.log('Please Select a File')
+            handleErr(setErr)
         } else {
           const url = '/api/users/upload';
         const formData = new FormData();
@@ -59,9 +61,9 @@ export default function UploadAvatar() {
                 <label htmlFor='avatarInput'><FaFileUpload className='uploadIcon'/></label> <br/>
                 <input id='avatarInput' hidden name="myImage" type='file' onChange={handleChange}/> <br/>
                 <button className='submitBtn' type="submit">Submit</button>
-            </form>
-            </> 
-            
+            </form> 
+            {err && <div style={{width: '100%', fontSize: '1.75em'}} className='errMessage' >Please, Select A Valid File Type</div>}
+            </>
             :
             
             <>

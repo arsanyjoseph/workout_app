@@ -56,29 +56,54 @@ const userSchema = mongoose.Schema({
     },
     goals: {
         type: [{
-            title: String,
-            createdAt: Date
+            title: {
+                type: String
+            },
+            description: {
+                type: String
+            },
+            createdAt: {
+                type: Date
+            }
         }],
         default: []
     },
     equipments: {
         type: [{
-            title: String,
-            createdAt: Date
+            name: {
+                type: String
+            },
+            createdAt: {
+                type: Date
+            }
         }],
         default: []
     },
     notes: {
         type: [{
-            title: String,
-            createdAt: Date
+            title: {
+                type: String
+            },
+            description: {
+                type: String
+            },
+            createdAt: {
+                type: Date
+            }
         }],
         default: []  
     },
     limitations: {
         type: [{
-            title: String,
-            createdAt: Date
+            title: {
+                type: String
+            },
+            description: {
+                type: String
+            },
+            createdAt: {
+                type: Date
+            }
         }],
         default: []
     },
@@ -93,10 +118,15 @@ const userSchema = mongoose.Schema({
     },
     nutritionPlan: {
         type: [{
-            carb: Number,
-            fat: Number,
-            protein: Number
-        }],
+            carb: {
+                type: Number
+            },
+            fat: {
+                type: Number
+            },
+            protein: {
+                type:Number
+        }}],
         default:[{
             carb: null,
             fat: null,

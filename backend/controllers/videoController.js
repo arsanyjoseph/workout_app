@@ -88,20 +88,22 @@ const updateVideo = async (req, res) => {
 const deleteVideo = async (req, res) => {
     try {
         //Fetch Video By Id
-        const removedVideo = await Video.findById(req.params.id)
-
+        const {id} = req.params
+        console.log(id)
+        const removedVideo = await Video.findById(id)
+        console.log(removedVideo)
         //Check If Video does not exist
         if(!removedVideo) {
             res.status(400)
             res.status(400).json({
-                message: "Video Not Found"
+                message: "Video is not Found"
             })
             throw new Error (`No Video with ${req.params.id} Id`)
         }
         //Remove Video
         await removedVideo.remove()
         res.status(200).json({
-            id: req.params.id
+            id: id
         })
 
     } catch (err) {

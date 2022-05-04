@@ -1,8 +1,11 @@
 import './assignDetails.css'
 import {useEffect, useState} from 'react'
 import {FaWindowClose} from 'react-icons/fa'
+import {useSelector} from 'react-redux'
 
 export default function AddDetails ({cancelEvent, eventName, data}) {
+    const {user} = useSelector((state)=> state.auth)
+    const eventLower = eventName.toLowerCase()
     const [newMode, setNewMode] = useState(false)
     const handleNew = (e)=> {
         e.preventDefault()
@@ -24,7 +27,9 @@ export default function AddDetails ({cancelEvent, eventName, data}) {
     })
 
     useEffect(()=> {
-        console.log(data)
+        if(data) {
+            console.log(data)
+        }
     },[newMode])
 
     if(!newMode) {

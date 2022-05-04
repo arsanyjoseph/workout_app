@@ -2,7 +2,7 @@ import { useEffect, useState} from 'react'
 import './workoutList.css'
 import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
-import Spinner from '../spinner'
+import CircularIndeterminate from '../spinner'
 import Table from './table'
 import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 import handleName from '../utils/handleTypeName'
@@ -13,7 +13,7 @@ export default function WorkoutList () {
     const [redirect, setRedirect] = useState(false)
     const {user} = useSelector((state)=> state.auth)
     const {type} = useParams()
-    const url = `/api/workouts/${type}`
+    const url = `/api/workouts/${type}/`
     const navigate = useNavigate()
     const workoutTypes = ['exercise', 'warmup', 'cooldown']
 
@@ -34,14 +34,14 @@ export default function WorkoutList () {
 
         asyncFunc.getItems(url, user.token, setItems)
         return ()=> setMessage('')
-    },[message, type, redirect, items])
+    },[message, type, redirect])
 
     if(items.length === 0) {
         return (
             <>
                 <h1 style={{fontWeight: 800}}>{handleName(type)}</h1>
                 <div className="coolDownListContainer">
-                    <Spinner/>
+                    <CircularIndeterminate/>
                     <div className='buttons' style={{justifyContent: 'center', marginTop: '1em'}}>
                         <button className='submitBtn' onClick={(e)=> handleNewBtn(e)}>New</button>
                     </div>

@@ -29,14 +29,6 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI)=> {
     }
 })
 
-export const setAvatar = createAsyncThunk('auth/setAvatar', async (id, thunkAPI)=> {
-    try {
-        return await authService.setAvatar(id)
-    } catch (error) {
-        const message = error.toString()
-        return thunkAPI.rejectWithValue(message)
-    }
-})
 
 export const logout = createAsyncThunk('auth/logout', async ()=> {
     try {

@@ -10,10 +10,13 @@ export default function LibraryView () {
     const [vids, setVids] = useState([])
     const urlApi = '/api/videos/'
     const navigate = useNavigate()
+    const deleteItem = (i)=> {
+       asyncFunc.handleDelete(urlApi, i, user.token)
+       asyncFunc.getItems(urlApi, user.token, setVids)
+    }
 
     useEffect(()=> {
         asyncFunc.getItems(urlApi, user.token, setVids)
-        console.log(vids.length)
     },[])
 
     if(vids.length === 0) {
@@ -29,7 +32,7 @@ export default function LibraryView () {
                 <button className='submitBtn' onClick={()=> navigate('/dashboard/library/new')}>New</button>
             </div>
             <div>
-                {vids.map((item, index)=> <LibraryCard key={index} cardTitle={item.name} CardDescription={item.description} url={item.link} />)}
+                {vids.map((item, index)=> <LibraryCard key={index}  deleteItem={()=> deleteItem(item._id)} cardTitle={item.name} CardDescription={item.description} url={item.link} />)}
             </div>
         </div>
         </>

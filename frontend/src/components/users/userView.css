@@ -6,7 +6,15 @@
     margin-left: 1em;
     cursor: pointer;
     position: sticky;
+    z-index: 2;
+}
+
+.showIcon {
     top: 0;
+}
+
+.addEvnt {
+    top: 5;
 }
 
 .showBtnContainer:hover {
@@ -26,6 +34,11 @@
     width: auto;
     flex: 3;
     margin: 1em 1em;
+}
+
+.userName {
+    max-width: fit-content;
+    margin: 0 auto;
 }
 
 .userName:hover {

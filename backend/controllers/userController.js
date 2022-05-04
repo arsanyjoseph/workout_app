@@ -175,7 +175,8 @@ const logInUser = async (req, res) => {
             isAdmin: user.isAdmin,
             isPending: user.isPending,
             id: user._id,
-            avatarLink: user.avatarLink
+            avatarLink: user.avatarLink,
+            goals: user.goals
         })
     } else {
         //If Wrong Password

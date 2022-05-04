@@ -8,8 +8,14 @@ const {
     deleteProgram
 } = require('../controllers/programController')
 
-router.route('/').get(getAllPrograms).post(createProgram)
+const {secure} = require('../middleware/authenticate')
 
-router.route('/:id').get(getProgram).put(updateProgram).delete(deleteProgram)
+router.get('/:id', secure, getProgram)
+router.put('/:id', secure, updateProgram)
+router.delete('/:id', secure, deleteProgram)
+
+router.get('/', secure, getAllPrograms)
+router.post('/', secure, createProgram)
+
 
 module.exports = router

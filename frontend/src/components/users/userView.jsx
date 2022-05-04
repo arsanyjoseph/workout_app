@@ -8,33 +8,86 @@ import {CgMenuGridR}  from 'react-icons/cg'
 import './userView.css'
 import AddDetails from "./assignDetails"
 import Calendar from "./userCalendar"
+import {CgAddR} from 'react-icons/cg'
+import EventHandler from "./calendarEvent"
 
 
 
 export default function UserView () {
+    const navigate = useNavigate()
+    const url = '/api/users/'
     const {user} = useSelector((state)=> state.auth)
     const {id} = useParams()
-    const navigate = useNavigate()
+
     const [userSelected, setUserSelected] = useState({})
-    const url = '/api/users/'
     const [toggleMenu , setToggleMenu] = useState(false)
+    //State Control Showing Event Assign
     const [eventForm, setEventForm] = useState(false)
+    //State Control Showing Personal Info
+    const [userPersonal, setUserPersonal] = useState(false)
+
     const [name, setName] = useState('')
+
+    //States Controlling Assigning Event Workouts
+    const [date, setDate] = useState(Date.now())
+    const [type, setType]= useState('')
+    const [data, setData] = useState([])
+    const [workoutId, setWorkoutId] = useState(null)
+    const [redirect, setRedirect] = useState(null)
+
+    const urlAssign = `/api/workouts/`
+
+    //Handle Assign Workout Date
+    const handleChangeDate = (newValue)=> {
+        setDate(newValue.toISOString())
+    }
+
+    const handleType = (e)=> {
+        e.preventDefault()
+        const typeName = e.target.value.toLowerCase()
+        setType(typeName)
+        asyncFunc.getItems(urlAssign + typeName, user.token, setData)
+    }
+
+    const handleAssign = (e)=> {
+        e.preventDefault()
+        const dataAssign = {
+            userId: id,
+            isComplete: false,
+            setDate: date
+        }
+        asyncFunc.updateItem(urlAssign + type + '/', workoutId, dataAssign, user.token, setRedirect)
+        setDate(Date.now())
+        setType('')
+        setData([])
+        setWorkoutId(null)
+        setEventForm(false)
+        
+    }
+    //Showing Side Bar
     const showNavdash = ()=> {
         setToggleMenu(!toggleMenu)
     }
 
+    //For test
+    const events = [
+        { title: 'event 1', date: '2022-05-01' },
+        { title: 'event 2', date: '2022-05-01' }
+      ]
+    //Convert Name to lowerCase
     const lowerName = name.toLowerCase()
+    //Show Personal Info Assign/View
     const handleEvent = (e)=> {
         e.preventDefault()
         setName(e.target.value)
-        setEventForm(true)
+        setUserPersonal(true)
+    }
+    //Cancel Overlay Forms
+    const cancelEventForm = (e, setState) => {
+        e.preventDefault()
+       setState(false)
     }
 
-    const cancelEventForm = (e) => {
-        e.preventDefault()
-       setEventForm(false)
-    }
     useEffect(()=> {
         if(!id) {
             navigate('/dashboard/users')
@@ -52,17 +105,31 @@ export default function UserView () {
     if(userSelected) {
        return (
         <div>
-             <h1 className="userName" onClick={()=>navigate(`/dashboard/users/${id}/view`)}>{userSelected.firstName + ' ' + userSelected.lastName}</h1>
+            <div style={{margin: '0 auto'}}>
+                <h1 className="userName" onClick={()=>navigate(`/dashboard/users/${id}/view`)}>{userSelected.firstName + ' ' + userSelected.lastName}</h1>
+            </div>
              <div className="showBtnContainer showIcon" onClick={showNavdash}>
                 <CgMenuGridR style={{fontSize: '2em', pointerEvents: 'none'}}/>
             </div>
+            <div className="showBtnContainer addEvnt" onClick={(e)=> setEventForm(true)}>
+                <CgAddR style={{fontSize: '2em', pointerEvents: 'none'}} />
+            </div>
             <div className="userContainer">
                 <NavDash setEvents={(e)=>handleEvent(e)} show={toggleMenu}/>
-                <div className="userContent" style={{backgroundColor: 'white', color: 'black'}}>
-                    <Calendar/>
+                <div className="userContent" style={{backgroundColor: 'var(--grey)', color: 'black', borderRadius: '5px', padding: '1em'}}>
+                    <Calendar events={events}/>
                 </div>
-                {eventForm && <AddDetails data={userSelected[lowerName]} eventName={name} cancelEvent={cancelEventForm} />}
             </div>
+            {eventForm && <EventHandler value={date} 
+            data={data} type={type}
+             handleChange={handleChangeDate}
+              closeEventForm={(e)=>cancelEventForm(e, setEventForm)}
+            handleType={(e)=> handleType(e)}
+            handleWorkoutId={(e)=> setWorkoutId(e.target.value)}
+            handleAssign={handleAssign}
+            />}
+
+            {userPersonal && <AddDetails data={userSelected[lowerName]} eventName={name} cancelEvent={(e)=>cancelEventForm(e, setUserPersonal)} />}
         </div>
         ) 
     }

@@ -20,3 +20,11 @@
   color: black;
   box-shadow: 2px 2px 4px 4px var(--grey);
 }
+
+.errMessage {
+  color: black;
+  margin: '0.25em';
+  font-weight: bold;
+  background-color: red;
+  animation: fade-in-bottom 0.25s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}

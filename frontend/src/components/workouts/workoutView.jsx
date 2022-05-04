@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {useNavigate, useParams} from 'react-router-dom'
 import { useSelector } from 'react-redux';
-import Spinner from '../spinner'
+import CircularIndeterminate from '../spinner'
 import './workoutView.css'
 import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 
@@ -117,10 +117,10 @@ export default function WorkoutView () {
         )
     }
 
-    if(!item.link) {
+    if(!item.name && !item.link) {
         return (
             <div className='takeTime'>
-                <Spinner/>
+                <CircularIndeterminate/>
             </div>
         )
     }
