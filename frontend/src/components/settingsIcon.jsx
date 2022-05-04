@@ -110,7 +110,7 @@ export default function CustomizedMenus(props) {
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
       >
-        <ImageAvatars name={user.firstName}/>
+        <ImageAvatars name={user.firstName} imgSrc={'/' + user.avatarLink}/>
       </Button>
       <StyledMenu
         id="demo-customized-menu"

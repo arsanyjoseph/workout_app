@@ -54,3 +54,8 @@
 .tableData:hover {
     background-color: rgba(185, 210, 248, 0.596);
 }
+
+.namesTd {
+    display: flex;
+    flex-direction: row;
+}

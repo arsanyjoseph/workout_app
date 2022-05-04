@@ -15,7 +15,7 @@ export default function Header(props) {
         <header className='header'>
             <div className='logo'>
                 <img src='/assets/logo-2.png' alt='logo' />
-                <Link  className='linkStyle' to='/'><FaHome/> Home</Link>
+                <Link  className='linkStyle' to='/home'><FaHome/> Home</Link>
             </div>
             <div className='optionsContainer'>
             { props.name ? <ul>

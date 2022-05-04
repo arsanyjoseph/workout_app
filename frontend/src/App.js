@@ -23,6 +23,9 @@ import UserGroup from './components/userGroup/userGroupList';
 import ProgramCreate from './components/programs/programCreate';
 
 import UploadAvatar from './components/imageUpload/imageUpload';
+
+import LibraryView from './components/library/libraryView';
+import LibraryCreate from './components/library/libraryCreate';
 import NoMatch from './components/nomatch/nomatch'
 
 function App() {
@@ -58,6 +61,9 @@ function App() {
             <Route path=':type/:id' element={<WorkoutView/>} />
             <Route path=':type/new' element={<WorkoutCreate/>} />
 
+            <Route path='library' element={<LibraryView/>} />
+            <Route path='library/:id' element={<LibraryCreate/>} />
+            <Route path='library/new' element={<LibraryCreate/>} />
 
           </Route>
 

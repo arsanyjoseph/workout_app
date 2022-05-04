@@ -8,7 +8,7 @@ const checkFileType = require('../multer/fileCheck')
 //getAllUsers
 const getAllUsers = async (req, res) => {
     try {
-        const allUsers = await User.find().select(['_id', 'firstName', 'lastName', 'isAdmin', 'isPending', 'createdAt', 'lastLogin']).sort([['firstName', 1]])
+        const allUsers = await User.find().select(['_id', 'firstName', 'lastName', 'isAdmin', 'isPending', 'createdAt', 'lastLogin', 'avatarLink']).sort([['firstName', 1]])
         res.status(200).json(allUsers)
     } catch(err) {
         console.log(err)
@@ -77,6 +77,7 @@ const createUser = async (req, res) => {
 
 //Update User Data
 const updateUser = async (req, res) => {
+    console.log(req.files)
     try {
         // Check for User by Id
         const {firstName, lastName, gender, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin, isPending, password} = req.body
@@ -130,10 +131,11 @@ const updateUser = async (req, res) => {
         if(password) {
             const salt = await bcrypt.genSalt(10)
             const hashedPass = await bcrypt.hash(password, salt)
+            console.log(hashedPass)
             await user.updateOne({
                 password: hashedPass
             })
-            
+
         }
         
         const updatedUser = await User.findById(req.params.id)
@@ -172,7 +174,8 @@ const logInUser = async (req, res) => {
             token: generateToken(user._id),
             isAdmin: user.isAdmin,
             isPending: user.isPending,
-            id: user._id
+            id: user._id,
+            avatarLink: user.avatarLink
         })
     } else {
         //If Wrong Password
@@ -229,20 +232,19 @@ const upload = multer({
 }).single('myImage');
 
 const uploadAvatar = async (req, res) => {
-    upload(req, res, (err)=> {
-        if(err) {
-            res.json(err.message)
-            console.log(err)   
-        } else {
-            console.log(req.file)
-            res.json({
-                message: "Successful",
-                url: req.file.destination,
-                path: '/uploads/' + req.file.filename
-
-            })
-        }
-    })
+    const user = await User.findById(req.user._id)
+    try {
+        await user.updateOne({
+            avatarLink: req.file.filename
+        })
+        const updatedUser = await User.findById(req.user._id)
+        res.status(200).json({
+            path: updatedUser.avatarLink
+        })
+    } catch (error) {
+        console.log(error) 
+    }
+   
 }
 
 
@@ -254,5 +256,6 @@ module.exports = {
     deleteUser,
     logInUser,
     uploadAvatar,
+    upload
 }
 

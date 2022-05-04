@@ -18,11 +18,11 @@
     padding: 0.3em 0;
 }
 
-.uploadContainer > form {
+.uploadForm {
     padding: 0.5em;
 }
 
-.uploadContainer > form > label {
+.uploadForm> label {
     font-weight: 800;
     font-size: 2em;
     display: block;
@@ -31,14 +31,22 @@
     animation: bounce-top 0.5s 3s infinite alternate-reverse forwards;
 }
 
-.uploadContainer > form > .submitBtn {
+.uploadForm > .submitBtn {
     align-self:flex-end;
 }
 
-.uploadContainer > form > input {
+.uploadForm > input {
     display: none;
 }
 
 .uploadIcon:hover {
     color: var(--blue);
+}
+
+.successUpload {
+    color: green;
+}
+
+.failedUpload {
+    color: red;
 }

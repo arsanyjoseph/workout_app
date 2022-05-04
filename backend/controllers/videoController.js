@@ -3,12 +3,12 @@ const Video = require('../models/videoModel')
 //Get All Videos
 const getAllVideos = async (req, res) => {
     try {
-        const video = await Video.findById(req.params.id)
-        if(!video) {
+        const videos = await Video.find().sort([['createdAt', -1]])
+        if(!videos) {
             res.status(400)
-            throw new Error (`No Video with ${req.params.id} Id`)
+            throw new Error (`No Videos Found`)
         }
-        res.status(200).json(video)
+        res.status(200).json(videos)
 
     } catch (err) {
         console.log(err)
@@ -33,7 +33,7 @@ const getVideo = async (req, res) => {
 }    
 
 const createVideo = async (req, res) => {
-    const {name, link, instruction} = req.body
+    const {name, link, description} = req.body
     //Check user provided a Name
     if (!name) {
         res.status(400)
@@ -51,7 +51,7 @@ const createVideo = async (req, res) => {
             name: name,
             createdById: req.user.id,
             link: link,
-            instruction: instruction
+            description: description
         })
         res.status(201).json(video) 
         } else {

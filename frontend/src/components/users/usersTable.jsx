@@ -4,6 +4,7 @@ import '../workouts/table.css'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import GroupsList from './groupsList'
+import ImageAvatars from '../avatar'
 
 export default function UsersTable ({data}) {
     return (
@@ -42,7 +43,7 @@ function GenerateTR (data) {
                 const lastLoginDate = handleDate(item.lastLogin)
                 return (
             <tr className='tableData' key={index}>
-                <td><button className='names' onClick={handleClick} value={item._id}>{item.firstName + ' ' + item.lastName}</button></td>
+                <td className='namesTd'><ImageAvatars name={item.firstName} imgSrc={'/' + item.avatarLink}/> <button className='names' onClick={handleClick} value={item._id}>{item.firstName + ' ' + item.lastName}</button></td>
                 <td>{lastLoginDate}</td>
                 <td><GroupsList token={user.token} url='/api/usergroups/groups' id={{id: item._id}} /></td>
                 <td className='assignedUsers'></td>

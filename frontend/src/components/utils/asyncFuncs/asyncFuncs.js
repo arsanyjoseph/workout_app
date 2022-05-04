@@ -9,6 +9,7 @@ const getItems = async (url, token, setState)=> {
         }
     }
     const response = await axios.get(url, config)
+    console.log(response.data)
     setState(response.data)
     return response.data
 }

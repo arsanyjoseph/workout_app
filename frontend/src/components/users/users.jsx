@@ -9,8 +9,7 @@ export default function Users () {
           <h1>Users</h1>
           <div className='usersContainer'>
             <UsersTable data={users}/>
-        </div>
-        
+          </div>
         </>  
     )
 }

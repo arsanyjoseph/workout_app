@@ -12,16 +12,23 @@ export default function ProgramCreate () {
         isRest: false        
     }])
 
-    const handleRest = (e)=> {
-        e.preventDefault()
-        setDays([...days,
-             days[e.target.value].isRest = !days[e.target.value].isRest])
-    }
+
     const [err, setErr] = useState(false)
     const [cooldowns, setCooldowns] = useState([])
     const [exercises, setExercises] = useState([])
     const [warmups, setWarmups] = useState([])
 
+    const handleSelect = (e) => {
+        e.preventDefault(e)
+        const index = Number(e.target.name)
+        const val = e.target.value
+    }
+
+    const handleRest = (e)=> {
+        e.preventDefault()
+    let newDays = days.map((item,index)=> index == parseInt(e.target.value)? {...item, isRest: !item.isRest} : item)
+    setDays(newDays)
+}
     const handleAdd = (e)=> {
         e.preventDefault()
         setDays([...days, {
@@ -46,7 +53,7 @@ export default function ProgramCreate () {
             <form className="formCoolDown" >
                     <input type='text' name="name" placeholder='* Name' />
             </form>
-            {days.map((item, index)=> <GenerateForm key={index} value={index} warmups={warmups} cooldowns={cooldowns} exercises={exercises} number={index + 1} handleRest={(e)=>handleRest(e)} isRest={item.isRest} /> )}
+            {days.map((item, index)=> <GenerateForm name={index} key={index} value={index} warmups={warmups} cooldowns={cooldowns} exercises={exercises} number={index + 1} handleRest={(e)=>handleRest(e)} isRest={item.isRest} handleSelect={handleSelect} /> )}
 
             <button className="submitBtn" onClick={(e)=> handleAdd(e)}>Add Day</button>
             <div id="cont"></div>
@@ -60,29 +67,29 @@ export default function ProgramCreate () {
     )
 }
 
-function GenerateForm ({warmups, exercises, cooldowns, number, isRest, handleRest, value}) {
+function GenerateForm ({warmups, exercises, cooldowns, number, name,ind, isRest, handleRest, value, handleSelect}) {
     return (
         <div className='daysContainer'>
             <form className="daysForm">
                 <span className="dayLabel">Day {number} : </span>
                 {isRest ? <span>Rest Day</span> : 
                 <>
-                <select className="selectWorkouts">
+                <select className="selectWorkouts" onChange={handleSelect}>
                     <option disabled selected>Warm Ups</option>
-                    {warmups.map((item, index)=> <option key={item._id+ number} value={item._id}>{item.name}</option>)}
+                    {warmups.map((item, index)=> <option name={name} key={item._id+ number} value={item._id}>{item.name}</option>)}
                 </select>
-                <select className="selectWorkouts">
+                <select className="selectWorkouts" onChange={handleSelect}>
                     <option disabled selected>Exercises</option>    
-                    {exercises.map((item, index)=> <option key={item._id+ number} value={item._id}>{item.name}</option>)}
+                    {exercises.map((item, index)=> <option name={name} key={item._id+ number} value={item._id}>{item.name}</option>)}
                 </select>
-                <select className="selectWorkouts">
+                <select className="selectWorkouts" onChange={handleSelect}>
                 <option disabled selected>Cool Downs</option>    
-                    {cooldowns.map((item, index)=> <option key={item._id+ number} value={item._id}>{item.name}</option>)}
+                    {cooldowns.map((item, index)=> <option name={name} key={item._id+ number} value={item._id}>{item.name}</option>)}
                 </select>
                 </>
                 }
+                <button className="submitBtn restBtn" value={value} onClick={(e)=>handleRest(e)}>isRest</button>
             </form>
-            <button className="submitBtn restBtn" value={value} onClick={(e)=>handleRest(e)}>isRest</button>
         </div>
     )
 }

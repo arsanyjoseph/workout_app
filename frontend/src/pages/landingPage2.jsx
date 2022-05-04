@@ -38,6 +38,9 @@ export default function LandingPage2 () {
     const navigate = useNavigate()
     
     useEffect (()=> {
+        if(user) {
+            navigate('/home')
+        }
     
     },[user])
     return <>

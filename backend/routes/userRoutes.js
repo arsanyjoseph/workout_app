@@ -8,15 +8,16 @@ const {
     deleteUser,
     logInUser,
     uploadAvatar,
+    upload
 } = require('../controllers/userController')
 
 const {secure} = require('../middleware/authenticate')
 
 router.post('/login', logInUser)
-router.post('/upload',secure, uploadAvatar)
+router.post('/upload',secure, upload, uploadAvatar)
 
 router.get('/:id', secure, getUser)
-router.put('/:id', secure, updateUser)
+router.put('/:id', secure, upload, updateUser)
 router.delete('/:id', secure, deleteUser)
 
 router.get('/', secure, getAllUsers)

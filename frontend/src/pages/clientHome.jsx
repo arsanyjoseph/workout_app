@@ -4,20 +4,22 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import './css/client.css'
 import { Outlet} from "react-router-dom";
+import CircularIndeterminate from "../components/spinner";
 
 
 export default function ClientHome () {
-    const {user} = useSelector((state)=> {
-         return state.auth})
+    const {user} = useSelector((state)=> state.auth)
     const navigate = useNavigate()
     useEffect(()=> {
         if(!user) {
-            navigate('/login')
+            navigate('/')
         }
-        if (user && user.isAdmin) {
-            navigate('/dashboard')
-        }
+        
     },[user, navigate])
+
+    if(!user) {
+        return <CircularIndeterminate />
+    }
 
     if(user.isPending) {
         return (

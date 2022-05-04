@@ -55,7 +55,7 @@ export default function WorkoutList () {
      return (
          <>
          <h1>{handleName(type)}</h1>
-            <div className="coolDownListContainer">
+        <div className="coolDownListContainer">
             <div className='buttons' style={{justifyContent: 'center', marginBottom: '1em'}}>
                 <button className='submitBtn' onClick={()=>navigate(`/dashboard/${type}/new`)}>New</button>
             </div>
