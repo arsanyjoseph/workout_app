@@ -23,24 +23,14 @@ export default function ProgCreate () {
     }
    
     const day = {
-        warmUp: {
-            id: '',
-            notes: ''
-        },
-        exercise: [
-            {id: '', note: ''}
-        ],
-        coolDown: {
-            id: '',
-            notes: ''
-        },
-        isRest: false
+        warmup: '',
+        cooldown: '',
+        exercise: []
     }
     const week = [day, day, day, day, day, day, day]
 
     const [prog, setProg] = useState([
         week,
-
     ])
 
     const addWeekEvent = (e)=> {
@@ -54,6 +44,9 @@ export default function ProgCreate () {
         setProg(newProg)
     }
 
+    useEffect(()=> {
+        console.log(prog)
+    },[prog])
     if(prog && prog.length > 0) {
       return (
         <div className="newCoolDownContainer progCreate">
@@ -62,21 +55,21 @@ export default function ProgCreate () {
                 <button className='weekBtn' onClick={addWeekEvent}><IoMdAddCircleOutline/></button>
                 <button className='weekBtn' onClick={removeWeekEvent}><MdOutlineDeleteSweep/></button>
             </div>
-            {prog.map((item, index)=> <GenerateWeek key={index} days={prog[index]} count={index} data={workouts.cooldowns}  value={value} handleChange={(e, val, ind)=>handleChange(e, val, index)} inputValue={inputValue} handleInputChange={handleInputChange} />)}
+            {prog.map((item, index)=> <GenerateWeek setHandleProg={setProg} program={prog} key={index} days={prog[index]} count={index} data={workouts.cooldowns}  value={value} handleChange={(e, val, ind)=>handleChange(e, val, index)} inputValue={inputValue} handleInputChange={handleInputChange} />)}
         </div>
         )  
     }
     
 }
 
-function GenerateWeek ({days, count, data, value, handleChange, inputValue, handleInputChange}) { 
+function GenerateWeek ({days, count, data, value, handleChange, inputValue, handleInputChange, setHandleProg, program}) { 
     
     if(days && days.length > 0) {
       return (
             <div className='weekContainer'>
                 <h3>Week {count +1}</h3>
                 <div className='daysContainer'>
-                  {days.map((item, index)=> <GenerateDays key={index} dayCount={(7 * count) + index +1} data={data} value={value} handleChange={handleChange} inputValue={inputValue} handleInputChange={handleInputChange} />)}  
+                  {days.map((item, index)=> <GenerateDays setHandleProg={setHandleProg} program={program} weekInd={count} dayInd={index} key={index} dayCount={(7 * count) + index +1} data={data} value={value} handleChange={handleChange} inputValue={inputValue} handleInputChange={handleInputChange} />)}  
                 </div>
             </div>
         )  
@@ -90,11 +83,11 @@ function GenerateWeek ({days, count, data, value, handleChange, inputValue, hand
         
 }
 
-function GenerateDays ({dayCount, data, value, handleChange, inputValue, handleInputChange}) {
+function GenerateDays ({dayCount, setHandleProg, program, data, value, handleChange, inputValue, handleInputChange, weekInd, dayInd}) {
     return (
         <div className='dayCont'>
             <h6>Day {dayCount}</h6>
-            <Cycle />
+            <Cycle setHandleProg={setHandleProg} program={program} weekInd={weekInd} dayInd={dayInd} />
          </div>
     )
 }
