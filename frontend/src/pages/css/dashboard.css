@@ -1,0 +1,24 @@
+.dashboardContainer {
+    background-image: url(../../../public/assets/banner/banner-4.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 150vh;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    place-items: center;
+    place-content: center;
+    color: white;
+    backdrop-filter: 200px;
+}
+
+.dashboardContainer > input, textarea:focus {
+    box-shadow: 1px 1px 4px 4px var(--blue);
+}
+
+.overlayGradient {
+    padding-bottom: 2em;
+    min-height: 150vh;
+    height: 100%;
+    background-image: linear-gradient(to left, rgb(0, 0, 0) , rgba(0, 0, 0, 0.37));
+}

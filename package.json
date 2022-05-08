@@ -1,0 +1,25 @@
+{
+  "name": "workout_app",
+  "version": "1.0.0",
+  "description": "workout App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "front": "npm start --prefix \"frontend\""
+  },
+  "author": "Arsany Benyamine",
+  "license": "ISC",
+  "dependencies": {
+    "@fullcalendar/interaction": "^5.11.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.2.10",
+    "multer": "^1.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}

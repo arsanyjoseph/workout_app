@@ -1,0 +1,27 @@
+.dayTitles {
+    font-weight: bolder;
+    font-size: larger;
+    color: rgb(0, 0, 0);
+    margin-right: 0.5em;
+}
+
+.dayDetails {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.dayDetails:hover {
+    color: var(--blue);
+    text-decoration: underline;
+}
+
+.dayContainer {
+    font-size: large;
+    color: black;
+    width: 40%;
+    background-color: rgb(211, 211, 211);
+    border-radius: 5px;
+    margin-top: 0.75em;
+    padding: 1em;
+    box-shadow: 1px 1px 1.5px 1.5px grey;
+}

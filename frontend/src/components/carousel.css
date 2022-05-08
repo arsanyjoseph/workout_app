@@ -1,0 +1,43 @@
+
+
+.carouselContainer {
+    margin: 0 auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: inherit;
+    height: 35em;
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    justify-content: space-between;
+}
+
+.dots {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.dots > span {
+    background-color: rgb(105, 105, 105);
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+    margin: 0.5em 1em;
+    box-shadow: 1px 1px 2px 2px rgb(77, 76, 76);
+    cursor: pointer;
+}
+
+.dots > span:hover {
+    background-color: rgb(180, 180, 180);
+    width: 1.25em;
+    height: 1.25em;
+}
+
+.carouselContainer > p {
+    background-color: rgba(255, 255, 255, 0.548) ;
+    font-size: large;
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    margin-top: 10em;
+}

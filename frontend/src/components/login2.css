@@ -1,0 +1,88 @@
+/*Slide animation*/
+@keyframes slideInFromTop {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+.loginBack, .mainDiv {
+    background-image: url(../../public/assets/banner/banner-4.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin-top: 2em;
+    border-radius: 10px;
+    font-size: 20pt;
+    font-family: 'fredoka', sans-serif;
+    animation: 0.5s ease-in-out 0s 1 slideInFromTop;
+}
+
+.loginContainer > .formHead {
+    padding: 0.25em;
+    border-radius: 5px 5px;
+    background-color: black;
+    color: white;
+}
+
+.formBody {
+    background-color: var(--white);
+    text-align: center;
+    padding: 1em 0;
+
+}
+
+.formLogin {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.formLogin > input {
+    margin: 0.5em 0;
+    border-radius: 8px;
+    height: 3em;
+    font-size: large;
+    font-weight: bold;
+    box-shadow: 2px 2px 2px 2px grey;
+    padding: 0.25em 1em;
+}
+
+.formLogin > button {
+    align-self:flex-end;
+}
+
+.retryBtn {
+    border: none;
+    font-size: inherit;
+    color: var(--blue);
+    background-color: transparent;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.formContainer > input, textarea:focus {
+    box-shadow: 1px 1px 4px 4px var(--blue);
+}
+
+@media only screen and (max-width: 300px) {
+    .formLogin > button {
+        width: fit-content;
+        height: fit-content;
+        font-size: 0.6rem;
+    }
+}

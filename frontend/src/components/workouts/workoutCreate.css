@@ -1,0 +1,95 @@
+.newCoolDownContainer, .coolDownAssignContainer, .userGroupContainer {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
+    border-radius: 10px;
+    font-size: 20pt;
+    font-family: var(--fredoka);
+    animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+.formHead {
+    padding: 0.25em;
+    border-radius: 5px 5px;
+    background-color: black;
+    color: white;
+}
+
+.formBody {
+    background-color: var(--white);
+    text-align: center;
+    padding: 1em 0;
+
+}
+
+.formCoolDown {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.formCoolDown > input, textarea, select, select> option {
+    margin: 0.5em 0;
+    border-radius: 8px;
+    height: 3em;
+    font-size: large;
+    font-weight: bold;
+    box-shadow: 2px 2px 2px 2px grey;
+    resize: none;
+    font-family: 'Courier New', Courier, monospace;
+    text-indent: 5%;
+}
+
+.formCoolDown > textarea {
+    height: 5em;
+    padding-top: 1em;
+}
+
+.buttons > button {
+    min-width: 2em;
+    align-self:flex-end;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+
+@media only screen and (max-width: 300px) {
+    .buttons > button {
+        width: fit-content;
+        height: fit-content;
+        font-size: 0.6rem;
+    }
+}
+
+
+/*Error Alert Animation*/
+@keyframes fade-in-bottom {
+0% {
+            transform: translateY(50px);
+    opacity: 0;
+}
+100% {
+            transform: translateY(0);
+    opacity: 1;
+}
+}
+
+/*Form Animation*/
+@keyframes fade-in {
+0% {
+    opacity: 0;
+}
+100% {
+    opacity: 1;
+}
+}
+  

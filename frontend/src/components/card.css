@@ -1,0 +1,12 @@
+.MuiCardMedia-img {
+    opacity: 0.8;
+}
+
+.MuiCardMedia-img:hover {
+    opacity: 1;
+}
+
+.MuiCardMedia-root {
+    border-top: 5px solid rgb(6, 154, 223);
+
+}

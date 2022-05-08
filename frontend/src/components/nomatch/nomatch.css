@@ -1,0 +1,10 @@
+.nomatchContainer {
+    text-align: center; 
+    font-size: x-large;
+    display: flex;
+    flex-direction: column;
+}
+
+.nomatchContainer > img {
+    filter: grayscale(50%);
+}
