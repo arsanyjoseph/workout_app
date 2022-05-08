@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function ProgramCreate () {
     const {user} = useSelector((state)=> state.auth)
+    const {workouts} = useSelector((state)=> state.workouts)
     const navigate = useNavigate()
     const [days, setDays] = useState([{
         warmUp: null,
@@ -16,10 +17,6 @@ export default function ProgramCreate () {
     const [name, setName] = useState('')
     const url = '/api/programs/'
     const [err, setErr] = useState(false)
-    const [cooldowns, setCooldowns] = useState([])
-    const [exercises, setExercises] = useState([])
-    const [warmups, setWarmups] = useState([])
-
     //HandleChange
     const handleCooldown = (i, e) => {
         e.preventDefault()
@@ -78,10 +75,6 @@ export default function ProgramCreate () {
     }
 
     useEffect(()=> {
-        asyncFunc.getItems('/api/workouts/cooldown', user.token, setCooldowns)
-        asyncFunc.getItems('/api/workouts/exercise', user.token, setExercises)
-        asyncFunc.getItems('/api/workouts/warmup', user.token, setWarmups)
-        console.log(days)
     },[navigate])
     return (
         <div className="newCoolDownContainer" style={{width: '90%'}}>
@@ -90,7 +83,7 @@ export default function ProgramCreate () {
             <form className="formCoolDown" >
                     <input type='text' value={name} name="name" placeholder='* Name' onChange={changeName}/>
             </form>
-            {days.map((item, index)=> <GenerateForm name={index} key={index} value={index} warmups={warmups} cooldowns={cooldowns} exercises={exercises} number={index + 1} handleRest={(e)=>handleRest(e)} isRest={item.isRest} handleCooldown={(e)=>handleCooldown(index,e)} handleExercise={(e)=> handleExercise(index,e)} handleWarmup={(e)=> handleWarmup(index, e)} /> )}
+            {days.map((item, index)=> <GenerateForm name={index} key={index} value={index} warmups={workouts.warmups} cooldowns={workouts.cooldowns} exercises={workouts.exercises} number={index + 1} handleRest={(e)=>handleRest(e)} isRest={item.isRest} handleCooldown={(e)=>handleCooldown(index,e)} handleExercise={(e)=> handleExercise(index,e)} handleWarmup={(e)=> handleWarmup(index, e)} /> )}
 
             <button className="submitBtn" onClick={(e)=> handleAdd(e)}>Add Day</button>
             <div id="cont"></div>

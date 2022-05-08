@@ -27,6 +27,7 @@ export default function UserView () {
     const [userPersonal, setUserPersonal] = useState(false)
 
     const [name, setName] = useState('')
+    const [wos, setWos] = useState([])
 
     //States Controlling Assigning Event Workouts
     const [date, setDate] = useState(Date.now())
@@ -71,8 +72,8 @@ export default function UserView () {
 
     //For test
     const events = [
-        { title: 'event 1', date: '2022-05-01' },
-        { title: 'event 2', date: '2022-05-01' }
+        { title: 'event 1', date: `2022-05-02`, publicId: '012' },
+        { title: 'event 2', date: '2022-05-01', publicId: '013' }
       ]
     //Convert Name to lowerCase
     const lowerName = name.toLowerCase()
@@ -93,6 +94,7 @@ export default function UserView () {
             navigate('/dashboard/users')
         } else {
             asyncFunc.getItem(url, id, user.token, setUserSelected)
+            asyncFunc.getItems(`/api/workouts/users/${id}`, user.token ,setWos)
         }
     },[])
 

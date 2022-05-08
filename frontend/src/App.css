@@ -2,6 +2,7 @@
   box-sizing: border-box;
   align-items: center;
   width: inherit;
+  height: fit-content;
 }
 
 .submitBtn {

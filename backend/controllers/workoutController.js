@@ -141,11 +141,29 @@ const deleteItem = async (req, res) => {
     }
 }
 
+const getUsersWO = async (req, res)=> {
+    try {
+        const {id} = req.params
+        const workouts = await WorkOut.find({ assignedUsersId: {
+            $elemMatch: {
+                userId: id
+            }
+        }})
+        console.log(workouts)
+
+        res.status(200).json(workouts)
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     getAllItems,
     createItem,
     getItem,
     deleteItem,
-    updateItem
+    updateItem,
+    getUsersWO
 }
 

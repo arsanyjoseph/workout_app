@@ -2,11 +2,13 @@ import './imageUpload.css'
 import {FaFileUpload} from "react-icons/fa";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import ImageAvatars from '../avatar';
 import handleErr from '../utils/errorAlert'
+import {uploadImage} from '../../features/auth/authSlice'
 
 export default function UploadAvatar() {
+    const dispatch = useDispatch()
     const {user} = useSelector((state)=> state.auth)
     const [file, setFile] = useState(null)
     const [fileUploaded, setFileUploaded] = useState({})
@@ -41,14 +43,16 @@ export default function UploadAvatar() {
             console.log('no token')
         } else {
             uploadAvatar(url, user.token, formData, setFileUploaded)
-            setShowMsg(true)
         }  
         }
         
     } 
 
     useEffect(()=> {
-        console.log(fileUploaded)
+        if(fileUploaded.avatarLink) {
+            dispatch(uploadImage(fileUploaded.avatarLink))
+            setShowMsg(true)
+        }
     },[fileUploaded])
         
     return (
@@ -67,8 +71,8 @@ export default function UploadAvatar() {
             :
             
             <>
-             <h2 className={fileUploaded.path ? 'successUpload uploadMsg' : 'failedUpload uploadMsg'}>{fileUploaded.path ? 'Image Successfully Uploaded' : 'Failed to Upload Image'}</h2>
-            {fileUploaded.path ? <ImageAvatars imgSrc={'/' + fileUploaded.path} name={user.firstName}/> : <h1>No Image Selected Yet</h1>}
+             <h2 className={fileUploaded.avatarLink ? 'successUpload uploadMsg' : 'failedUpload uploadMsg'}>{fileUploaded.avatarLink ? 'Image Successfully Uploaded' : 'Failed to Upload Image'}</h2>
+            {fileUploaded.avatarLink ? <ImageAvatars imgSrc={'/' + fileUploaded.avatarLink} name={user.firstName}/> : <h1>No Image Selected Yet</h1>}
             <br/>
             </>}
         </div>

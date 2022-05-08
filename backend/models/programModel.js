@@ -45,8 +45,8 @@ const programSchema = mongoose.Schema({
         isComplete: {
             type: Boolean
         },
-        default: []
-    }]
+    }],
+    default: []
 }, {
     timestamps: true,
 })

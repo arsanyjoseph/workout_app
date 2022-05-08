@@ -1,21 +1,95 @@
+.daysForm {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    padding: 0.25em;
+}
+
+
+
+.weekDays {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 150vh;
+}
+
+.smallBtn {
+    width: fit-content;
+    height: fit-content;
+    padding: 0.25em;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+
+.progCreate {
+    background-color: white;
+    width: 95%;
+    height: 100%;
+    max-height: fit-content;
+}
+
+.progCreate > h1 {
+    font-size: larger;
+    background-color: black;
+    margin: 0;
+    padding-top: 0.25em;
+}
+
+.weekContainer {
+    width: 100%;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+}
+
+.weekContainer > h3{
+    text-align: left;
+    padding-left: 0.25em;
+    margin: 0;
+}
+
 .daysContainer {
-    border-bottom: 1px solid rgb(145, 145, 145);
-    max-width: 80%;
-    margin: 0.25em auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.dayCont {
+    border: 1px solid black;
+    width: 15%;
+    height: fit-content;
+    background-color: white;
+    padding: 0.25em;
     color: black;
 }
 
-.dayLabel {
-    color: black;
-    font-weight: 800;
+.dayCont > h6 {
+    margin: 0;
+    text-align: left;
 }
 
-.restBtn {
-    font-size: small;
-    padding: 0.5em;
-    margin: 0 0.5em;
+
+.progController {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
 }
 
-.selectWorkouts {
-    margin: 0.5em 0.5em;
+.weekBtn {
+    border: none;
+    background-color: transparent;
+    font-size: larger;
+    cursor: pointer;
+}
+
+.weekBtn:hover {
+    color: var(--blue);
 }

@@ -9,8 +9,10 @@ const getItems = async (url, token, setState)=> {
         }
     }
     const response = await axios.get(url, config)
+    if(setState) {
+        setState(response.data)
+    }
     console.log(response.data)
-    setState(response.data)
     return response.data
 }
 
@@ -22,7 +24,6 @@ const getItem = async (url, id, token, setState)=> {
         }
     }
     const response = await axios.get(url + id, config)
-    console.log(response.data)
     setState(response.data)
     return response.data
 }

@@ -9,9 +9,9 @@ import './userCalendar.css'
 
 export default function Calendar ({events}) {
     const calendarRef = useRef(null)
-    const handleDateClick = (arg) => { 
+    const handleClick = (arg)=> {
         console.log(arg)
-      }
+    }
     useEffect(()=> {
 
     },[])
@@ -21,6 +21,7 @@ export default function Calendar ({events}) {
         plugins={[ dayGridPlugin, interactionPlugin ]}
         initialView="dayGridMonth"
         events={events}
+        eventClick={handleClick}
         />
     )
 }

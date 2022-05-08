@@ -6,6 +6,7 @@ import Header from '../components/header'
 import {FaArrowDown} from 'react-icons/fa'
 
 import { getAllUsers, reset } from '../features/users/usersSlice';
+import { getCooldowns, getExercises, getWarmups } from "../features/workouts/workoutSlice";
 
 export default function Dashboard () {
     const {user} = useSelector((status)=> status.auth)
@@ -23,6 +24,9 @@ export default function Dashboard () {
 
         if(user && user.isAdmin && !user.isPending) {
             dispatch(getAllUsers(user.token))
+            dispatch(getExercises(user.token))
+            dispatch(getCooldowns(user.token))
+            dispatch(getWarmups(user.token))
         }   
         dispatch(reset())
     },[user])

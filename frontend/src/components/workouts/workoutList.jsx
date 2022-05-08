@@ -4,18 +4,17 @@ import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import CircularIndeterminate from '../spinner'
 import Table from './table'
-import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 import handleName from '../utils/handleTypeName'
 
 export default function WorkoutList () {
-    const [items, setItems] = useState([])
+    const {workouts} = useSelector((state)=> state.workouts)
     const [message, setMessage] = useState('')
     const [redirect, setRedirect] = useState(false)
     const {user} = useSelector((state)=> state.auth)
     const {type} = useParams()
-    const url = `/api/workouts/${type}/`
     const navigate = useNavigate()
     const workoutTypes = ['exercise', 'warmup', 'cooldown']
+    const woArr = workouts[`${type}s`]
 
     const handleNewBtn = (e) => {
         e.preventDefault();
@@ -27,16 +26,13 @@ export default function WorkoutList () {
         if(!user.token) {
             navigate('/')
         }
-        if (!workoutTypes.includes(type)) {
-            setMessage('Error getting Items !!!')
-            setTimeout(()=> navigate('/notfound'), 3000)
+        if (workoutTypes.includes(type) === false) {
+            navigate('/notfound')
         }
-
-        asyncFunc.getItems(url, user.token, setItems)
         return ()=> setMessage('')
     },[message, type, redirect])
 
-    if(items.length === 0) {
+    if(woArr && woArr.length === 0) {
         return (
             <>
                 <h1 style={{fontWeight: 800}}>{handleName(type)}</h1>
@@ -51,7 +47,7 @@ export default function WorkoutList () {
         )
     }
     
-    if(items.length > 0){
+    if(woArr.length > 0){
      return (
          <>
          <h1>{handleName(type)}</h1>
@@ -59,7 +55,7 @@ export default function WorkoutList () {
             <div className='buttons' style={{justifyContent: 'center', marginBottom: '1em'}}>
                 <button className='submitBtn' onClick={()=>navigate(`/dashboard/${type}/new`)}>New</button>
             </div>
-            <Table data={items}/>
+            <Table data={woArr}/>
         </div>
         </>
     )   

@@ -43,7 +43,33 @@ const createUser = async (req, res) => {
         })
             throw new Error ('Please Fill mandatory Data')
      }
+     const checkLength = await User.find()
+   
     try {  
+        //Check If No Users Registered
+        if(checkLength.length === 0) {
+            const newUser = await User.create({
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: hashedPass,
+                height: height,
+                weight: weight,
+                gender: gender,
+                isPending: false,
+                isAdmin: true,
+            })
+            res.status(201).json({
+                id: newUser._id,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                email: newUser.email,
+                token: generateToken(newUser._id),
+                isAdmin: newUser.isAdmin,
+                isPending: newUser.isPending
+            }) 
+         }
+     
         //Check if User email previously assigned
         const checkEmail = await User.find({ email: email})
         if(checkEmail.length === 0) {
@@ -240,7 +266,7 @@ const uploadAvatar = async (req, res) => {
         })
         const updatedUser = await User.findById(req.user._id)
         res.status(200).json({
-            path: updatedUser.avatarLink
+            avatarLink: updatedUser.avatarLink
         })
     } catch (error) {
         console.log(error) 

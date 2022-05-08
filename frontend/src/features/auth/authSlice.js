@@ -38,6 +38,11 @@ export const logout = createAsyncThunk('auth/logout', async ()=> {
     }
 })
 
+
+export const uploadImage = createAsyncThunk('auth/avatar', async (data)=> {
+    return data
+} )
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -47,7 +52,7 @@ export const authSlice = createSlice({
             state.isLoading = false
             state.isSuccess = false
             state.message = ''
-        }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -82,6 +87,21 @@ export const authSlice = createSlice({
         .addCase(logout.fulfilled, (state)=> {
             state.user = null
         })
+        .addCase(uploadImage.pending, (state)=> {
+            state.isLoading = true
+        })
+        .addCase(uploadImage.fulfilled, (state, action)=> {
+            state.isLoading = false
+            state.isSuccess = true
+            state.user.avatarLink = action.payload
+        })
+        .addCase(uploadImage.rejected, (state, action)=> {
+            state.isLoading = false
+            state.isError = true
+            state.message = action.payload
+            state.user = null
+        })
+        
     }
 })
 

@@ -9,8 +9,19 @@ const getAllPrograms = async (req, res) => {
     }
 } 
 
-const getProgram = (req, res) => {
-    res.status(201).json({Program: req.params.id})
+const getProgram = async (req, res) => {
+    try {
+        const {id} = req.params
+        const program = await Program.findById(id)
+        if(!program) {
+            res.status(400).json({
+                message: 'No Program Found'
+            })
+        }
+        res.status(200).json(program)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 
@@ -42,12 +53,50 @@ const createProgram = async (req, res) => {
     }
 }
 
-const updateProgram = (req, res) => {
-    res.status(200).json({Program : req.params.id})
+const updateProgram = async (req, res) => {
+   try {
+       const {id} = req.params
+       const {startDate, endDate, userId} = req.body
+       if(!startDate || !endDate || !userId) {
+            res.status(400).json({
+                message: 'Please, Fill All fields'
+            })
+       }
+
+       const program = await Program.findById(id)
+       await program.updateOne({
+           $push: {usersIds: [{
+               userId: userId,
+               startDate: startDate,
+               endDate: endDate
+           }]}
+       })
+       const modifyItem = await Program.findById(id)
+       res.status(200).json(modifyItem)
+   } catch (error) {
+       console.log(error)
+   }
 }
 
-const deleteProgram = (req, res) => {
-    res.status(200).json({Program : req.params.id})
+const deleteProgram = async (req, res) => {
+    try {
+        const {id} = req.params
+        const program = Program.findById(id)
+        if(!program) {
+            res.status(400)
+            res.status(400).json({
+                message: "Program is Not Found"
+            })
+            throw new Error (`No Program with ${req.params.id} Id`)
+        }
+        //Remove User 
+        await program.remove()
+        res.status(200).json({
+            id: req.params.id
+        })
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 module.exports = {

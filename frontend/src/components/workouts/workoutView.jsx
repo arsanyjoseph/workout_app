@@ -13,8 +13,10 @@ export default function WorkoutView () {
     const {id}= useParams();
     const {user} = useSelector((state)=> state.auth)
     const {users} = useSelector((state)=> state.users)
-
+    const {workouts} = useSelector((state)=> state.workouts)
     const {type} = useParams()
+    const woArr = workouts[`${type}s`]
+
     const url = `/api/workouts/${type}/`
 
     const [item, setItem] = useState({})
