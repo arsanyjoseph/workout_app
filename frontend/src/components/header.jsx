@@ -5,27 +5,28 @@ import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import TemporaryDrawer from '../../src/components/drawer'
 import CustomizedMenus from './settingsIcon'
+import DownTimer from './countdownTimer/countdownTimer'
 
-
-export default function Header(props) {
+export default function Header({name, validate}) {
     useEffect(()=> {
 
-    },[ props])
+    },[])
     return (
         <header className='header'>
             <div className='logo'>
                 <img src='/assets/logo-2.png' alt='logo' />
                 <Link  className='linkStyle' to='/home'><FaHome/> Home</Link>
             </div>
+            {name && !validate && <DownTimer/>}
             <div className='optionsContainer'>
-            { props.name ? <ul>
+            { name ? <ul>
                     <li>
-                        <span className='linkStyle' >{'Hello, ' + props.name}</span>
+                        <span className='linkStyle' >{'Hello, ' + name}</span>
                     </li>
                     <li>
                         <span className='linkStyle'><CustomizedMenus/></span>
                     </li>
-                    {props.validate && <li>
+                    {validate && <li>
                         <TemporaryDrawer/>
                     </li>}
                 </ul> : <ul>

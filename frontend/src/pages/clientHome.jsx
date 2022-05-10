@@ -10,11 +10,11 @@ import CircularIndeterminate from "../components/spinner";
 export default function ClientHome () {
     const {user} = useSelector((state)=> state.auth)
     const navigate = useNavigate()
+    
     useEffect(()=> {
         if(!user) {
             navigate('/')
         }
-        
     },[user, navigate])
 
     if(!user) {
@@ -40,6 +40,7 @@ export default function ClientHome () {
             <div className="clientContainer">
                 <div className="overlayClient">
                 <Header name={user.firstName} validate={user.isAdmin}/>
+                <h1>Hello Timer</h1>
                 <Outlet/>
                 </div>
             </div>

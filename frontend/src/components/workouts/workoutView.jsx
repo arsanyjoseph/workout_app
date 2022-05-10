@@ -23,55 +23,10 @@ export default function WorkoutView () {
     const [edit, setEdit] = useState(false)
     const [err, setErr] = useState(false)
     const [successDelete, setSuccessDelete] = useState(false)
-    const [assignUser, setAssignUser] = useState(false)
-    const [selectUser, setSelectUser] = useState({
-        userId: null,
-        isComplete: false,
-        setDate: Date.now(),
-    })
+    
     const [message, setMessage] = useState('Please, Select a User')
     const navigate = useNavigate()
 
-    const handleChangeDate = (newValue) => {
-        setSelectUser((prevState)=>( {
-            ...prevState,
-                setDate: newValue
-          }))
-    };
-
-    //Handle Assign User
-    const handleAssign = (e)=> {
-        e.preventDefault()
-        if(!selectUser.userId || selectUser.userId === '' || selectUser.userId === undefined || !selectUser.setDate || selectUser.setDate === null) {
-            handleErr(setErr)
-        } else {
-            asyncFunc.updateItem(url, id, selectUser, user.token, setItem)
-            asyncFunc.getItem(url, id, user.token, setItem)
-            setAssignUser(false)
-    
-        }
-    }
-
-    //Select A User
-    const defineUser = (e)=> {
-        e.preventDefault()
-        //Check for a selected user
-        if(!e.target.value || e.target.value == null || e.target.value === undefined || e.target.value === '') {
-            handleErr(setErr)
-        } else {
-            setSelectUser((prevState)=>( {
-                ...prevState,
-                    userId: e.target.value
-              }))
-        }
-    }
-    
-
-    const handleBackButton = (e)=> {
-        e.preventDefault()
-        setAssignUser(false)
-    }
-    
     //Save input
     const handleChange = (e)=> {
         setItem((prevState)=>( {
@@ -108,16 +63,8 @@ export default function WorkoutView () {
             asyncFunc.getItem(url, id, user.token, setItem)
         }
 
-    },[edit, assignUser, err, selectUser])
+    },[edit, err])
 
-    //Assign User Mode
-    if(assignUser) {
-        return (
-            <>
-              <UserAssign datePicker={true} value={selectUser.setDate} handleChange={handleChangeDate} submitUser={handleAssign} message= {message} isAssigned={err} handleSelect={defineUser} handleBack={handleBackButton}/>
-            </>
-        )
-    }
 
     if(!item.name && !item.link) {
         return (
@@ -154,11 +101,9 @@ export default function WorkoutView () {
                 <button className='submitBtn' onClick={()=>navigate(`/dashboard/${type}`)}>Back</button>
                 <button className='submitBtn' onClick={()=> setEdit(true)}>Edit</button>
                 <button className='submitBtn' onClick={(e)=> deleteCoolDown(e)}>Delete</button>
-                <button className='submitBtn' onClick={()=> setAssignUser(true)}>Assign</button>
             </div>
             <h1>{item.name}</h1>
             <h2>{item.instruction}</h2>
-            <h3>{item.assignedUsersId.length > 0 ? item.assignedUsersId.map((item, index)=> <span key={index + item}>{searchArray(item.userId, users) + ', ' }</span>) : 'No Users Assigned yet'}</h3>
             <div className='vidContainer'> 
                 <iframe width='100%' height='100%' src={asyncFunc.linkVid(item.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
             </div>

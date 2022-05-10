@@ -1,0 +1,3 @@
+const consent = ['The plan is based on your Target and your level as well.', 'You are not supposed to register at any Gym Clubs.', 'The Progress and Development is a matter of commitment.', 'The Follow Up is via our website social part (Messages, Media Upload).' , 'The Membership is valid for 1 month and will be automatically suspended unless renewed.', "It is out of our Responsibility if you did not comply to the Coach's instructions.", 'Membership fees are non-Refundable', 'Sharing Nutrition/Calithenics Plans among others are prohibited' ]
+
+export default consent

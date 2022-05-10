@@ -26,6 +26,7 @@ import ProgramList from './components/programs/programList'
 import ProgCreate from './components/programs/programCreate2'
 
 import UploadAvatar from './components/imageUpload/imageUpload';
+import EditProfile from './components/editProfile/editProfile';
 
 import LibraryView from './components/library/libraryView';
 import LibraryCreate from './components/library/libraryCreate';
@@ -40,9 +41,13 @@ function App() {
           <Route path='/' element={<LandingPage2/>} />
           <Route path='/login' element={<Login2/>} />
           <Route path='/register' element={<Register/>} />
+
           <Route path='/home' element={<ClientHome/>} >
             <Route path='editavatar/' element={<UploadAvatar/>} />
+            <Route path='editProfile/' element={<EditProfile/>} />
           </Route>
+
+
           <Route path='/dashboard' element={<Dashboard/>}>
             <Route path='home/' element={<Navigate replace to="/home"/>} />
 

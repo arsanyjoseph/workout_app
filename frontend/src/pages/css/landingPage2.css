@@ -135,7 +135,7 @@ a {
         flex-wrap: wrap;
         justify-content: space-evenly;
         margin: 0;
-        padding: 5em 0;
+        padding: 5em 5em;
         background-image: linear-gradient(to bottom, rgb(136, 136, 136) , rgb(0, 0, 0));
         }
 

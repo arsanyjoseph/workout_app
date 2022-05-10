@@ -28,6 +28,14 @@ const userSchema = mongoose.Schema({
         required: true,
         default: true
     },
+    extendTime: {
+        type: Date,
+        required: true,
+        default: Date.now() + 604800000
+    },
+    age: {
+        type: Number,
+    },
     gender: {
         type: String,
     },
@@ -53,6 +61,39 @@ const userSchema = mongoose.Schema({
     },
     weight: {
         type: Number,
+    },
+    membership: {
+        type: String,
+        required: true,
+    },
+    personalInfo: {
+        type: {
+            isInjured: {
+                type: Boolean
+            },
+            injury: {
+                type: String
+            },
+            trainPlace: {
+                type: String
+            },
+            target: {
+                type: String
+            },
+            trainDays: {
+                type: Number
+            },
+            isOtherSport: {
+                type: Boolean
+            },
+            otherSport: {
+                type: String
+            },
+            isShootPics: {
+                type: Boolean
+            }
+        },
+        required: true,
     },
     goals: {
         type: [{

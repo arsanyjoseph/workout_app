@@ -1,5 +1,7 @@
 .mainDiv {
-    padding-bottom: 2em;
+    padding-bottom: 5em;
+    height: fit-content;
+    min-height: 100%;
 }
 
 .formContainer {
@@ -25,6 +27,16 @@
     padding: 2em;
 }
 
+.registerBoxMod {
+    display: block;
+}
+
+.registerBoxMod > h2 {
+    margin: 0;
+}
+
+
+
 
 /*Media Queries*/
 @media only screen and (max-width: 1000px) {
@@ -37,6 +49,8 @@
     .formContainer {
         height: fit-content;
     }
+
+    
 }
 
 @media only screen and (max-width: 500px) {
@@ -44,4 +58,12 @@
         width: 100%;
         font-size: 0.25rem;
     }
+}
+
+@media only screen and (max-width: 1125px) {
+    
+}   
+
+.css-13r4j3i .MuiTextField-root .MuiOutlinedInput {
+    width: 10em;
 }

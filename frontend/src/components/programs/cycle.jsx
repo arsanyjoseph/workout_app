@@ -1,6 +1,7 @@
 import ComboBox from './autoComplete'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import './cycle.css'
 //{label, data, multiple, value, handleChange, inputValue, handleInputChange}
 
 export default function Cycle ({weekInd, dayInd, setHandleProg, program}) {
@@ -51,10 +52,10 @@ export default function Cycle ({weekInd, dayInd, setHandleProg, program}) {
 
     if(workouts) {
         return (
-            <div>
-                <ComboBox label="Warm Up" multiple={false} data={workouts.warmups} value={warmup} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setWarmup)} inputValue={inputValue} handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setInputValue)} />
-                <ComboBox label="Cool Down" multiple={false} data={workouts.cooldowns} value={cooldown} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setCooldown)} inputValue={inputValue2} handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setInputValue2)} />
-                <ComboBox label="Exercise" multiple={true} data={workouts.exercises} value={exercise} handleChange={(e, newVal, setState)=> handleChEx(e, newVal, setExercise)} inputValue={inputValue3} handleInputChange={(e, newVal, setState)=> handleInEx(e, newVal, setInputValue3)} />
+            <div className='cycleForm'>
+                <ComboBox disableClearable={false} label="Warm Up" multiple={false} data={workouts.warmups} value={warmup} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setWarmup)} inputValue={inputValue} handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setInputValue)} />
+                <ComboBox disableClearable={true} label="Exercise" multiple={true} data={workouts.exercises} value={exercise} handleChange={(e, newVal, setState)=> handleChEx(e, newVal, setExercise)} inputValue={inputValue3} handleInputChange={(e, newVal, setState)=> handleInEx(e, newVal, setInputValue3)} />
+                <ComboBox disableClearable={false} label="Cool Down" multiple={false} data={workouts.cooldowns} value={cooldown} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setCooldown)} inputValue={inputValue2} handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setInputValue2)} />
                 <button onClick={(e)=>handleSave(e)}>Save</button>
             </div>
         )

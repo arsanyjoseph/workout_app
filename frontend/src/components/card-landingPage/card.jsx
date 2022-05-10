@@ -7,22 +7,22 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import './card.css'
 
-export default function ImgMediaCard(props) {
+export default function ImgMediaCard({name, paragraph, src}) {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component="img"
-        alt="Malaa"
+        alt={name}
         height="300"
         width="200"
-        image={props.src}
+        image={src}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {props.name}
+          {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {props.paragraph}
+          {paragraph}
         </Typography>
       </CardContent>
     </Card>

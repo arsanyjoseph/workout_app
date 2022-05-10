@@ -15,7 +15,7 @@ export default function UsersTable ({data}) {
                         <th className='tableHead'>Name</th>
                         <th className='tableHead'>Last Login</th>
                         <th className='tableHead'>User Groups</th>   
-                        <th className='tableHead'>Details</th>   
+                        <th className='tableHead'>Status</th>   
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +46,7 @@ function GenerateTR (data) {
                 <td className='namesTd'><ImageAvatars name={item.firstName} imgSrc={'/' + item.avatarLink}/> <button className='names' onClick={handleClick} value={item._id}>{item.firstName + ' ' + item.lastName}</button></td>
                 <td>{lastLoginDate}</td>
                 <td><GroupsList token={user.token} url='/api/usergroups/groups' id={{id: item._id}} /></td>
-                <td className='assignedUsers'></td>
+                <td className={item.isPending ? 'assignedUsers suspended' : 'assignedUsers approved'}>{item.isPending ? 'Pending' : 'Approved'}</td>
             </tr>
                 )  
             })}

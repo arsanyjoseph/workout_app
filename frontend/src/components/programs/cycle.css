@@ -1,0 +1,17 @@
+.cycleForm {
+    margin: 0.3em auto;
+    background-color: rgb(209, 209, 209);
+    border-radius: 5px;
+    padding: 0.25em;
+}
+
+@media screen and (max-width: 1300px) {
+    .cycleForm {
+      width: 100%;
+    }
+
+    .cycleForm * {
+        width: 100%;
+        font-size: 8pt;
+    }
+  }

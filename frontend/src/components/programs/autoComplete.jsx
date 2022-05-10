@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useSelector } from 'react-redux';
-export default function ComboBox({label, data, multiple, value, handleChange, inputValue, handleInputChange}) {
+export default function ComboBox({disableClearable, label, data, multiple, value, handleChange, inputValue, handleInputChange}) {
 
     return (
       <Autocomplete
@@ -14,12 +14,14 @@ export default function ComboBox({label, data, multiple, value, handleChange, in
         multiple={multiple}
         getOptionLabel={(option)=> option.name}
         isOptionEqualToValue={(option, value)=> option.name === value.name}
-        
+        disableClearable={disableClearable}	
+        noOptionsText='No Options'
         disablePortal
         id="combo-box-demo"
         options={data}
         sx={{ width: 150 }}
         renderInput={(params) => <TextField {...params} label={label} />}
       />
+
     );
   }

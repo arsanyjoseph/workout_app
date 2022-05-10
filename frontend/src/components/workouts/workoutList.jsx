@@ -32,7 +32,7 @@ export default function WorkoutList () {
         }
         asyncFunc.getItems(`/api/workouts/${type}` , user.token, setWoArr)
         return ()=> setMessage('')
-    },[message, type, redirect, woArr])
+    },[message, type, redirect])
 
     if(woArr && woArr.length === 0) {
         return (

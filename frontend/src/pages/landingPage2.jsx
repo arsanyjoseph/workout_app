@@ -4,9 +4,10 @@ import './css/landingPage2.css'
 import { FaArrowDown } from "react-icons/fa";
 import { useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
-import ImgMediaCard from '../components/card'
+import ImgMediaCard from '../components/card-landingPage/card'
 import scrollFunc from '../components/utils/scrollFunc';
 import { useNavigate } from 'react-router-dom';
+import memberships from '../components/utils/memberships';
 
 function useOnScreen(options) {
     const ref = useRef()
@@ -74,7 +75,7 @@ export default function LandingPage2 () {
         </section>
         <section id='features'>
             <div className='cardsContainer'>
-                {images.map((value, index)=> <ImgMediaCard key={index} name='M.Alaa' paragraph='Try This' src={`../assets/gallery/${value}`} />)}
+                {memberships.map((value, index)=> <ImgMediaCard key={index} name={value.name} paragraph={value.details} src={`../assets/gallery/${value.img}`} />)}
             </div>
         </section> 
         <section id='testimonials'>

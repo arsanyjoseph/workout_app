@@ -9,10 +9,7 @@ export default function Footer() {
             <div className='contactContainer'>
                 <div className='contactSocial'>
                     <h1>WorkOut App</h1>
-                    <div className='contactItem'>
-                        <FaFacebook/>
-                        <span>Facebook /</span>
-                    </div>
+                    
                     <div className='contactItem'>
                         <FaInstagram/>
                         <span>Instagram /</span>
@@ -24,7 +21,7 @@ export default function Footer() {
                 </div>
                 <div className='about'>
                     <h1>About Us</h1>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia illo fugit dolores at voluptate a culpa, magni odio tempora autem!</p>
+                    <p>Calisthenics is a form of strength training consisting of a variety of movements that exercise large muscle groups (gross motor movements), such as standing, grasping, pushing, etc.</p>
                 </div>
         </div>
         <a onClick={()=> scrollFunc('banner')}><FaAngleDoubleUp/></a>

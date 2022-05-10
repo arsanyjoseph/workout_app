@@ -1,34 +1,3 @@
-.daysForm {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid black;
-    padding: 0.25em;
-}
-
-
-
-.weekDays {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    height: 150vh;
-}
-
-.smallBtn {
-    width: fit-content;
-    height: fit-content;
-    padding: 0.25em;
-    margin: 0;
-}
-
-
-
-
-
-
-
-
-
 .progCreate {
     background-color: white;
     width: 95%;
@@ -48,26 +17,44 @@
     background-color: black;
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
+    height: fit-content;
 }
 
-.weekContainer > h3{
+.weekContainer > h3 {
     text-align: left;
-    padding-left: 0.25em;
+    padding-left: 1em;
     margin: 0;
 }
 
 .daysContainer {
     display: flex;
     flex-direction: row;
-}
+    max-height: fit-content;
+    height: fit-content;
+    width: 100%;
+    align-items: center;
+    justify-content: center;}
 
+@media screen and (max-width: 1300px) {
+    .daysContainer {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+  }
+    
 .dayCont {
     border: 1px solid black;
-    width: 15%;
+    width: 13%;
+    max-width: 20%;
     height: fit-content;
     background-color: white;
     padding: 0.25em;
     color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .dayCont > h6 {

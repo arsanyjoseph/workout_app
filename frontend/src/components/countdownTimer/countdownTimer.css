@@ -1,0 +1,21 @@
+.timerContainer {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding: 0.25em 0;
+}
+
+.timerContainer > h1 {
+    border: 5px solid rgb(0, 0, 0);
+    border-radius: 5px;
+    padding: 0.3em;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    background-color: var(--blue);
+    margin: 0;
+}

@@ -8,5 +8,9 @@
 
 .MuiCardMedia-root {
     border-top: 5px solid rgb(6, 154, 223);
-
 }
+
+.css-1ri6ub7-MuiPaper-root-MuiCard-root {
+    margin: 1em 5em;
+}
+

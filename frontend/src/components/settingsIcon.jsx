@@ -87,6 +87,9 @@ export default function CustomizedMenus(props) {
     setAnchorEl(null);
   };
 
+  const handleProfile = (e)=> {
+    console.log(e.target.innerText.toLowerCase())
+  }
   const handleEdit = ()=> {
     handleClose();
     navigate('/home/editavatar')
@@ -125,7 +128,7 @@ export default function CustomizedMenus(props) {
           <EditIcon />
           Edit Avatar
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem  onClick={(e)=> handleProfile(e)} disableRipple>
           <FileCopyIcon />
           Edit Profile
         </MenuItem>

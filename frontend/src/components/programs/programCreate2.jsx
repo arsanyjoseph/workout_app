@@ -84,6 +84,7 @@ function GenerateWeek ({days, count, data, value, handleChange, inputValue, hand
 }
 
 function GenerateDays ({dayCount, setHandleProg, program, data, value, handleChange, inputValue, handleInputChange, weekInd, dayInd}) {
+    
     return (
         <div className='dayCont'>
             <h6>Day {dayCount}</h6>

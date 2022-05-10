@@ -35,8 +35,8 @@ const getUser = async (req, res) => {
 
 //Register User
 const createUser = async (req, res) => {
-    const {firstName, lastName, email, password, height, weight, gender } = req.body
-    if (!firstName || !lastName || !email || !password ) {
+    const {firstName, lastName, email, password, height, weight, gender, location, age, personalInfo, membership } = req.body
+    if (!firstName || !lastName || !email || !password || !personalInfo) {
         res.status(400)
         res.status(400).json({
             message: "Please Fill Mandatory Fields"
@@ -60,6 +60,19 @@ const createUser = async (req, res) => {
                 gender: gender,
                 isPending: false,
                 isAdmin: true,
+                location: location,
+                age: age,
+                membership: membership,
+                personalInfo: {
+                    isInjured: personalInfo.isInjured,
+                    injury: personalInfo.injury,
+                    isOtherSport: personalInfo.isOtherSport,
+                    otherSport: personalInfo.otherSport,
+                    target: personalInfo.target,
+                    isShootPics: personalInfo.isShootPics,
+                    trainDays: personalInfo.trainDays,
+                    trainPlace: personalInfo.trainPlace
+                }
             })
             res.status(201).json({
                 id: newUser._id,
@@ -68,13 +81,32 @@ const createUser = async (req, res) => {
                 email: newUser.email,
                 token: generateToken(newUser._id),
                 isAdmin: newUser.isAdmin,
-                isPending: newUser.isPending
+                isPending: newUser.isPending,
+                age: newUser.age,
+                location: newUser.location,
+                extendTime: newUser.extendTime,
+                height: newUser.height,
+                weight: newUser.weight,
+                membership: newUser.membership,
+                personalInfo: {
+                    isInjured: personalInfo.isInjured,
+                    injury: personalInfo.injury,
+                    isOtherSport: personalInfo.isOtherSport,
+                    otherSport: personalInfo.otherSport,
+                    target: personalInfo.target,
+                    isShootPics: personalInfo.isShootPics,
+                    trainDays: personalInfo.trainDays,
+                    trainPlace: personalInfo.trainPlace
+                }
+
             }) 
          }
      
         //Check if User email previously assigned
         const checkEmail = await User.find({ email: email})
         if(checkEmail.length === 0) {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPass = await bcrypt.hash(password, salt) 
            const newUser = await User.create({
             firstName: firstName,
             lastName: lastName,
@@ -82,7 +114,20 @@ const createUser = async (req, res) => {
             password: hashedPass,
             height: height,
             weight: weight,
-            gender: gender
+            gender: gender,
+            location: location,
+            age: age,
+            membership: membership,
+            personalInfo: {
+                isInjured: personalInfo.isInjured,
+                injury: personalInfo.injury,
+                isOtherSport: personalInfo.isOtherSport,
+                otherSport: personalInfo.otherSport,
+                target: personalInfo.target,
+                isShootPics: personalInfo.isShootPics,
+                trainDays: personalInfo.trainDays,
+                trainPlace: personalInfo.trainPlace
+            }
         })
         res.status(201).json({
             id: newUser._id,
@@ -91,7 +136,18 @@ const createUser = async (req, res) => {
             email: newUser.email,
             token: generateToken(newUser._id),
             isAdmin: newUser.isAdmin,
-            isPending: newUser.isPending
+            isPending: newUser.isPending,
+            membership: newUser.membership,
+            personalInfo: {
+                isInjured: personalInfo.isInjured,
+                injury: personalInfo.injury,
+                isOtherSport: personalInfo.isOtherSport,
+                otherSport: personalInfo.otherSport,
+                target: personalInfo.target,
+                isShootPics: personalInfo.isShootPics,
+                trainDays: personalInfo.trainDays,
+                trainPlace: personalInfo.trainPlace
+            }
         }) 
         } else {
             res.status(400).json({message: `Another User with the same email "${email}" exists`})
@@ -103,7 +159,6 @@ const createUser = async (req, res) => {
 
 //Update User Data
 const updateUser = async (req, res) => {
-    console.log(req.files)
     try {
         // Check for User by Id
         const {firstName, lastName, gender, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin, isPending, password} = req.body
@@ -157,7 +212,6 @@ const updateUser = async (req, res) => {
         if(password) {
             const salt = await bcrypt.genSalt(10)
             const hashedPass = await bcrypt.hash(password, salt)
-            console.log(hashedPass)
             await user.updateOne({
                 password: hashedPass
             })
@@ -189,9 +243,19 @@ const logInUser = async (req, res) => {
             message: 'Please Provide mandatory Fields'
         })
     }
-    //Find User and Match Password
+
     const user = await User.findOne({email})
+    
+    //Find User and Match Password
     if (user && (await bcrypt.compare(password, user.password))) {
+        const dateFormat = new Date(user.extendTime)
+        const milliSc = dateFormat.getTime()
+
+        if(milliSc - Date.now() < 0) {
+            await user.updateOne({
+                isPending: true
+            })
+        }
         res.status(200).json({ 
             message: "login successful",
             user: user.email,
@@ -202,7 +266,8 @@ const logInUser = async (req, res) => {
             isPending: user.isPending,
             id: user._id,
             avatarLink: user.avatarLink,
-            goals: user.goals
+            goals: user.goals,
+            extendTime: user.extendTime
         })
     } else {
         //If Wrong Password
@@ -259,7 +324,6 @@ const upload = multer({
 }).single('myImage');
 
 const uploadAvatar = async (req, res) => {
-    console.log(req.user)
     const user = await User.findById(req.user._id)
     try {
         await user.updateOne({
