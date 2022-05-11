@@ -37,6 +37,17 @@ export default function DownTimer () {
 
        return ()=> clearInterval(timer)
     })
+
+    if(!user.extendTime) {
+        return (
+            <div className="timerContainer">
+            <h1>0</h1>
+            <h1>0</h1>
+            <h1>0</h1>
+            <h1>0</h1>
+        </div> 
+        )
+    }
     return (
         <div className="timerContainer">
             <h1>{timerDays}</h1>

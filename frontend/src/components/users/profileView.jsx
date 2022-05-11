@@ -32,6 +32,8 @@ export default function ProfileView () {
         if(!selectedUser.firstName) {
             asyncFunc.getItem(url, id, user.token, setSelectedUser)
         }
+
+        console.log(selectedUser)
     },[])
 
     if(!selectedUser.firstName) {
@@ -42,14 +44,19 @@ export default function ProfileView () {
         <div className="profileContainer">
             <h1>{selectedUser.firstName + ' ' + selectedUser.lastName}</h1>
             <h2 style={{fontWeight: 800}} className={selectedUser.isPending ? 'suspended' : 'approved'}>{selectedUser.isPending ? 'Suspended' : 'Approved'}</h2>
+            <h3>{selectedUser.email}</h3>
+
             <div className="buttons">
                 <button className="submitBtn" onClick={(e)=> handleApprove(e)}>Approve/Suspend</button>
                 <button className="submitBtn" onClick={(e)=> handleChangePassword(e)}>Reset Password</button>
             </div>
-            {password && <form onSubmit={(e)=> changePass(e)} className="formLogin">
+            {password && 
+                <form onSubmit={(e)=> changePass(e)} className="formLogin">
                             <input type='password' value={passValue} autoComplete='new-password' placeholder='New Password' onChange={(e)=> setPassValue(e.target.value)} />
                             <button style={{fontSize: '0.75em'}} className="submitBtn" type="submit">Save</button>
-                        </form>}
+                </form>
+            }
+
         </div>
     )
 }

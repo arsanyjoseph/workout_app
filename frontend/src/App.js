@@ -2,6 +2,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import {Navigate} from 'react-router-dom'
 import './App.css';
 
+import LandingPageAr from './pages/landingPageAr';
 import LandingPage2 from '../src/pages/landingPage2'
 import Login2 from '../src/components/login2'
 import Register from './pages/register';
@@ -39,6 +40,7 @@ function App() {
       <div className='container'>
         <Routes>
           <Route path='/' element={<LandingPage2/>} />
+          <Route path='/ar' element={<LandingPageAr/>} />
           <Route path='/login' element={<Login2/>} />
           <Route path='/register' element={<Register/>} />
 
@@ -63,8 +65,7 @@ function App() {
 
             <Route path='programs/' element={<ProgramList/>} />
             <Route path='programs/:id' element={<ProgramView/>} />
-            <Route path='programs/new' element={<ProgramCreate/>} />
-            <Route path='programs/new2' element={<ProgCreate/>} />
+            <Route path='programs/new' element={<ProgCreate/>} />
 
             <Route path=':type' element={<WorkoutList/>} />
             <Route path=':type/:id' element={<WorkoutView/>} />

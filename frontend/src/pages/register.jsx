@@ -79,10 +79,10 @@ export default function Register () {
       });
 
       const handleInputs = (e, setState)=> {
-          setState((prevState)=>( {
+          setState((prevState)=>({
             ...prevState,
-                [e.target.name]: e.target.type == 'checkbox' ? e.target.checked : e.target.value
-          }) )
+                [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value
+          }))
       }
 
       const handleChange = (prop) => (event) => {
@@ -101,7 +101,12 @@ export default function Register () {
       };
 
     const handleNext = (i)=> {
-        
+        if (phase === 1) {
+            setFormData((prevState)=> ({
+                ...prevState,
+                    personalInfo: personalInfo
+            }))
+        }
         setPhase(i)
     }
 
@@ -118,6 +123,10 @@ export default function Register () {
 
     const submitForm = (e) => {
         e.preventDefault()
+        
+        console.log(checkbox2 === false)
+
+
         if(checkbox1 === false || checkbox2 === false || firstName.length === 0 || lastName.length === 0 || password.length === 0 || email.length === 0 || location.length === 0 || weight === 0 || height === 0 || target.length === 0 || trainDays === 0 || trainPlace.length === 0 || gender.length === 0 || membership.length === 0) {
             handleErr(setErr)
         } else if(firstName === '' || lastName === '' || email === '' || password === ''){
@@ -152,9 +161,8 @@ export default function Register () {
         if(isSuccess || user) {
             navigate('/')
         }
-        console.log(phase)
         dispatch(reset())
-    },[user, message, isError, isSuccess, navigate, dispatch, phase])
+    },[user, message, isError, isSuccess, navigate, dispatch, formData, personalInfo])
 
 
     if(isLoading) {
@@ -434,9 +442,9 @@ export default function Register () {
                     <ul>
                         {consent.map((item, index)=> <p key={index}>- {item}</p>)}
                     </ul>
-                    <FormControlLabel  control={<Checkbox />} value={checkbox1} label="I agree On The Registration General notes" labelPlacement='end' />
+                    <FormControlLabel  control={<Checkbox value={checkbox1} onChange={()=>setCheckBox1(!checkbox1)} />}  label="I agree On The Registration General notes" labelPlacement='end' />
                     <br/>
-                    <FormControlLabel  control={<Checkbox />} value={checkbox2} label={<PrivacyModal />} labelPlacement='end' />
+                    <FormControlLabel  control={<Checkbox value={checkbox2} onChange={()=>setCheckBox2(!checkbox2)}/>}  label={<PrivacyModal />} labelPlacement='end' />
                     <div>
                     <Button onClick={()=>handleNext(2)} variant='contained' className='registerBtn' sx={{ width: 'fit-content', height: '6ch', color: 'white', backgroundColor: 'black', padding: '1.5em', fontSize: '0.75em', fontWeight: 'bolder',}}>Back</Button>
 

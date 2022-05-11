@@ -31,6 +31,9 @@ export default function Header({name, validate}) {
                     </li>}
                 </ul> : <ul>
                     <li>
+                        <Link className='linkStyle' to='/ar'>ع</Link>
+                    </li>
+                    <li>
                         <Link className='linkStyle' to='/login'><BiLogIn/> Login  </Link>
                     </li>
 

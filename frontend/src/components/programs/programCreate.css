@@ -34,7 +34,9 @@
     height: fit-content;
     width: 100%;
     align-items: center;
-    justify-content: center;}
+    justify-content: center;
+    border-radius: 5px;
+}
 
 @media screen and (max-width: 1300px) {
     .daysContainer {
@@ -55,11 +57,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    max-height: fit-content;
 }
 
-.dayCont > h6 {
+.dayCont > h4 {
     margin: 0;
-    text-align: left;
 }
 
 
@@ -79,4 +81,22 @@
 
 .weekBtn:hover {
     color: var(--blue);
+}
+
+.add-removeBtn {
+    display: flex;
+    flex-direction: row;
+}
+
+.add-removeBtn > button {
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    cursor: pointer;
+    font-size: larger;
+}
+
+.add-removeBtn > button:hover {
+    color: var(--blue);
+    border-color: var(--blue);
 }

@@ -72,7 +72,7 @@ export default function UserView () {
 
     //For test
     const events = [
-        { title: 'event 1', date: `2022-05-02`, publicId: '012' },
+        { title: 'event 1', date: '2022-05-02', publicId: '012' },
         { title: 'event 2', date: '2022-05-01', publicId: '013' }
       ]
     //Convert Name to lowerCase

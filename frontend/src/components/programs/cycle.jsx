@@ -2,9 +2,10 @@ import ComboBox from './autoComplete'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import './cycle.css'
-//{label, data, multiple, value, handleChange, inputValue, handleInputChange}
+import {FaRegSave} from 'react-icons/fa'
 
-export default function Cycle ({weekInd, dayInd, setHandleProg, program}) {
+
+export default function Cycle ({weekInd, dayInd, setHandleProg,cycleInd, program}) {
     const {workouts} = useSelector((state)=> state.workouts)
     const [inputValue, setInputValue] = useState('')
     const [inputValue2, setInputValue2] = useState('')
@@ -41,7 +42,7 @@ export default function Cycle ({weekInd, dayInd, setHandleProg, program}) {
                 return item._id
             })
         }
-        program[weekInd][dayInd] = cycle
+        program[weekInd][dayInd][cycleInd] = cycle
         setHandleProg([...program])
         console.log(program)
     }
@@ -56,7 +57,7 @@ export default function Cycle ({weekInd, dayInd, setHandleProg, program}) {
                 <ComboBox disableClearable={false} label="Warm Up" multiple={false} data={workouts.warmups} value={warmup} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setWarmup)} inputValue={inputValue} handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setInputValue)} />
                 <ComboBox disableClearable={true} label="Exercise" multiple={true} data={workouts.exercises} value={exercise} handleChange={(e, newVal, setState)=> handleChEx(e, newVal, setExercise)} inputValue={inputValue3} handleInputChange={(e, newVal, setState)=> handleInEx(e, newVal, setInputValue3)} />
                 <ComboBox disableClearable={false} label="Cool Down" multiple={false} data={workouts.cooldowns} value={cooldown} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setCooldown)} inputValue={inputValue2} handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setInputValue2)} />
-                <button onClick={(e)=>handleSave(e)}>Save</button>
+                <button onClick={(e)=>handleSave(e)} className='weekBtn' style={{fontSize: 'larger', marginTop: '0.25em'}}><FaRegSave/></button>
             </div>
         )
     }

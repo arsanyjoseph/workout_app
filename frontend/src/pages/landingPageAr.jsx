@@ -32,7 +32,7 @@ function useOnScreen(options) {
     return [ref, visible]
 }
      
-export default function LandingPage2 () {
+export default function LandingPageAr () {
     const [ref, visible] = useOnScreen({rootmargin: '0px', threshold: 0.6})
     const {user} = useSelector((state)=> state.auth)
     const navigate = useNavigate()
