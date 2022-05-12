@@ -10,43 +10,56 @@ const programSchema = mongoose.Schema({
         required: true,
         ref: 'User'
     },
-    description: {
-        type: String,
-        default: ''
+    details: {
+        type: [[[{
+            warmup: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Workout'
+            },
+            cooldown: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Workout'
+            },
+            exercise: {
+                type: [mongoose.Schema.Types.ObjectId],
+                ref: 'Workout'
+            },
+            isRest: {
+                type: Boolean
+            },
+            notes: {
+                type: String
+            }
+        }]]]
     },
-    details: [{
-        warmUp: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'WarmUp'
-        },
-        coolDown: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'CoolDown'
-        },
-        exercise: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Exercise'
-        },
-        isRest: {
-            type: Boolean
-        },
-    }],
-    usersIds : [{
-        userId : {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        startDate: {
-            type: Date
-        },
-        endDate: {
-            type: Date
-        },
-        isComplete: {
-            type: Boolean
-        },
-    }],
-    default: []
+    assignedUser : {
+        type: {
+            id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            startDate: {
+                type: Date
+            },
+            endDate: {
+                type: Date
+            },
+            completed: {
+                type: [{
+                    weekInd: {
+                        type: Number
+                    },
+                    dayInd: {
+                        type: Number
+                    },
+                    cycleInd: {
+                        type: Number
+                    }
+                }]
+            }
+        }
+    },
+   
 }, {
     timestamps: true,
 })

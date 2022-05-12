@@ -22,9 +22,9 @@ import UserGroupCreate from './components/userGroup/userGroupCreate';
 import UserGroup from './components/userGroup/userGroupList';
 
 import ProgramView from './components/programs/programView'
-import ProgramCreate from './components/programs/programCreate';
 import ProgramList from './components/programs/programList'
 import ProgCreate from './components/programs/programCreate2'
+import ProgView from './components/programs/programView2';
 
 import UploadAvatar from './components/imageUpload/imageUpload';
 import EditProfile from './components/editProfile/editProfile';
@@ -64,7 +64,7 @@ function App() {
             <Route path='usergroups/new' element={<UserGroupCreate/>} />
 
             <Route path='programs/' element={<ProgramList/>} />
-            <Route path='programs/:id' element={<ProgramView/>} />
+            <Route path='programs/:id' element={<ProgView/>} />
             <Route path='programs/new' element={<ProgCreate/>} />
 
             <Route path=':type' element={<WorkoutList/>} />

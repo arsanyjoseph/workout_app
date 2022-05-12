@@ -100,3 +100,19 @@
     color: var(--blue);
     border-color: var(--blue);
 }
+
+
+.progName {
+    font-weight: bolder;
+    font-size: larger;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 1px var(--grey);
+    margin-top: 0.5em;
+    text-align: center;
+    border: 2px solid black;
+}
+
+.progName:focus {
+    border: 2px solid var(--blue);
+    box-shadow: 2px 2px 2px 2px var(--blue);
+}

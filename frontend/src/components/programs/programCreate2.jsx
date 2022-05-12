@@ -1,22 +1,32 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 import './programCreate.css'
 import {IoMdAddCircleOutline} from 'react-icons/io' 
 import {MdOutlineDeleteSweep} from 'react-icons/md'
+import {AiOutlineSchedule} from 'react-icons/ai'
 import CircularIndeterminate from '../spinner'
 import Cycle from './cycle'
 import {IoMdRemoveCircleOutline} from 'react-icons/io'
 import {FiBatteryCharging} from 'react-icons/fi'
+import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
+import handleErr from '../utils/errorAlert'
 
 
 export default function ProgCreate () {
+    const navigate = useNavigate()
+    const [err, setErr] = useState(false)
     const {workouts} = useSelector((state)=> state.workouts)
+    const {user} = useSelector((state)=> state.auth)
     const [value, setValue] = useState(null)
     const [inputValue, setInputValue] = useState('');
-
+    const [progName, setProgName] = useState('')
+    const url = '/api/programs/'
+    const handleProgName = (e)=> {
+        e.preventDefault()
+        setProgName(e.target.value)
+    }
     const handleChange = (e, newValue, index)=> {
-        console.log(newValue['_id'])
-        console.log(index)
             setValue(newValue);
     }
 
@@ -27,7 +37,8 @@ export default function ProgCreate () {
         warmup: '',
         cooldown: '',
         exercise: [],
-        isRest: false
+        isRest: false,
+        notes: ''
     }
     const day = [cycle]
     const week = [day, day, day, day, day, day, day]
@@ -47,18 +58,37 @@ export default function ProgCreate () {
         setProg(newProg)
     }
 
+    const saveProg = (e)=> {
+        e.preventDefault()
+        if(!progName || progName.length === 0 || prog.length === 0) {
+            handleErr(setErr)
+        } else {
+            const progData = {
+                name: progName,
+                details: prog
+            }
+            asyncFunc.createItem(url ,progData, user.token)
+            navigate('/dashboard/programs')
+        }
+    }
+
     useEffect(()=> {
-        
+        console.log(prog)
     },[prog])
     if(prog && prog.length > 0) {
       return (
         <div className="newCoolDownContainer progCreate">
             <h1>New Program</h1>
+            <form>
+                <input className='progName' type='text' placeholder='Program Name' value={progName} onChange={handleProgName}/>
+            </form>
             <div className='progController'>
                 <button className='weekBtn' onClick={addWeekEvent}><IoMdAddCircleOutline/></button>
                 <button className='weekBtn' onClick={removeWeekEvent}><MdOutlineDeleteSweep/></button>
             </div>
             {prog.map((item, index)=> <GenerateWeek cycle={cycle} setHandleProg={setProg} program={prog} key={index} days={prog[index]} count={index} data={workouts.cooldowns}  value={value} handleChange={(e, val, ind)=>handleChange(e, val, index)} inputValue={inputValue} handleInputChange={handleInputChange} />)}
+            <button className='weekBtn' style={{ width: '100%', fontWeight: 'bolder'}} onClick={saveProg}><AiOutlineSchedule/> Save</button>
+            {err && <div className='errMessage' >Please, Fill Mandatory Fields</div>}
         </div>
         )  
     }
@@ -89,11 +119,8 @@ function GenerateWeek ({days,cycle, count, data, value, handleChange, inputValue
 function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd, cycle}) {
     const handleAddCycle = (e)=> {
         e.preventDefault()
-        console.log(weekInd)
-        console.log(dayInd)
         program[weekInd][dayInd] = [...program[weekInd][dayInd], cycle]
         setHandleProg([...program])
-        console.log(program)
     }
 
     const handleRemoveCycle = (e)=> {
@@ -108,8 +135,8 @@ function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd, cycle
         e.preventDefault()
         let newCycle = program[weekInd][dayInd].map((item, index)=> index == parseInt(e.target.value) ? {...item,
             isRest: !item.isRest,
-            warmup: '',
-            cooldown: '',
+            warmup: null,
+            cooldown: null,
             exercise: [],
         }: item)
         program[weekInd][dayInd] = newCycle

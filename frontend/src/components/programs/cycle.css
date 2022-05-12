@@ -3,6 +3,8 @@
     background-color: rgb(209, 209, 209);
     border-radius: 5px;
     padding: 0.25em;
+    min-height: 1em;
+    min-width: 1em;
 }
 
 @media screen and (max-width: 1300px) {
@@ -14,4 +16,17 @@
         width: 100%;
         font-size: 8pt;
     }
+  }
+
+  .cycleForm > h5 {
+    margin: 0.25em;
+    background-color: green;
+    border-radius: 5px;
+  }
+
+  .cycleNotes {
+    width: 75%;
+    height: fit-content;
+    text-align: left;
+    padding-top: 0.25em;
   }

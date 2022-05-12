@@ -5,9 +5,7 @@ import CircularIndeterminate from '../spinner'
 import './workoutView.css'
 import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 
-import UserAssign from '../userAssign';
 import handleErr from '../utils/errorAlert';
-import searchArray from '../utils/extractName';
 
 export default function WorkoutView () {
     const {id}= useParams();

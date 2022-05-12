@@ -26,28 +26,23 @@ const getProgram = async (req, res) => {
 
 
 const createProgram = async (req, res) => {
-    const {details, name} = req.body
+    try {
+        const {details, name} = req.body
     if(!name || name === '' || details.length === 0) {
         res.status(400).json({
             message: "Please, Fill Mandatory Fields"
         })
     }
 
-    try {
         const checkProg = await Program.find({name: name})
         if(checkProg.length === 0) {
             const program = await Program.create({
                 name: name,
                 createdById: req.user.id,
                 details: details
-            })
-            
+            })  
             res.status(201).json(program)
-        } else {
-            res.status(400).json({
-                message: "Error While Creating Program"
-            })
-        }
+        } 
     } catch (error) {
         console.log(error)   
     }
