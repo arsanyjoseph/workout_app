@@ -224,7 +224,19 @@ const updateUser = async (req, res) => {
             lastName: updatedUser.lastName,
             email: updatedUser.email,
             lastLogin: updatedUser.lastLogin,
-            isPending: updatedUser.isPending
+            isPending: updatedUser.isPending,
+            isAdmin: updatedUser.isAdmin,
+            isPending: updatedUser.isPending,
+            age: updatedUser.age,
+            location: updatedUser.location,
+            extendTime: updatedUser.extendTime,
+            gender: updatedUser.gender,
+            height: updatedUser.height,
+            weight: updatedUser.weight,
+            membership: updatedUser.membership,
+            personalInfo: updatedUser.personalInfo,
+            phoneNumber: updatedUser.phoneNumber,
+            avatarLink: updatedUser.avatarLink
         })
     } catch(err) {
         console.log(err)

@@ -5,6 +5,9 @@
     margin: 0 auto;
     color: black;
     padding: 0.5em 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .suspended {
@@ -13,4 +16,25 @@
 
 .approved {
     color: rgb(0, 109, 0);
+}
+
+.userInfo {
+    text-align: left;
+}
+
+.userInfo > h3 {
+    border: 1px solid black;
+    padding: 0.5em;
+    border-radius: 5px;
+    margin: 0.5em;
+    background-color: rgb(218, 218, 218);
+    animation: slit-in-horizontal 0.45s ease-out both;
+}
+.userDetails {
+    color: var(--blue);
+}
+
+.suspendApprove {
+    cursor: pointer;
+    color: var(--grey);
 }

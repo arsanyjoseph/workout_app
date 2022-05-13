@@ -63,7 +63,6 @@ export default function UserView () {
         setData([])
         setWorkoutId(null)
         setEventForm(false)
-        
     }
     //Showing Side Bar
     const showNavdash = ()=> {
@@ -123,12 +122,12 @@ export default function UserView () {
                 </div>
             </div>
             {eventForm && <EventHandler value={date} 
-            data={data} type={type}
-             handleChange={handleChangeDate}
-              closeEventForm={(e)=>cancelEventForm(e, setEventForm)}
-            handleType={(e)=> handleType(e)}
-            handleWorkoutId={(e)=> setWorkoutId(e.target.value)}
-            handleAssign={handleAssign}
+                    data={data} type={type}
+                    handleChange={handleChangeDate}
+                    closeEventForm={(e)=>cancelEventForm(e, setEventForm)}
+                    handleType={(e)=> handleType(e)}
+                    handleWorkoutId={(e)=> setWorkoutId(e.target.value)}
+                    handleAssign={handleAssign}
             />}
 
             {userPersonal && <AddDetails data={userSelected[lowerName]} eventName={name} cancelEvent={(e)=>cancelEventForm(e, setUserPersonal)} />}
