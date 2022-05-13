@@ -1,4 +1,4 @@
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import './programCreate.css'
 import CircularIndeterminate from '../spinner'
 import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
@@ -7,40 +7,69 @@ import { useSelector } from 'react-redux'
 import './cycle.css'
 import extractData from '../utils/extractData'
 import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
 import ComboBox from './autoComplete'
-import Typography from '@mui/material/Typography';
+import MaterialUIPickers from '../datePicker/datePicker'
+import {BsBatteryCharging, BsFillPersonPlusFill} from 'react-icons/bs'
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box'
+import handleErr from '../utils/errorAlert'
+import {IoArrowBackCircle} from 'react-icons/io5'
+import { CgMinimize } from 'react-icons/cg'
+import {FaRunning} from 'react-icons/fa'
+import {MdEditCalendar} from 'react-icons/md'
 
 
-
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'white',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
 
 
 export default function ProgView () {
     const {id} = useParams()
-    const [program, setProgram] = useState([])
+    const navigate = useNavigate()
     const {user} = useSelector((state)=> state.auth)
     const {users} = useSelector((state)=> state.users)
     const url = '/api/programs/'
-    const [showUsers, setShowUsers] = useState(false)
-    
 
+    const [program, setProgram] = useState({})
+    const [showUsers, setShowUsers] = useState(false)
+    const [showPreview, setShowPreview] = useState(false)
+    const [startDate, setStartDate] = useState(Date.now())
+    const [userId, setUserId] = useState(null)
+    const [userIdInput, setUserIdInput] = useState('')
+    const [err, setErr] = useState(false)
+
+
+    const handleChange = (e, newVal, setState) => {
+        setState(newVal)
+    }
+    const handleInputChange = (e, newVal, setState) => {
+        setState(newVal)
+    }
+
+    const handleDateChange = (newVal) => {
+        setStartDate(newVal)
+    }
+
+    const handleSubmit = () => {
+        if(userId === null) {
+            handleErr(setErr)
+        } else {
+            const modifyDate = startDate
+            const modifyUserId = userId._id
+            const formData = {
+                startDate: modifyDate,
+                userId: modifyUserId
+            }  
+
+            asyncFunc.updateItem(url, id, formData, user.token, setProgram)
+            setShowUsers(false)
+        }
+    }
     useEffect(()=> {
         if(id) {
             asyncFunc.getItem(url, id, user.token, setProgram)
             console.log(program)
         }
+
+        return ()=> setProgram({})
     },[])
     if(!program.name) {
       return (
@@ -51,23 +80,35 @@ export default function ProgView () {
      return (
         <div className='newCoolDownContainer progCreate'>
             <h1>{program.name}</h1>
-            <button className='weekBtn' onClick={()=> setShowUsers(!showUsers)}>Assign</button>
+            <div className="buttons">
+                    <button className='weekBtn' onClick={()=> navigate('/dashboard/programs') }><IoArrowBackCircle/></button>
+                    <button className='weekBtn'><MdEditCalendar/></button>
+                    <button className='weekBtn' onClick={()=> setShowUsers(!showUsers)}><BsFillPersonPlusFill/></button>        
+            </div>
+
             <Modal
                 open={showUsers}
                 onClose={()=> setShowUsers(false)}
-                aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
             >
-                <Box sx={{style}}>
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-                    <ComboBox disableClearable={false} label="Users" size='large' getOptionLabel={(option)=> option.firstName} isOptionEqualToValue={(option, value)=> option.firstName === value.firstName} multiple={false} data={users} />
-                </Box>
+                <div className='modalDiv'>
+                    <h1>Select User</h1>
+                    <div className='usersCont'>
+                    <ComboBox disableClearable={false} label="Select User" getOptionLabel={(option)=> option.firstName + ' ' + option.lastName} isOptionEqualToValue={(option, value)=> option.firstName === value.firstName} multiple={false} data={users} value={userId} inputValue={userIdInput} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setUserId)} 
+                    handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setUserIdInput)} renderOption={(props, option) => (
+                            <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                                <Avatar src={`/${option.avatarLink}`} alt='m' />
+                                <span style={{marginLeft: '0.5em', fontWeight: 'bolder'}}>{option.firstName + ' ' + option.lastName}</span>
+                            </Box>
+                            )}/>
+                    <br/>
+                    <MaterialUIPickers label='Start Date' value={startDate} handleChange={handleDateChange} />
+                    <button className='weekBtn assignSubmtBtn' onClick={handleSubmit}>Submit</button>
+                    </div>
+                    {err && <div className='errMessage userAssignErr' >Please, Fill Mandatory Fields</div>}
+                </div>
             </Modal>
+
+        
             {program.details.map((item, index)=> <GenerateWeek key={index} weekInd={index} days={item}/>)}
         </div>
     )   
@@ -95,23 +136,68 @@ function GenerateDays ({dayCount, day}) {
     )
 }
 
-function GenerateCycle ({cycleIndex, cycle}) {
+function GenerateCycle ({cycleIndex, cycle, handleShowPreview}) {
+    const {user} = useSelector((state)=> state.auth)
     const {workouts} = useSelector((state)=> state.workouts)
-    return (
-        <div className="cycleForm">
-            {!cycle.isRest && <><p>{extractData(cycle.warmup, workouts.warmups)}</p>
+    const [showCycle, setShowCycle] = useState(true)
+    const [showPreview, setShowPreview] = useState(false)
+    const [item ,setItem] = useState({})
+    const url = '/api/workouts/'
+    const handlePreview = (e, type)=> {
+        const id = e.target.value
+        asyncFunc.getItem(url + `${type}/`, id, user.token, setItem)
+        setShowPreview(true)
+    }
+    const handleModalClose = ()=> {
+        setItem({})
+        setShowPreview(false)
+    }
 
-            <p>{extractData(cycle.cooldown, workouts.cooldowns)}</p>
-            
-            {cycle.exercise.map((item, index)=> {
-                const name = extractData(item, workouts.exercises)
-                return <p key={index}>{name}</p>
-            })}
-            
+    return (
+        <div className="cycleFormView">
+
+            <Modal
+                open={showPreview}
+                onClose={handleModalClose}
+            >
+                <div className="modalDiv previewDiv">
+                    <h1>{item.name}</h1>
+                    <h2>{item.instruction}</h2>
+                    {item.link && 
+                    <div className='vidContainer'> 
+                        <iframe width='100%' height='100%' src={asyncFunc.linkVid(item.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
+                    </div>}
+                    
+                </div>
+            </Modal>
+            <button className='weekBtn' style={{ float: 'right', fontSize: 'large'}} onClick={()=> setShowCycle(!showCycle)}><CgMinimize/></button>
+            {!cycle.isRest && !showCycle && <FaRunning/>}
+            {!cycle.isRest && showCycle &&
+             <>
+             <div>
+                 <h5>Warm Up:</h5>
+                 <button className='previewBtn' value={cycle.warmup} onClick={(e, type)=> handlePreview(e, 'warmup')}>{extractData(cycle.warmup, workouts.warmups)}</button>
+             </div>
+
+             <div>
+                 <h5>Exercise:</h5>
+                 {cycle.exercise.map((item, index)=> {
+                        const name = extractData(item, workouts.exercises)
+                        return <button className='previewBtn' key={index} value={item} onClick={handlePreview}>{name}</button>
+                    })}
+             </div>
+
+             <div>
+                 <h5>Cool Down:</h5>
+                 <button className='previewBtn' value={cycle.cooldown} onClick={handlePreview}>{extractData(cycle.cooldown, workouts.cooldowns)}</button>
+             </div>
             </>}
 
 
-            {cycle.isRest && <h2>Rest</h2>}
+            {cycle.isRest && <>
+                {!showCycle && <h4>Rest</h4>}
+                <BsBatteryCharging/>
+            </> }
 
         </div>
     )

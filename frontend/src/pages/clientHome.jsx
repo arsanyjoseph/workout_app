@@ -40,7 +40,6 @@ export default function ClientHome () {
             <div className="clientContainer">
                 <div className="overlayClient">
                 <Header name={user.firstName} validate={user.isAdmin}/>
-                <h1>Hello Timer</h1>
                 <Outlet/>
                 </div>
             </div>

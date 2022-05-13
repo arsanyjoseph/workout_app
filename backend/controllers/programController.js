@@ -51,8 +51,8 @@ const createProgram = async (req, res) => {
 const updateProgram = async (req, res) => {
    try {
        const {id} = req.params
-       const {startDate, endDate, userId} = req.body
-       if(!startDate || !endDate || !userId) {
+       const {startDate, userId} = req.body
+       if(!startDate || !userId) {
             res.status(400).json({
                 message: 'Please, Fill All fields'
             })
@@ -60,11 +60,10 @@ const updateProgram = async (req, res) => {
 
        const program = await Program.findById(id)
        await program.updateOne({
-           $push: {usersIds: [{
+           assignedUser: {
                userId: userId,
-               startDate: startDate,
-               endDate: endDate
-           }]}
+               startDate: startDate
+           }
        })
        const modifyItem = await Program.findById(id)
        res.status(200).json(modifyItem)

@@ -24,6 +24,7 @@ const getItem = async (url, id, token, setState)=> {
     }
     const response = await axios.get(url + id, config)
     setState(response.data)
+    console.log(response.data)
     return response.data
 }
 
@@ -35,7 +36,6 @@ const createItem = async (url, data, token)=> {
         }
     }
     const response = await axios.post(url, data, config)
-    console.log(response.data)
     return response.data
 }
 

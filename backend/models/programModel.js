@@ -34,14 +34,11 @@ const programSchema = mongoose.Schema({
     },
     assignedUser : {
         type: {
-            id: {
+            userId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'User'
             },
             startDate: {
-                type: Date
-            },
-            endDate: {
                 type: Date
             },
             completed: {
@@ -55,7 +52,8 @@ const programSchema = mongoose.Schema({
                     cycleInd: {
                         type: Number
                     }
-                }]
+                }],
+                default: []
             }
         }
     },

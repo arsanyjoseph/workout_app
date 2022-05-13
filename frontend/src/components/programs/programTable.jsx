@@ -14,7 +14,7 @@ export default function ProgramTable ({data}) {
                         <th className='tableHead'>Created By</th>
                         <th className='tableHead'>Created At</th>
                         <th className='tableHead'>Length</th>      
-                        <th className='tableHead'>Assigned Users</th>   
+                        <th className='tableHead'>Assigned User</th>   
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +46,7 @@ function GenerateTR (data) {
                 <td>{idName}</td>
                 <td>{creationDate}</td>
                 <td>{(item.details.length) * 7} Days</td>
-                <td className='assignedUsers'>{item.usersIds.length > 0 ? item.usersIds.map((i, index)=> <span key={index + i.userId}>{searchArray(i.userId, users) + ', '}</span> ) : 'No Users Assigned Yet'}</td>
+                <td className='assignedUsers'>{item.assignedUser ? <span>{searchArray(item.assignedUser.userId, users)}</span> : 'No Users Assigned Yet'}</td>
             </tr>
                 )  
             })}
