@@ -1,15 +1,6 @@
 import { useEffect, useState } from 'react'
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
+import { Box,IconButton ,Button, TextField, FormControl, InputLabel, OutlinedInput, MenuItem, InputAdornment, Checkbox, Switch,FormControlLabel } from "@mui/material"
+import {Visibility, VisibilityOff} from '@mui/icons-material'
 import Header from '../components/header'
 import {BiUserPlus} from 'react-icons/bi'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -20,11 +11,8 @@ import CircularIndeterminate from '../components/spinner'
 import './css/register.css'
 import handleErr from '../components/utils/errorAlert'
 import countries from '../components/utils/countries';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import memberships from '../components/utils/memberships'
 import consent from '../components/utils/consent'; 
-import { Checkbox } from '@mui/material';
 import PrivacyModal from '../components/privacy/privacyModal';
 
 
@@ -123,16 +111,11 @@ export default function Register () {
 
     const submitForm = (e) => {
         e.preventDefault()
-        
-        console.log(checkbox2 === false)
-
-
         if(checkbox1 === false || checkbox2 === false || firstName.length === 0 || lastName.length === 0 || password.length === 0 || email.length === 0 || location.length === 0 || weight === 0 || height === 0 || target.length === 0 || trainDays === 0 || trainPlace.length === 0 || gender.length === 0 || membership.length === 0) {
             handleErr(setErr)
         } else if(firstName === '' || lastName === '' || email === '' || password === ''){
             handleErr(setErr)
         }
-        
         else {
             const userData = {
                 firstName,
@@ -151,20 +134,15 @@ export default function Register () {
             dispatch(register(userData))
     }
 }
-
-
     useEffect(()=> {
         if (isError) {
             setInvalid(true)
         }
-
         if(isSuccess || user) {
             navigate('/')
         }
         dispatch(reset())
     },[user, message, isError, isSuccess, navigate, dispatch, formData, personalInfo])
-
-
     if(isLoading) {
         return (
             <>
@@ -172,7 +150,6 @@ export default function Register () {
             </>
         )
     }
-
     if(invalid) {
         return (
             <div className="loginBack">
@@ -189,7 +166,6 @@ export default function Register () {
         </div>
         )
     }
-
     if(!invalid && phase === 1) {
         return (
             <div className='mainDiv' style={{minHeight: '100vh'}}>
@@ -210,7 +186,6 @@ export default function Register () {
                     variant='standard'
                     className='registerBox'
                     >
-
                         <TextField
                         id="outlined-target-input"
                         label="** What is Your Target ?"
@@ -219,7 +194,6 @@ export default function Register () {
                         name='target'
                         />
                         <br/>
-
                         <TextField
                         id="outlined-trainPlace-input"
                         label="** Where is your Training Place ?"
@@ -227,8 +201,6 @@ export default function Register () {
                         value={trainPlace}
                         name='trainPlace'
                         />
-
-
                         <TextField
                         id="outlined-trainDays-input"
                         label="** Days of Training"
@@ -268,16 +240,13 @@ export default function Register () {
                         </TextField>
                         <br/>
                         <Button onClick={()=>handleNext(2)} variant='contained' className='registerBtn' sx={{ width: 'fit-content', height: '6ch', color: 'white', backgroundColor: 'black', padding: '1.5em', fontSize: '0.75em', fontWeight: 'bolder',}}>Next</Button>
-
                     </Box>
                     {err && <div className='errMessage' style={{width: '100%', fontSize: '2em',textAlign: 'center', fontWeight: '800'}} >Please, Fill Mandatory Fields</div>}
-
                     </div>
                 </div>
             </div>
         )
     }
- 
     if (!invalid && phase === 2) {
     return (
         <ThemeProvider theme={theme}>
@@ -298,7 +267,6 @@ export default function Register () {
                     variant='standard'
                     className='registerBox'
                     >
-
                         <TextField
                         id="outlined-firstName-input"
                         label="First Name"
@@ -306,7 +274,6 @@ export default function Register () {
                         value={firstName}
                         name='firstName'
                         />
-
                         <TextField
                         id="outlined-lastName-input"
                         label="Last Name"
@@ -314,7 +281,6 @@ export default function Register () {
                         value={lastName}
                         name='lastName'
                         />
-                        
                         <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-age">Age</InputLabel>
                             <OutlinedInput
@@ -326,7 +292,6 @@ export default function Register () {
                                 name='age'
                             />
                         </FormControl>
-
                         <TextField
                         id="outlined-phoneNumber-input"
                         label="Phone Number"
@@ -334,7 +299,6 @@ export default function Register () {
                         value={phoneNumber}
                         name='phoneNumber'
                         />
-
                         <TextField
                         id="outlined-email-input"
                         label="E-mail"
@@ -343,7 +307,6 @@ export default function Register () {
                         name='email'
                         autoComplete='username'
                         />
-                        
                         <FormControl sx={{ m: 1, width: '25ch' }} color = 'primary' variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                             <OutlinedInput
@@ -380,7 +343,6 @@ export default function Register () {
                                 name='weight'
                             />
                         </FormControl>
-
                         <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-height">Height</InputLabel>
                             <OutlinedInput
@@ -393,7 +355,6 @@ export default function Register () {
                                 name='height'
                             />
                         </FormControl>
-
                         <TextField
                             id="outlined-select-gender"
                             select

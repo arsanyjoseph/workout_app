@@ -1,31 +1,36 @@
 import {useNavigate, useParams} from 'react-router-dom'
-import './programCreate.css'
-import CircularIndeterminate from '../spinner'
-import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+
 import './cycle.css'
-import extractData from '../utils/extractData'
-import Modal from '@mui/material/Modal';
+import './programCreate.css'
+
+import CircularIndeterminate from '../spinner'
 import ComboBox from './autoComplete'
 import MaterialUIPickers from '../datePicker/datePicker'
-import {BsBatteryCharging, BsFillPersonPlusFill} from 'react-icons/bs'
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box'
+
 import handleErr from '../utils/errorAlert'
+import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
+import extractData from '../utils/extractData'
+import {GenerateWeek} from './programCreate2'
+
+import {Modal, Avatar, Box} from '@mui/material'
+
+import {BsBatteryCharging, BsFillPersonPlusFill} from 'react-icons/bs'
 import {IoArrowBackCircle} from 'react-icons/io5'
 import { CgMinimize } from 'react-icons/cg'
 import {FaRunning} from 'react-icons/fa'
-import {MdEditCalendar, MdDeleteForever} from 'react-icons/md'
+import {MdLibraryAdd, MdOutlineDeleteSweep} from 'react-icons/md'
+import {AiOutlineSchedule} from 'react-icons/ai'
 
 
 
-
-export default function ProgView () {
+export default function ProgEdit () {
     const {id} = useParams()
     const navigate = useNavigate()
     const {user} = useSelector((state)=> state.auth)
     const {users} = useSelector((state)=> state.users)
+    const {workouts} = useSelector((state)=> state.workouts)
     const url = '/api/programs/'
 
     const [program, setProgram] = useState({})
@@ -36,18 +41,51 @@ export default function ProgView () {
     const [userIdInput, setUserIdInput] = useState('')
     const [err, setErr] = useState(false)
 
+    const [value, setValue] = useState(null)
+    const [inputValue, setInputValue] = useState('');
 
+    const cycle = {
+        warmup: '',
+        cooldown: '',
+        exercise: [],
+        isRest: false,
+        notes: ''
+    }
+    const day = [cycle]
+    const week = [day, day, day, day, day, day, day]
+
+    const [prog, setProg] = useState([])
+
+    const addWeekEvent = (e)=> {
+        e.preventDefault()
+        setProg([...prog, week])
+    }
+
+    const removeWeekEvent = (e)=> {
+        e.preventDefault()
+        const newProg = prog.splice(1-prog.length)
+        setProg(newProg)
+    }
+
+    const saveProg = (e)=> {
+        e.preventDefault()
+        if(prog.length === 0) {
+            handleErr(setErr)
+        } else {
+            asyncFunc.updateItem(url, id, {prog: [...prog]}, user.token, setProgram)
+            navigate(`/dashboard/programs/${id}`)       
+        }
+    }
+    //View Handle Functions
     const handleChange = (e, newVal, setState) => {
         setState(newVal)
     }
     const handleInputChange = (e, newVal, setState) => {
         setState(newVal)
     }
-
     const handleDateChange = (newVal) => {
         setStartDate(newVal)
     }
-
     const handleSubmit = () => {
         if(userId === null) {
             handleErr(setErr)
@@ -63,19 +101,18 @@ export default function ProgView () {
             setShowUsers(false)
         }
     }
-
-    const handleDelete = (e)=> {
-        e.preventDefault()
-        asyncFunc.handleDelete(url, id, user.token)
-        navigate('/dashboard/programs/')
-    }
     useEffect(()=> {
         if(id) {
             asyncFunc.getItem(url, id, user.token, setProgram)
             console.log(program)
         }
 
-        return ()=> setProgram({})
+        return ()=> {
+            setProgram({})
+            setProg([])
+            setUserId(null)
+            setUserIdInput('')
+        }
     },[])
     if(!program.name) {
       return (
@@ -88,9 +125,9 @@ export default function ProgView () {
             <h1>{program.name}</h1>
             <div className="buttons">
                     <button className='weekBtn' onClick={()=> navigate('/dashboard/programs') }><IoArrowBackCircle/></button>
-                    <button className='weekBtn' onClick={()=> navigate(`/dashboard/programs/${id}/edit`)}><MdEditCalendar/></button>
-                    <button className='weekBtn' onClick={()=> setShowUsers(!showUsers)}><BsFillPersonPlusFill/></button>
-                    <button className='weekBtn' onClick={handleDelete}><MdDeleteForever/></button>
+                    <button className='weekBtn' onClick={addWeekEvent}><MdLibraryAdd/></button>
+                    <button className='weekBtn' onClick={removeWeekEvent}><MdOutlineDeleteSweep/></button>
+                    <button className='weekBtn' onClick={()=> setShowUsers(!showUsers)}><BsFillPersonPlusFill/></button>        
             </div>
 
             <Modal
@@ -114,36 +151,38 @@ export default function ProgView () {
                     {err && <div className='errMessage userAssignErr' >Please, Fill Mandatory Fields</div>}
                 </div>
             </Modal>
+            {program.details.map((item, index)=> <GenerateWeekView key={index} weekInd={index} days={item}/>)}
 
-        
-            {program.details.map((item, index)=> <GenerateWeek key={index} weekInd={index} days={item}/>)}
+            {prog.length > 0 && prog.map((item, index)=>  <GenerateWeek cycle={cycle} setHandleProg={setProg} program={prog} key={index} days={prog[index]} count={index} data={workouts.cooldowns}  value={value} handleChange={(e, val, ind)=>handleChange(e, val, index)} inputValue={inputValue} handleInputChange={handleInputChange} />)}
+
+            <button className='weekBtn' style={{ width: '100%', fontWeight: 'bolder'}} onClick={saveProg}><AiOutlineSchedule/> Save</button>
+            {err && <div className='errMessage' >Please, Add at least One Week</div>}
         </div>
     )   
     }
 }
 
-function GenerateWeek ({weekInd, days}) {
+function GenerateWeekView ({weekInd, days}) {
     return (
         <div className="weekContainer">
             <h3>Week {weekInd +1}</h3>
             <div className="daysContainer">
-                {days.map((item, index)=> <GenerateDays key={index} dayCount={(7 * weekInd) + index +1} day={item}/>)}
+                {days.map((item, index)=> <GenerateDaysView key={index} dayCount={(7 * weekInd) + index +1} day={item}/>)}
             </div>
         </div>
     )
 }
 
-
-function GenerateDays ({dayCount, day}) {
+function GenerateDaysView ({dayCount, day}) {
     return (
         <div className="dayCont">
             <h4>Day {dayCount}</h4>
-            {day.map((item, index)=> <GenerateCycle key={index} cycleIndex={index} cycle={item} /> )}
+            {day.map((item, index)=> <GenerateCycleView key={index} cycleIndex={index} cycle={item} /> )}
         </div>
     )
 }
 
-function GenerateCycle ({cycleIndex, cycle, handleShowPreview}) {
+function GenerateCycleView ({cycleIndex, cycle, handleShowPreview}) {
     const {user} = useSelector((state)=> state.auth)
     const {workouts} = useSelector((state)=> state.workouts)
     const [showCycle, setShowCycle] = useState(true)

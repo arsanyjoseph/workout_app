@@ -77,6 +77,7 @@ const createUserGroup = async (req, res) => {
 //Update existing User Group
 const updateUserGroup = async (req, res) => {
     try {
+        const {deletedId, name, userId} = req.body
         //Fetch User Group by Id
         const updateGroup = await UserGroup.findById(req.params.id)
         if (!updateGroup){
@@ -85,15 +86,23 @@ const updateUserGroup = async (req, res) => {
             })
         }
         //Update User Group
-        if(req.body.name) {
+        if(name) {
             await updateGroup.updateOne({
-                name: req.body.name
+                name: name
             })
         }
 
-        if(req.body.userId) {
+        if(userId) {
             await updateGroup.updateOne({
-                $push : {usersId : [req.body.userId]}
+                $push : {usersId : [userId]}
+            })
+        }
+
+        if(deletedId) {
+            await updateGroup.updateOne({
+                $pull: {
+                    usersId: {$in: [deletedId]}
+                }
             })
         }
         const updated = await UserGroup.findById(req.params.id)

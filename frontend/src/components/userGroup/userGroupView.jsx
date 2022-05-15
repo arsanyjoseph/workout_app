@@ -30,7 +30,8 @@ export default function UserGroupView () {
 
     const handleRemove = (e)=> {
         e.preventDefault()
-        console.log(e.target.value)
+        const deletedId = e.target.value
+        asyncFunc.updateItem(url, id, {deletedId: deletedId}, user.token, setUserGroup)
     }
 
     //Select A User

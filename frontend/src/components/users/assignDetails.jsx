@@ -2,15 +2,24 @@ import './assignDetails.css'
 import {useEffect, useState} from 'react'
 import {FaWindowClose} from 'react-icons/fa'
 import {useSelector} from 'react-redux'
+import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
+import { useParams } from 'react-router-dom'
 
 export default function AddDetails ({cancelEvent, eventName, data}) {
     const {user} = useSelector((state)=> state.auth)
     const eventLower = eventName.toLowerCase()
     const [newMode, setNewMode] = useState(false)
+    const url = '/api/users/'
+    const {id} = useParams()
     const handleNew = (e)=> {
         e.preventDefault()
         setNewMode(true)
     }
+    const [formData, setFormData] = useState({
+            title: '',
+            description: '',
+            createdAt: Date.now()
+        })
 
     const handleChange = (e)=> {
         e.preventDefault()
@@ -20,11 +29,12 @@ export default function AddDetails ({cancelEvent, eventName, data}) {
         }))
     }
 
-    const [formData, setFormData] = useState({
-        title: '',
-        body: '',
-        createdAt: new Date()
-    })
+    const saveItem = (e)=> {
+        e.preventDefault()
+        console.log(formData)
+        asyncFunc.updateItem(url, id, {goal: formData}, user.token)
+    }
+   
 
     useEffect(()=> {
         if(data) {
@@ -56,10 +66,10 @@ export default function AddDetails ({cancelEvent, eventName, data}) {
             <div className="formBody">
                 <form className="formLogin">
                     <input  type='text' value={formData.title} name="title"  placeholder={`${eventName} Title`} onChange={handleChange}/>
-                    <textarea  type='text' value={formData.body} name="body"  placeholder={`${eventName} Details`} onChange={handleChange}/>
+                    <textarea  type='text' value={formData.description} name="description"  placeholder={`${eventName} Details`} onChange={handleChange}/>
                     <div className="buttons">
                         <button onClick={()=> setNewMode(false)} className="submitBtn">Back</button>
-                        <button className="submitBtn" type="submit">Save</button>
+                        <button className="submitBtn" type="submit" onClick={saveItem}>Save</button>
                     </div>
                 </form>
             </div>

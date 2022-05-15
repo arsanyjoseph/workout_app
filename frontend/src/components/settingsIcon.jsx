@@ -5,17 +5,16 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import {AiFillSetting} from 'react-icons/ai'
 import ImageAvatars from './avatar'
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import {BiLogOut} from 'react-icons/bi'
 import {logout, reset} from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import './settingsIcon.css'
 
 
 const theme = createTheme({
@@ -87,8 +86,10 @@ export default function CustomizedMenus(props) {
     setAnchorEl(null);
   };
 
-  const handleProfile = (e)=> {
-    console.log(e.target.innerText.toLowerCase())
+  const handleEditProfile = (e)=> {
+    const linkTxt = e.target.innerText.toLowerCase().replace(/\s+/g, '');
+    navigate(`/home/${linkTxt}/${user.id}`)
+    handleClose();
   }
   const handleEdit = ()=> {
     handleClose();
@@ -128,14 +129,15 @@ export default function CustomizedMenus(props) {
           <EditIcon />
           Edit Avatar
         </MenuItem>
-        <MenuItem  onClick={(e)=> handleProfile(e)} disableRipple>
+        <MenuItem  onClick={(e)=> handleEditProfile(e)} disableRipple>
           <FileCopyIcon />
           Edit Profile
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>
           <MoreHorizIcon />
-          Notifications
+          Messages
+          {props.notif && <span className='notifNumber'><span>{props.notif}</span></span>}
         </MenuItem>
 
         <MenuItem onClick={handleClose} disableRipple>

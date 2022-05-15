@@ -95,8 +95,7 @@ export default function ProgCreate () {
     
 }
 
-function GenerateWeek ({days,cycle, count, data, value, handleChange, inputValue, handleInputChange, setHandleProg, program}) { 
-    
+export function GenerateWeek ({days,cycle, count, data, value, handleChange, inputValue, handleInputChange, setHandleProg, program}) { 
     if(days && days.length > 0) {
       return (
             <div className='weekContainer'>
@@ -116,7 +115,7 @@ function GenerateWeek ({days,cycle, count, data, value, handleChange, inputValue
         
 }
 
-function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd, cycle}) {
+export function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd, cycle}) {
     const handleAddCycle = (e)=> {
         e.preventDefault()
         program[weekInd][dayInd] = [...program[weekInd][dayInd], cycle]
@@ -141,8 +140,8 @@ function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd, cycle
         }: item)
         program[weekInd][dayInd] = newCycle
         setHandleProg([...program])
-        console.log(program)
     }
+
     return (
         <div className='dayCont'>
             <h4>Day {dayCount}</h4>

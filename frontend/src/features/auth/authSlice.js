@@ -43,6 +43,10 @@ export const uploadImage = createAsyncThunk('auth/avatar', async (data)=> {
     return data
 } )
 
+export const resetUser = createAsyncThunk('auth/avatar', async (data)=> {
+    return data
+} )
+
 export const authSlice = createSlice({
     name: 'auth',
     initialState,

@@ -149,7 +149,6 @@ const getUsersWO = async (req, res)=> {
                 userId: id
             }
         }})
-        console.log(workouts)
 
         res.status(200).json(workouts)
         

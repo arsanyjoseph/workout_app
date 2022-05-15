@@ -95,47 +95,12 @@ const userSchema = mongoose.Schema({
         },
         required: true,
     },
-    goals: {
+
+    personalDetails: {
         type: [{
-            title: {
+            type: {
                 type: String
             },
-            description: {
-                type: String
-            },
-            createdAt: {
-                type: Date
-            }
-        }],
-        default: []
-    },
-    equipments: {
-        type: [{
-            name: {
-                type: String
-            },
-            createdAt: {
-                type: Date
-            }
-        }],
-        default: []
-    },
-    notes: {
-        type: [{
-            title: {
-                type: String
-            },
-            description: {
-                type: String
-            },
-            createdAt: {
-                type: Date
-            }
-        }],
-        default: []  
-    },
-    limitations: {
-        type: [{
             title: {
                 type: String
             },

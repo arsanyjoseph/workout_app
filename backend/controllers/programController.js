@@ -51,20 +51,24 @@ const createProgram = async (req, res) => {
 const updateProgram = async (req, res) => {
    try {
        const {id} = req.params
-       const {startDate, userId} = req.body
-       if(!startDate || !userId) {
-            res.status(400).json({
-                message: 'Please, Fill All fields'
-            })
-       }
+       const {startDate, userId, prog} = req.body
 
        const program = await Program.findById(id)
+
+       if (startDate && userId) {
        await program.updateOne({
            assignedUser: {
                userId: userId,
                startDate: startDate
            }
-       })
+       }) 
+       }
+
+       if(prog) {
+           await program.updateOne({
+               details: [...program.details, ...prog]
+           })
+       }
        const modifyItem = await Program.findById(id)
        res.status(200).json(modifyItem)
    } catch (error) {

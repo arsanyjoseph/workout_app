@@ -21,13 +21,12 @@ import UserGroupView from './components/userGroup/userGroupView';
 import UserGroupCreate from './components/userGroup/userGroupCreate';
 import UserGroup from './components/userGroup/userGroupList';
 
-import ProgramView from './components/programs/programView'
 import ProgramList from './components/programs/programList'
 import ProgCreate from './components/programs/programCreate2'
 import ProgView from './components/programs/programView2';
+import ProgEdit from './components/programs/programEdit';
 
 import UploadAvatar from './components/imageUpload/imageUpload';
-import EditProfile from './components/editProfile/editProfile';
 
 import LibraryView from './components/library/libraryView';
 import LibraryCreate from './components/library/libraryCreate';
@@ -46,7 +45,7 @@ function App() {
 
           <Route path='/home' element={<ClientHome/>} >
             <Route path='editavatar/' element={<UploadAvatar/>} />
-            <Route path='editProfile/' element={<EditProfile/>} />
+            <Route path='editprofile/:id' element={<ProfileView/>} />
           </Route>
 
 
@@ -64,6 +63,7 @@ function App() {
             <Route path='usergroups/new' element={<UserGroupCreate/>} />
 
             <Route path='programs/' element={<ProgramList/>} />
+            <Route path='programs/:id/edit' element={<ProgEdit/>} />
             <Route path='programs/:id' element={<ProgView/>} />
             <Route path='programs/new' element={<ProgCreate/>} />
 

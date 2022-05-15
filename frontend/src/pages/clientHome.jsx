@@ -39,7 +39,7 @@ export default function ClientHome () {
         return (
             <div className="clientContainer">
                 <div className="overlayClient">
-                <Header name={user.firstName} validate={user.isAdmin}/>
+                <Header name={user.firstName} validate={user.isAdmin} notif={5}/>
                 <Outlet/>
                 </div>
             </div>

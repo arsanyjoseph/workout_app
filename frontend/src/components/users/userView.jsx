@@ -6,10 +6,11 @@ import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import NavDash from './nav'
 import {CgMenuGridR}  from 'react-icons/cg'
 import './userView.css'
-import AddDetails from "./assignDetails"
 import Calendar from "./userCalendar"
-import {CgAddR} from 'react-icons/cg'
-import EventHandler from "./calendarEvent"
+import { Modal } from "@mui/material"
+import handleDate from '../utils/dateHandler'
+import {MdLibraryAdd, MdSave} from 'react-icons/md'
+import extractType from "../utils/userDataType"
 
 
 
@@ -21,49 +22,23 @@ export default function UserView () {
 
     const [userSelected, setUserSelected] = useState({})
     const [toggleMenu , setToggleMenu] = useState(false)
-    //State Control Showing Event Assign
-    const [eventForm, setEventForm] = useState(false)
-    //State Control Showing Personal Info
-    const [userPersonal, setUserPersonal] = useState(false)
+    const [newMode, setNewMode] = useState(false)
 
     const [name, setName] = useState('')
-    const [wos, setWos] = useState([])
+    const [itemsArr, setItemsArr] = useState([])
+    //Convert Name to lowerCase
+    const lowerName = name.toLowerCase()
 
-    //States Controlling Assigning Event Workouts
-    const [date, setDate] = useState(Date.now())
-    const [type, setType]= useState('')
-    const [data, setData] = useState([])
-    const [workoutId, setWorkoutId] = useState(null)
+    const [item, setItem] = useState({
+        type: '',
+        title: '',
+        description: '',
+        createdAt: new Date,
+    })
+    const [userPersonal, setUserPersonal] = useState(false)
+
+
     const [redirect, setRedirect] = useState(null)
-
-    const urlAssign = `/api/workouts/`
-
-    //Handle Assign Workout Date
-    const handleChangeDate = (newValue)=> {
-        setDate(newValue.toISOString())
-    }
-
-    const handleType = (e)=> {
-        e.preventDefault()
-        const typeName = e.target.value.toLowerCase()
-        setType(typeName)
-        asyncFunc.getItems(urlAssign + typeName, user.token, setData)
-    }
-
-    const handleAssign = (e)=> {
-        e.preventDefault()
-        const dataAssign = {
-            userId: id,
-            isComplete: false,
-            setDate: date
-        }
-        asyncFunc.updateItem(urlAssign + type + '/', workoutId, dataAssign, user.token, setRedirect)
-        setDate(Date.now())
-        setType('')
-        setData([])
-        setWorkoutId(null)
-        setEventForm(false)
-    }
     //Showing Side Bar
     const showNavdash = ()=> {
         setToggleMenu(!toggleMenu)
@@ -74,28 +49,53 @@ export default function UserView () {
         { title: 'event 1', date: '2022-05-02', publicId: '012' },
         { title: 'event 2', date: '2022-05-01', publicId: '013' }
       ]
-    //Convert Name to lowerCase
-    const lowerName = name.toLowerCase()
     //Show Personal Info Assign/View
-    const handleEvent = (e)=> {
+    const handleOpenModal = (e)=> {
         e.preventDefault()
         setName(e.target.value)
+        const typeArr = extractType(userSelected.personalDetails, lowerName)
+        setItemsArr([...typeArr])
         setUserPersonal(true)
     }
-    //Cancel Overlay Forms
-    const cancelEventForm = (e, setState) => {
+
+    const handleChangeItem = (e, setState) => {
         e.preventDefault()
-       setState(false)
+        setState((prevState)=> ({
+            ...prevState,
+                [e.target.name]: e.target.value
+        }))
+    }
+
+    const handleSaveItem = (e)=> {
+        e.preventDefault()
+        setItem((prevState)=> ({
+            ...prevState,
+                type: `${lowerName}`
+        }))
+        asyncFunc.updateItem(url, id, item,  user.token)
+        setNewMode(false)
+    }
+
+    const toggleNewMode = ()=> {
+        setItem({
+            type: `${lowerName}`,
+            title: '',
+            description: '',
+            createdAt: new Date
+        })
+        setNewMode(!newMode)
+    }
+    const checkType = ()=> {
+        console.log(itemsArr)
     }
 
     useEffect(()=> {
         if(!id) {
             navigate('/dashboard/users')
         } else {
-            asyncFunc.getItem(url, id, user.token, setUserSelected)
-            asyncFunc.getItems(`/api/workouts/users/${id}`, user.token ,setWos)
+            asyncFunc.getItem('/api/users/', id, user.token, setUserSelected)
         }
-    },[])
+    },[itemsArr])
 
     if(!userSelected.firstName) {
         return <>
@@ -112,25 +112,34 @@ export default function UserView () {
              <div className="showBtnContainer showIcon" onClick={showNavdash}>
                 <CgMenuGridR style={{fontSize: '2em', pointerEvents: 'none'}}/>
             </div>
-            <div className="showBtnContainer addEvnt" onClick={(e)=> setEventForm(true)}>
-                <CgAddR style={{fontSize: '2em', pointerEvents: 'none'}} />
-            </div>
             <div className="userContainer">
-                <NavDash setEvents={(e)=>handleEvent(e)} show={toggleMenu}/>
+                <NavDash setEvents={(e)=>handleOpenModal(e)} show={toggleMenu}/>
                 <div className="userContent" style={{backgroundColor: 'var(--grey)', color: 'black', borderRadius: '5px', padding: '1em'}}>
                     <Calendar events={events}/>
                 </div>
             </div>
-            {eventForm && <EventHandler value={date} 
-                    data={data} type={type}
-                    handleChange={handleChangeDate}
-                    closeEventForm={(e)=>cancelEventForm(e, setEventForm)}
-                    handleType={(e)=> handleType(e)}
-                    handleWorkoutId={(e)=> setWorkoutId(e.target.value)}
-                    handleAssign={handleAssign}
-            />}
-
-            {userPersonal && <AddDetails data={userSelected[lowerName]} eventName={name} cancelEvent={(e)=>cancelEventForm(e, setUserPersonal)} />}
+        <Modal
+            open={userPersonal}
+            onClose={()=> setUserPersonal(false)}
+        >
+                <div className="modalDiv previewDiv">
+                    <h1>{name}</h1>
+                    <div className="itemsCont">
+                        {itemsArr.length > 0 && itemsArr.map((item, index)=> <div key={index} className="itemCont">
+                            <h3>{`${index + 1} - `}{item.title} :</h3>
+                            <p> {item.description}</p>
+                            <h6>Created @: {handleDate(item.createdAt)}</h6>
+                        </div>)}
+                        <button onClick={checkType}>Test</button>
+                    </div>
+                    {newMode && <form className="newItemForm">
+                        <input type='text' name="title" placeholder={`${name} Title`} value={item.title} onChange={(e,setState)=> handleChangeItem(e, setItem)}/>
+                        <textarea type='text' name="description" placeholder={`${name} Description`} value={item.description} onChange={(e,setState)=> handleChangeItem(e, setItem)}/>
+                        <button className="weekBtn" onClick={handleSaveItem}><MdSave/></button>
+                    </form>}
+                    <button className="weekBtn" style={{float: 'right'}} onClick={toggleNewMode}><MdLibraryAdd/></button>
+                </div>
+        </Modal>
         </div>
         ) 
     }

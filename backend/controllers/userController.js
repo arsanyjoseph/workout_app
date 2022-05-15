@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const multer = require('multer')
 const storage = require('../multer/config')
 const checkFileType = require('../multer/fileCheck')
+const fs = require('fs')
 
 //getAllUsers
 const getAllUsers = async (req, res) => {
@@ -15,7 +16,18 @@ const getAllUsers = async (req, res) => {
         res.status(400)
     }
 } 
-
+//Get User Data
+const getUserData = async (req, res) => {
+    try {
+        const {type, id} = req.params
+        const data = await User.find({id: id, type:type})
+        res.status(200).json(data)
+        
+    } catch (error) {
+        console.log(error)
+        res.status(400)
+    }
+}
 //Get User via Params
 const getUser = async (req, res) => {
     try {
@@ -161,7 +173,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Check for User by Id
-        const {firstName, lastName, gender, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin, isPending, password} = req.body
+        const {firstName, lastName, gender, age, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin, isPending, password} = req.body
         const user = await User.findById(req.params.id)
         if (!user){
             res.status(400).json({
@@ -177,7 +189,7 @@ const updateUser = async (req, res) => {
         }
 
         //Update User
-        if(firstName || lastName || gender || phoneNumber || location || avatarLink || height || weight) {
+        if(firstName || lastName || gender || phoneNumber || location || avatarLink || height || weight || age) {
             await user.updateOne({
             firstName: firstName,
             lastName: lastName,
@@ -187,6 +199,7 @@ const updateUser = async (req, res) => {
             avatarLink: avatarLink,
             height: height,
             weight: weight,
+            age: age,
         })
         }
 
@@ -196,19 +209,19 @@ const updateUser = async (req, res) => {
             })
         }
 
-        if (goals || equipments || notes | limitations || nutritionPlan || progressPics) {
+        const {type, title, description, createdAt} = req.body
+        if(type && title && createdAt) {
             await user.updateOne({
-             $push : {
-                 goals: [goals],
-                 equipments : [equipments],
-                 notes: [notes],
-                 limitations: [limitations],
-                 progressPics: [progressPics],
-                 nutritionPlan: [nutritionPlan]
-             }   
+                $push: {
+                    personalDetails: [{
+                        title: title,
+                        type: type,
+                        description: description,
+                        createdAt: createdAt
+                    }]
+                }
             })
         }
-
         if(password) {
             const salt = await bcrypt.genSalt(10)
             const hashedPass = await bcrypt.hash(password, salt)
@@ -236,7 +249,8 @@ const updateUser = async (req, res) => {
             membership: updatedUser.membership,
             personalInfo: updatedUser.personalInfo,
             phoneNumber: updatedUser.phoneNumber,
-            avatarLink: updatedUser.avatarLink
+            avatarLink: updatedUser.avatarLink,
+            goals: updatedUser.goals,
         })
     } catch(err) {
         console.log(err)
@@ -333,10 +347,12 @@ const upload = multer({
     fileFilter: function (req, file, cb) {
         checkFileType(file, cb)
     }
-}).single('myImage');
+})
 
 const uploadAvatar = async (req, res) => {
     const user = await User.findById(req.user._id)
+    const oldAvatar = user.avatarLink
+    fs.unlink(`/${oldAvatar}`, ()=> console.log('success delete'))
     try {
         await user.updateOne({
             avatarLink: req.file.filename
@@ -360,6 +376,7 @@ module.exports = {
     deleteUser,
     logInUser,
     uploadAvatar,
-    upload
+    upload,
+    getUserData
 }
 

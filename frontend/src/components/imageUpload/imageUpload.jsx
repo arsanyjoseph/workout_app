@@ -6,6 +6,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import ImageAvatars from '../avatar';
 import handleErr from '../utils/errorAlert'
 import {uploadImage} from '../../features/auth/authSlice'
+import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 
 export default function UploadAvatar() {
     const dispatch = useDispatch()
@@ -28,6 +29,7 @@ export default function UploadAvatar() {
         }
         const response = await axios.post(url,formData, config)
         setState(response.data)
+        dispatch(uploadImage(response.data.avatarLink))
         return response.data
     }
 
@@ -38,11 +40,12 @@ export default function UploadAvatar() {
         } else {
           const url = '/api/users/upload';
         const formData = new FormData();
-        formData.append('myImage', file);
+        formData.append('avatarImg', file);
         if(!user.token) {
             console.log('no token')
         } else {
             uploadAvatar(url, user.token, formData, setFileUploaded)
+            asyncFunc.getItem('/api/users/', user.id, user.token)
         }  
         }
         
@@ -63,7 +66,7 @@ export default function UploadAvatar() {
             <h2>Please, Choose a Valid File</h2>
             <form className='uploadForm' onSubmit={handleSubmit} >
                 <label htmlFor='avatarInput'><FaFileUpload className='uploadIcon'/></label> <br/>
-                <input id='avatarInput' hidden name="myImage" type='file' onChange={handleChange}/> <br/>
+                <input id='avatarInput' hidden name="avatarImg" type='file' onChange={handleChange}/> <br/>
                 <button className='submitBtn' type="submit">Submit</button>
             </form> 
             {err && <div style={{width: '100%', fontSize: '1.75em'}} className='errMessage' >Please, Select A Valid File Type</div>}

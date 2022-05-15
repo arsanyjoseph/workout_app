@@ -1,13 +1,15 @@
 .profileContainer {
     background-color: white;
     border-radius: 5px;
-    max-width: 90%;
+    max-width: 75%;
     margin: 0 auto;
     color: black;
     padding: 0.5em 1em;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    margin-top: 1em;
 }
 
 .suspended {
@@ -20,6 +22,11 @@
 
 .userInfo {
     text-align: left;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
 }
 
 .userInfo > h3 {
@@ -28,7 +35,9 @@
     border-radius: 5px;
     margin: 0.5em;
     background-color: rgb(218, 218, 218);
+    min-width: 15em;
     animation: slit-in-horizontal 0.45s ease-out both;
+    border-left: 10px solid black;
 }
 .userDetails {
     color: var(--blue);
@@ -37,4 +46,32 @@
 .suspendApprove {
     cursor: pointer;
     color: var(--grey);
+}
+
+.editBtn {
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: large;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+.editBtn:hover {
+    color: var(--blue);
+    background-color: white;
+    border: 2px solid var(--blue);
+
+}
+
+.passwordForm > input {
+    font-size: large;
+    box-shadow: 1px 1px 1px 1px var(--grey);
+    margin: 1em;
+    border-radius: 5px;
+}
+
+.passwordForm > button {
+    float: right;
+    margin-top: 0.75em;
 }

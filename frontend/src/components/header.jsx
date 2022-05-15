@@ -7,7 +7,7 @@ import TemporaryDrawer from '../../src/components/drawer'
 import CustomizedMenus from './settingsIcon'
 import DownTimer from './countdownTimer/countdownTimer'
 
-export default function Header({name, validate}) {
+export default function Header({name, validate, notif}) {
     useEffect(()=> {
 
     },[])
@@ -24,7 +24,7 @@ export default function Header({name, validate}) {
                         <span className='linkStyle' >{'Hello, ' + name}</span>
                     </li>
                     <li>
-                        <span className='linkStyle'><CustomizedMenus/></span>
+                        <span className='linkStyle'><CustomizedMenus notif={notif}/></span>
                     </li>
                     {validate && <li>
                         <TemporaryDrawer/>

@@ -23,7 +23,9 @@ const getItem = async (url, id, token, setState)=> {
         }
     }
     const response = await axios.get(url + id, config)
-    setState(response.data)
+    if(setState) {
+        setState(response.data)
+    }
     console.log(response.data)
     return response.data
 }

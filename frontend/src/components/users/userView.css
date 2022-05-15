@@ -45,3 +45,43 @@
     color: var(--blue);
     cursor: pointer;
 }
+
+.itemsCont {
+    display: flex;
+    flex-direction: column;
+    max-height: 10em;
+    
+}
+
+.itemCont {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid black;
+    padding: 0.5em;
+    background-color: rgb(223, 223, 223);
+    border-radius: 5px;
+    height: fit-content;
+}
+
+.itemCont * {
+    margin: 0.25em;
+    font-weight: bold;
+
+}
+
+.newItemForm {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+}
+.newItemForm > input, textarea {
+    box-shadow: 1px 1px 1px 1px grey;
+    border-radius: 5px;
+    text-align: center;
+    padding: 0.5em;
+}
+.newItemForm > input:focus, textarea:focus {
+    box-shadow: 1px 1px 1px 1px var(--blue);
+}
