@@ -49,7 +49,7 @@ export default function LandingPage2 () {
              <Header/>
             <div className="showContainer" id='banner'>
                 <h1>Welcome to Calisthenics World</h1>
-                <p>Start Your Journey Safely, <a href='/login'>Join Us</a></p>
+                <p>Start Your Journey Safely, <a href='/register'>Join Us</a></p>
                 <p>Explore More</p>
                 <a className='arrowIcon' onClick={()=>scrollFunc('personal')}><FaArrowDown/></a>
             </div>  

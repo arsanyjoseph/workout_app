@@ -1,8 +1,6 @@
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import './countdownTimer.css'
-export default function DownTimer () {
-    const {user} = useSelector((state)=> state.auth)
+export default function DownTimer ({user}) {
     const [timerDays, setTimerDays] = useState();
     const [timerHours, setTimerHours] = useState();
     const [timerMinutes, setTimerMinutes] = useState();

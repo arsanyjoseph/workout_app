@@ -119,7 +119,14 @@ const userSchema = mongoose.Schema({
         default: []
     },
     progressPics: {
-        type: [String],
+        type: [{
+            name: {
+                type: String
+            },
+            time: {
+                type: Date
+            }
+        }],
         default: []
     },
     nutritionPlan: {

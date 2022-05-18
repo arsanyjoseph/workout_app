@@ -22,6 +22,8 @@ import { CgMinimize } from 'react-icons/cg'
 import {FaRunning} from 'react-icons/fa'
 import {MdLibraryAdd, MdOutlineDeleteSweep} from 'react-icons/md'
 import {AiOutlineSchedule} from 'react-icons/ai'
+import {TiDelete} from 'react-icons/ti'
+
 
 
 
@@ -101,6 +103,11 @@ export default function ProgEdit () {
             setShowUsers(false)
         }
     }
+
+    const deleteWeek = (index)=> {
+        console.log(index)
+        asyncFunc.updateItem(url, id, {weekIndex: index}, user.token, setProgram).then(()=> navigate(`/dashboard/programs/${id}`))
+    }
     useEffect(()=> {
         if(id) {
             asyncFunc.getItem(url, id, user.token, setProgram)
@@ -151,7 +158,7 @@ export default function ProgEdit () {
                     {err && <div className='errMessage userAssignErr' >Please, Fill Mandatory Fields</div>}
                 </div>
             </Modal>
-            {program.details.map((item, index)=> <GenerateWeekView key={index} weekInd={index} days={item}/>)}
+            {program.details.map((item, index)=> <GenerateWeekView key={index} weekInd={index} days={item} deleteWeek={(ind)=>deleteWeek(index)}/>)}
 
             {prog.length > 0 && prog.map((item, index)=>  <GenerateWeek cycle={cycle} setHandleProg={setProg} program={prog} key={index} days={prog[index]} count={index} data={workouts.cooldowns}  value={value} handleChange={(e, val, ind)=>handleChange(e, val, index)} inputValue={inputValue} handleInputChange={handleInputChange} />)}
 
@@ -162,10 +169,10 @@ export default function ProgEdit () {
     }
 }
 
-function GenerateWeekView ({weekInd, days}) {
+function GenerateWeekView ({weekInd, days, deleteWeek}) {
     return (
         <div className="weekContainer">
-            <h3>Week {weekInd +1}</h3>
+            <h3>Week {weekInd +1} <span className='weekBtn' onClick={deleteWeek}><TiDelete/></span></h3>
             <div className="daysContainer">
                 {days.map((item, index)=> <GenerateDaysView key={index} dayCount={(7 * weekInd) + index +1} day={item}/>)}
             </div>

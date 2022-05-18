@@ -20,6 +20,8 @@ export default function UploadAvatar() {
         setFile(e.target.files[0])
     }
 
+    const [newUser, setNewUser] = useState({})
+
     const uploadAvatar = async (url, token, formData, setState)=> {
         const config = {
             headers: {
@@ -45,7 +47,7 @@ export default function UploadAvatar() {
             console.log('no token')
         } else {
             uploadAvatar(url, user.token, formData, setFileUploaded)
-            asyncFunc.getItem('/api/users/', user.id, user.token)
+            asyncFunc.getItem('/api/users/', user.id, user.token, setNewUser)
         }  
         }
         

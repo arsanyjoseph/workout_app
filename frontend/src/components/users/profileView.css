@@ -75,3 +75,8 @@
     float: right;
     margin-top: 0.75em;
 }
+
+.modalBody > .MuiFormControl-root {
+    min-width: 10em;
+    margin: 1em;
+}

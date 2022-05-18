@@ -17,6 +17,7 @@ export default function Cycle ({weekInd, dayInd, setHandleProg, cycleInd, progra
     const [err, setErr] = useState(false)
     const [inputValue, setInputValue] = useState('')
     const [inputValue2, setInputValue2] = useState('')
+
     const [inputValue3, setInputValue3] = useState('')
 
     const [warmup, setWarmup] = useState(null)
@@ -41,7 +42,7 @@ export default function Cycle ({weekInd, dayInd, setHandleProg, cycleInd, progra
     }
 
     const handleInEx = (e, newVal, setState) => {
-        setState([...exercise, newVal])
+        setState(newVal)
     }
 
     const handleSave = (e)=> {
@@ -74,7 +75,9 @@ export default function Cycle ({weekInd, dayInd, setHandleProg, cycleInd, progra
                 <button className='weekBtn' style={{ float: 'right', fontSize: 'large'}} onClick={()=> setShowCycle(!showCycle)}><CgMinimize/></button>
                 {showCycle && <>
                 <ComboBox disableClearable={false} label="Warm Up" size='small' getOptionLabel={(option)=> option.name} isOptionEqualToValue={(option, value)=> option.name === value.name} multiple={false} data={workouts.warmups} value={warmup} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setWarmup)} inputValue={inputValue} handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setInputValue)} />
+
                 <ComboBox disableClearable={true} label="Exercise" size='small' getOptionLabel={(option)=> option.name} isOptionEqualToValue={(option, value)=> option.name === value.name} multiple={true} data={workouts.exercises} value={exercise} handleChange={(e, newVal, setState)=> handleChEx(e, newVal, setExercise)} inputValue={inputValue3} handleInputChange={(e, newVal, setState)=> handleInEx(e, newVal, setInputValue3)} />
+
                 <ComboBox disableClearable={false} label="Cool Down" size='small' getOptionLabel={(option)=> option.name} isOptionEqualToValue={(option, value)=> option.name === value.name} multiple={false} data={workouts.cooldowns} value={cooldown} handleChange={(e, newVal, setState)=> handleChange(e, newVal, setCooldown)} inputValue={inputValue2} handleInputChange={(e, newVal, setState)=> handleInputChange(e, newVal, setInputValue2)} />
                 <button className='weekBtn' onClick={()=> setShowNotes(!showNotes)}><MdOutlineNotes/></button>
                 <br/>        

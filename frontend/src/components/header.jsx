@@ -7,7 +7,7 @@ import TemporaryDrawer from '../../src/components/drawer'
 import CustomizedMenus from './settingsIcon'
 import DownTimer from './countdownTimer/countdownTimer'
 
-export default function Header({name, validate, notif}) {
+export default function Header({name, validate, notif, user}) {
     useEffect(()=> {
 
     },[])
@@ -17,7 +17,7 @@ export default function Header({name, validate, notif}) {
                 <img src='/assets/logo-2.png' alt='logo' />
                 <Link  className='linkStyle' to='/home'><FaHome/> Home</Link>
             </div>
-            {name && !validate && <DownTimer/>}
+            {name && !validate && <DownTimer user={user}/>}
             <div className='optionsContainer'>
             { name ? <ul>
                     <li>

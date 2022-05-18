@@ -24,9 +24,9 @@ export default function LibraryView () {
         <>
         <h1>Library</h1>
         <div className="coolDownListContainer">
-            <div className='buttons' style={{justifyContent: 'center', marginBottom: '1em'}}>
+            {user.isAdmin && <div className='buttons' style={{justifyContent: 'center', marginBottom: '1em'}}>
                 <button className='submitBtn' onClick={()=> navigate('/dashboard/library/new')}>New</button>
-            </div>
+            </div>}
             <CircularIndeterminate />
             <h1>No Items Found</h1>
         </div>
@@ -39,11 +39,11 @@ export default function LibraryView () {
         <>
         <h1>Library</h1>
         <div className="coolDownListContainer">
-            <div className='buttons' style={{justifyContent: 'center', marginBottom: '1em'}}>
+            {user.isAdmin && <div className='buttons' style={{justifyContent: 'center', marginBottom: '1em'}}>
                 <button className='submitBtn' onClick={()=> navigate('/dashboard/library/new')}>New</button>
-            </div>
+            </div>}
             <div>
-                {vids.map((item, index)=> <LibraryCard key={index}  deleteItem={()=> deleteItem(item._id)} cardTitle={item.name} CardDescription={item.description} url={item.link} />)}
+                {vids.map((item, index)=> <LibraryCard key={index} user={user} deleteItem={()=> deleteItem(item._id)} cardTitle={item.name} CardDescription={item.description} url={item.link} />)}
             </div>
         </div>
         </>

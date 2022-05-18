@@ -42,17 +42,7 @@ const programSchema = mongoose.Schema({
                 type: Date
             },
             completed: {
-                type: [{
-                    weekInd: {
-                        type: Number
-                    },
-                    dayInd: {
-                        type: Number
-                    },
-                    cycleInd: {
-                        type: Number
-                    }
-                }],
+                type: [String],
                 default: []
             }
         }

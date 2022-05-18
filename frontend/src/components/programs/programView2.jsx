@@ -1,18 +1,21 @@
 import {useNavigate, useParams} from 'react-router-dom'
-import './programCreate.css'
-import CircularIndeterminate from '../spinner'
-import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import './cycle.css'
-import extractData from '../utils/extractData'
-import Modal from '@mui/material/Modal';
+
+import './programCreate.css'
+import './programView.css'
+
+import {Avatar, Box, Modal} from '@mui/material';
+
+import CircularIndeterminate from '../spinner'
 import ComboBox from './autoComplete'
 import MaterialUIPickers from '../datePicker/datePicker'
-import {BsBatteryCharging, BsFillPersonPlusFill} from 'react-icons/bs'
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box'
+
+import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 import handleErr from '../utils/errorAlert'
+import extractData from '../utils/extractData'
+
+import {BsBatteryCharging, BsFillPersonPlusFill} from 'react-icons/bs'
 import {IoArrowBackCircle} from 'react-icons/io5'
 import { CgMinimize } from 'react-icons/cg'
 import {FaRunning} from 'react-icons/fa'
@@ -114,7 +117,6 @@ export default function ProgView () {
                     {err && <div className='errMessage userAssignErr' >Please, Fill Mandatory Fields</div>}
                 </div>
             </Modal>
-
         
             {program.details.map((item, index)=> <GenerateWeek key={index} weekInd={index} days={item}/>)}
         </div>

@@ -1,21 +1,19 @@
 import handleDate from '../utils/dateHandler'
 import { useSelector } from "react-redux"
+import searchArray from '../utils/extractName' 
 import '../workouts/table.css'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import GroupsList from './groupsList'
-import ImageAvatars from '../avatar'
 
-export default function UsersTable ({data}) {
+export default function UserGroupTable ({data}) {
     return (
         <div className='tableContainer'>
             <table>
                 <thead>
                     <tr>
                         <th className='tableHead'>Name</th>
-                        <th className='tableHead'>Last Login</th>
-                        <th className='tableHead'>User Groups</th>   
-                        <th className='tableHead'>Status</th>   
+                        <th className='tableHead'>Created By</th>   
+                        <th className='tableHead'>Created At</th>   
+                        <th className='tableHead'>Assigned Users</th>   
                     </tr>
                 </thead>
                 <tbody>
@@ -27,7 +25,6 @@ export default function UsersTable ({data}) {
 }
 
 function GenerateTR (data) {
-    const {user} = useSelector((state)=> state.auth)
     const {users} = useSelector((state)=> state.users)
     const navigate = useNavigate()
 
@@ -40,13 +37,14 @@ function GenerateTR (data) {
             return (
             <>
             {data.map((item, index)=> {
-                const lastLoginDate = handleDate(item.lastLogin)
+                const creationDate = handleDate(item.createdAt)
+                const idName = searchArray(item.createdById, users)
                 return (
             <tr className='tableData' key={index}>
-                <td className='namesTd'><ImageAvatars name={item.firstName} imgSrc={'/' + item.avatarLink}/> <button className='names' onClick={handleClick} value={item._id}>{item.firstName + ' ' + item.lastName}</button></td>
-                <td>{lastLoginDate}</td>
-                <td><GroupsList token={user.token} url='/api/usergroups/groups/' id={{id: item._id}} /></td>
-                <td className={item.isPending ? 'assignedUsers suspended' : 'assignedUsers approved'}>{item.isPending ? 'Pending' : 'Approved'}</td>
+                <td><button className='names' onClick={handleClick} value={item._id}>{item.name}</button></td>
+                <td>{idName}</td>
+                <td>{creationDate}</td>
+                <td className='assignedUsers'>{item.usersAssigned.length > 0 ? item.usersAssigned.map((i, index)=> <span key={index + i.userId}>{searchArray(i, users) + ', '}</span> ) : 'No Users Assigned Yet'}</td>
             </tr>
                 )  
             })}

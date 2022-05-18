@@ -26,7 +26,6 @@ const getItem = async (url, id, token, setState)=> {
     if(setState) {
         setState(response.data)
     }
-    console.log(response.data)
     return response.data
 }
 
@@ -57,6 +56,7 @@ const updateItem = async (url, id, data, token, setState) => {
     if (setState) {
         setState(response.data)
     }
+    console.log(response.data)
     return response.data
 }
 
@@ -79,9 +79,36 @@ const getItemsByUserId = async (url, id, token, setState) => {
         }
     }
     const response = await axios.post(url, id, config)
-    setState(response.data)
+    if(setState) {
+        setState(response.data)
+    }
     return response.data
+}
 
+const getWorkoutsByUserId = async (url, id, token, setState) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.get(url + id, config)
+    if(setState) {
+        setState(response.data)
+    }
+    return response.data
+}
+
+const getTodayUser = async (url, id, data, token, setState) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+    const response = await axios.post(url + id, data, config)
+    if(setState) {
+        setState(response.data)
+    }
+    return response.data
 }
 const asyncFunc = {
     createItem,
@@ -90,7 +117,9 @@ const asyncFunc = {
     updateItem,
     handleDelete,
     getItems,
-    getItemsByUserId
+    getItemsByUserId,
+    getWorkoutsByUserId,
+    getTodayUser
 }
 
 export default asyncFunc

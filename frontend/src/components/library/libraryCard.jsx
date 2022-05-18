@@ -2,7 +2,7 @@ import './libraryCard.css'
 import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 import {MdDeleteForever} from 'react-icons/md'
 
-export default function LibraryCard ({cardTitle, CardDescription, url, deleteItem, value}) {
+export default function LibraryCard ({cardTitle, CardDescription, url, deleteItem, value, user}) {
     return (
         <div className="cardItemContainer">
             <div className='contentContainer'>
@@ -12,7 +12,7 @@ export default function LibraryCard ({cardTitle, CardDescription, url, deleteIte
             <div className='vidContainer'>
                 <iframe width='100%' height='100%' src={asyncFunc.linkVid(url)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
             </div>
-            <span className='deleteBin' value={value} onClick={()=> deleteItem()}><MdDeleteForever style={{pointerEvents: 'none'}}/></span>
+            { user.isAdmin && <span className='deleteBin' value={value} onClick={()=> deleteItem()}><MdDeleteForever style={{pointerEvents: 'none'}}/></span>}
         </div>
     )
 }

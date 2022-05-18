@@ -7,9 +7,15 @@ const {
     updateMetricSet,
     deleteMetricSet
 } = require('../controllers/metricSetController')
+const {secure} = require('../middleware/authenticate')
 
-router.route('/').get(getAllMetricSets).post(createMetricSet)
+router.get('/:id', secure, getMetricSet)
+router.put('/:id', secure, updateMetricSet)
+router.delete('/:id', secure, deleteMetricSet)
 
-router.route('/:id').get(getMetricSet).put(updateMetricSet).delete(deleteMetricSet)
+router.get('/', secure, getAllMetricSets)
+router.post('/', secure, createMetricSet)
+
+
 
 module.exports = router

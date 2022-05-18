@@ -173,7 +173,7 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
     try {
         // Check for User by Id
-        const {firstName, lastName, gender, age, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin, isPending, password} = req.body
+        const {firstName, lastName, gender, age, phoneNumber, location, avatarLink, height, weight, goals, equipments, notes, limitations, progressPics, nutritionPlan, lastLogin, isPending, password, plan, extendTime} = req.body
         const user = await User.findById(req.params.id)
         if (!user){
             res.status(400).json({
@@ -222,14 +222,26 @@ const updateUser = async (req, res) => {
                 }
             })
         }
+        if(plan) {
+            await user.updateOne({
+                membership: plan
+            })
+        }
         if(password) {
             const salt = await bcrypt.genSalt(10)
             const hashedPass = await bcrypt.hash(password, salt)
             await user.updateOne({
                 password: hashedPass
             })
-
         }
+
+        if(extendTime) {
+            const modTime = user.extendTime.getTime()
+            await user.updateOne({
+                extendTime: extendTime + modTime
+            })
+        }
+
         
         const updatedUser = await User.findById(req.params.id)
         res.status(200).json({
@@ -277,7 +289,7 @@ const logInUser = async (req, res) => {
         const dateFormat = new Date(user.extendTime)
         const milliSc = dateFormat.getTime()
 
-        if(milliSc - Date.now() < 0) {
+        if(milliSc - Date.now() < 0 &&  user.isAdmin === false) {
             await user.updateOne({
                 isPending: true
             })
@@ -352,7 +364,8 @@ const upload = multer({
 const uploadAvatar = async (req, res) => {
     const user = await User.findById(req.user._id)
     const oldAvatar = user.avatarLink
-    fs.unlink(`/${oldAvatar}`, ()=> console.log('success delete'))
+    console.log(oldAvatar)
+    fs.unlink(`/uploads/${oldAvatar}`, ()=> console.log('success delete'))
     try {
         await user.updateOne({
             avatarLink: req.file.filename

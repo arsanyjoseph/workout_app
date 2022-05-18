@@ -32,6 +32,11 @@ import LibraryView from './components/library/libraryView';
 import LibraryCreate from './components/library/libraryCreate';
 import NoMatch from './components/nomatch/nomatch'
 
+import MetricSets from './components/metricSets/metricSets'
+import MetricSetCreate from './components/metricSets/metricSetCreate';
+
+import UserWorkouts from './components/userWorkouts/userWorkouts';
+
 function App() {
   return (
     <>
@@ -44,8 +49,11 @@ function App() {
           <Route path='/register' element={<Register/>} />
 
           <Route path='/home' element={<ClientHome/>} >
+            <Route path='' element={<UserWorkouts/>} />
             <Route path='editavatar/' element={<UploadAvatar/>} />
             <Route path='editprofile/:id' element={<ProfileView/>} />
+            <Route path='library' element={<LibraryView/>} />
+
           </Route>
 
 
@@ -74,6 +82,9 @@ function App() {
             <Route path='library' element={<LibraryView/>} />
             <Route path='library/:id' element={<LibraryCreate/>} />
             <Route path='library/new' element={<LibraryCreate/>} />
+
+            <Route path='metricsets' element={<MetricSets/>} />
+            <Route path='metricsets/new' element={<MetricSetCreate/>} />
 
           </Route>
 

@@ -20,7 +20,6 @@ app.use('/api/users', require('./routes/userRoutes'))
 
 app.use('/api/workouts', require('./routes/workoutRoutes'))
 
-
 app.use('/api/programs', require('./routes/programRoutes'))
 
 app.use('/api/videos', require('./routes/videoRoutes'))

@@ -1,0 +1,42 @@
+.userHomeContainer {
+    margin: 5em auto;
+    background-color: white;
+    width: 90%;
+    border-radius: 5px;
+    height: 80%;
+}
+
+.userHomeContainer > h1 {
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin: 0;
+}
+
+.cycleCont {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin: 2em auto;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid Black;
+    border-radius: 5px;
+    background-color: rgb(240, 240, 240);
+}
+
+.titleSpan {
+    text-decoration: underline;
+    font-size: large;
+}
+
+.homeWO {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 0.5em;
+}
+
+.homeWO:hover {
+    background-color: rgb(220, 220, 220);
+}

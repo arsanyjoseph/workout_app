@@ -7,11 +7,8 @@ import './userCalendar.css'
 
 
 
-export default function Calendar ({events}) {
+export default function Calendar ({events, handleClick}) {
     const calendarRef = useRef(null)
-    const handleClick = (arg)=> {
-        console.log(arg)
-    }
     useEffect(()=> {
 
     },[])

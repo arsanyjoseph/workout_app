@@ -1,16 +1,23 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
-import CircularIndeterminate from "../spinner"
-import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
-import NavDash from './nav'
-import {CgMenuGridR}  from 'react-icons/cg'
+
 import './userView.css'
+
+import CircularIndeterminate from "../spinner"
+import NavDash from './nav'
 import Calendar from "./userCalendar"
-import { Modal } from "@mui/material"
+
 import handleDate from '../utils/dateHandler'
-import {MdLibraryAdd, MdSave} from 'react-icons/md'
+import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import extractType from "../utils/userDataType"
+import extractData from "../utils/extractData";
+
+import { Modal } from "@mui/material"
+
+import {CgMenuGridR}  from 'react-icons/cg'
+import {MdLibraryAdd, MdSave} from 'react-icons/md'
+import {BsBatteryCharging} from 'react-icons/bs'
 
 
 
@@ -18,16 +25,21 @@ export default function UserView () {
     const navigate = useNavigate()
     const url = '/api/users/'
     const {user} = useSelector((state)=> state.auth)
+    const {workouts} = useSelector((state)=> state.workouts)
     const {id} = useParams()
 
     const [userSelected, setUserSelected] = useState({})
     const [toggleMenu , setToggleMenu] = useState(false)
     const [newMode, setNewMode] = useState(false)
+    const [eventModal, setEventModal] = useState(false)
+    const [noId, setNoId] = useState(false)
 
     const [name, setName] = useState('')
     const [itemsArr, setItemsArr] = useState([])
+    const [calEvents, setCalEvents] = useState([])
+    const [itemView, setItemView] = useState({})
     //Convert Name to lowerCase
-    const lowerName = name.toLowerCase()
+    let lowerName = ''
 
     const [item, setItem] = useState({
         type: '',
@@ -36,26 +48,24 @@ export default function UserView () {
         createdAt: new Date,
     })
     const [userPersonal, setUserPersonal] = useState(false)
-
-
     const [redirect, setRedirect] = useState(null)
     //Showing Side Bar
     const showNavdash = ()=> {
         setToggleMenu(!toggleMenu)
     }
 
-    //For test
-    const events = [
-        { title: 'event 1', date: '2022-05-02', publicId: '012' },
-        { title: 'event 2', date: '2022-05-01', publicId: '013' }
-      ]
     //Show Personal Info Assign/View
     const handleOpenModal = (e)=> {
-        e.preventDefault()
         setName(e.target.value)
+        lowerName = name.toLowerCase()
         const typeArr = extractType(userSelected.personalDetails, lowerName)
-        setItemsArr([...typeArr])
+        setItemsArr(typeArr)
         setUserPersonal(true)
+    }
+
+    const handleCloseModal = (e)=> {
+        setItemsArr([])
+        setUserPersonal(false)
     }
 
     const handleChangeItem = (e, setState) => {
@@ -85,8 +95,59 @@ export default function UserView () {
         })
         setNewMode(!newMode)
     }
+
+    const convertNames = (data) => {
+        let newArr = []
+        data.map((item, index)=> {
+            if(item.title === 'Rest') {
+                newArr.push(item)
+            }
+            if(item.title === 'WarmUp') {
+                const newItem = {
+                    title: extractData(item.id, workouts.warmups),
+                    id: item.id,
+                    date: item.date
+                }
+                newArr.push(newItem)
+            }
+            if(item.title === 'Exercise') {
+                const newItem = {
+                    title: extractData(item.id, workouts.exercises),
+                    id: item.id,
+                    date: item.date
+                }
+                newArr.push(newItem)
+            }
+            if(item.title === 'CoolDown') {
+                const newItem = {
+                    title: extractData(item.id, workouts.cooldowns),
+                    id: item.id,
+                    date: item.date
+                }
+                newArr.push(newItem)
+            }
+        })
+        setCalEvents(newArr)
+    }
     const checkType = ()=> {
         console.log(itemsArr)
+    }
+
+    const handleEventClick = (arg)=> {
+        const woId = arg.event._def.publicId
+        const typeName = arg.event._def.title.toLowerCase()
+        if(woId === 'null') {
+            setNoId(true)
+        } else {
+            asyncFunc.getItem(`/api/workouts/${typeName}/`, woId, user.token, setItemView)
+        }
+        setEventModal(true)
+    }
+
+    const handleEventClose = ()=> {
+        setNoId(false)
+        setItemView({})
+        setEventModal(false)
     }
 
     useEffect(()=> {
@@ -94,16 +155,19 @@ export default function UserView () {
             navigate('/dashboard/users')
         } else {
             asyncFunc.getItem('/api/users/', id, user.token, setUserSelected)
+            asyncFunc.getWorkoutsByUserId('/api/programs/users/', id, user.token).then((data)=> {
+                convertNames(data)
+            })
         }
-    },[itemsArr])
+    },[])
 
-    if(!userSelected.firstName) {
+    if(!userSelected.firstName || calEvents.length === 0) {
         return <>
                  <CircularIndeterminate />
             </>
     }
 
-    if(userSelected) {
+    if(userSelected && calEvents.length > 0) {
        return (
         <div>
             <div style={{margin: '0 auto'}}>
@@ -115,12 +179,37 @@ export default function UserView () {
             <div className="userContainer">
                 <NavDash setEvents={(e)=>handleOpenModal(e)} show={toggleMenu}/>
                 <div className="userContent" style={{backgroundColor: 'var(--grey)', color: 'black', borderRadius: '5px', padding: '1em'}}>
-                    <Calendar events={events}/>
+                    {calEvents.length > 0 && <Calendar events={calEvents} handleClick={handleEventClick}/>}
                 </div>
             </div>
+            <Modal
+            open={eventModal}
+            onClose={handleEventClose}
+            >   
+                <div className="modalDiv">
+                    <h1>View</h1>
+                    <div className="modalBody">
+                        {noId && 
+                        <>
+                            <h2 style={{textAlign: 'center'}}>Rest</h2>
+                            <BsBatteryCharging style={{fontSize: '2em'}}/>
+                        </>}
+                        {itemView.name && 
+                        <>
+                        <h1>{itemView.name}</h1>
+                        <h2>{itemView.instruction}</h2>
+                        {itemView.link && 
+                        <div className='vidContainer'> 
+                            <iframe width='100%' height='100%' src={asyncFunc.linkVid(itemView.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
+                        </div>}
+                        </>}
+                    </div>
+                </div>
+
+            </Modal>
         <Modal
             open={userPersonal}
-            onClose={()=> setUserPersonal(false)}
+            onClose={handleCloseModal}
         >
                 <div className="modalDiv previewDiv">
                     <h1>{name}</h1>

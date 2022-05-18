@@ -15,6 +15,7 @@ import {logout, reset} from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import './settingsIcon.css'
+import {MdVideoLibrary} from 'react-icons/md'
 
 
 const theme = createTheme({
@@ -138,6 +139,11 @@ export default function CustomizedMenus(props) {
           <MoreHorizIcon />
           Messages
           {props.notif && <span className='notifNumber'><span>{props.notif}</span></span>}
+        </MenuItem>
+
+        <MenuItem onClick={()=> navigate('/home/library')} disableRipple>
+          <MdVideoLibrary style={{fontSize: 'large'}}/>
+          <span style={{marginLeft: '0.8em'}}>Library</span>
         </MenuItem>
 
         <MenuItem onClick={handleClose} disableRipple>

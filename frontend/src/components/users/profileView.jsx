@@ -4,15 +4,17 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import handleDate from '../utils/dateHandler'
 import countries from '../utils/countries'
+import memberships from "../utils/memberships"
 import CircularIndeterminat from '../spinner'
 import './profileView.css'
 import ImageAvatars from "../avatar"
 import {FcApproval, FcDisapprove} from 'react-icons/fc'
-import {MdPublishedWithChanges} from 'react-icons/md'
+import { MdChangeCircle, MdMoreTime} from 'react-icons/md'
 import {Si1Password} from 'react-icons/si'
 import {IoArrowBackCircle} from 'react-icons/io5'
 import {FaEdit, FaSave} from 'react-icons/fa'
 import { Box, Modal, TextField, FormControl, InputLabel, OutlinedInput, MenuItem, InputAdornment } from "@mui/material"
+import DownTimer from "../countdownTimer/countdownTimer"
 
 
 export default function ProfileView () {
@@ -24,6 +26,8 @@ export default function ProfileView () {
     const [editMode, setEditMode] = useState(false)
     const [password, setPassword] = useState(false)
     const [passValue, setPassValue] = useState('')
+    const [showMember, setShowMember] = useState(false)
+    const [membership, setMembership] = useState('')
     const {id} = useParams()
     const url = '/api/users/'
     const [formData, setFormData] = useState({
@@ -90,11 +94,25 @@ export default function ProfileView () {
             navigate(`/home`)
         }
     }
+
+    const changePlan = (e)=> {
+        setMembership(e.target.value)
+    }
+
+    const savePlan = (e)=> {
+        e.preventDefault()
+        asyncFunc.updateItem(url, id, {plan: membership}, user.token, setSelectedUser)
+        setShowMember(false)
+    }
+
+    const addTime = (e)=> {
+        e.preventDefault()
+        asyncFunc.updateItem(url, id, {extendTime: 2592000000}, user.token, setSelectedUser)
+    }
     useEffect(()=> {
         if(!selectedUser.firstName) {
             asyncFunc.getItem(url, id, user.token, setSelectedUser)
         }
-        console.log(locationHook.pathname)
     },[])
 
     if(!selectedUser.firstName) {
@@ -105,15 +123,17 @@ export default function ProfileView () {
         <div className="profileContainer">
             <ImageAvatars imgSrc={'/' + selectedUser.avatarLink} name={selectedUser.firstName} />
             <h1>{selectedUser.firstName + ' ' + selectedUser.lastName}</h1>
+            {user.isAdmin && <span className="weekBtn" onClick={addTime}><MdMoreTime style={{fontSize: '1.5em'}}/></span>}
+            <DownTimer user={selectedUser} />
             <h2 style={{fontWeight: 800}} className={selectedUser.isPending ? 'suspended' : 'approved'}>
-                {user.isAdmin && !selectedUser.isAdmin && <span className="suspendApprove" onClick={(e)=> handleApprove(e)}><MdPublishedWithChanges/> </span>}
+                {user.isAdmin && <span className="suspendApprove" onClick={(e)=> handleApprove(e)}><MdChangeCircle/> </span>}
                 {selectedUser.isPending ? <><span>Suspended </span><FcDisapprove/></> 
                     :
                 <><span>Approved </span><FcApproval/></>}
                 
                 </h2>
             <h3>Last Login <span className="userDetails">{handleDate(selectedUser.lastLogin)}</span></h3>
-            <h2>Membership: <span className="userDetails">{selectedUser.membership}</span></h2>
+            <h2>Membership: <span className="userDetails">{selectedUser.membership}</span>{user.isAdmin && <span className="weekBtn" onClick={()=> setShowMember(true)}><MdChangeCircle/></span>}</h2>
             <button className="editBtn" onClick={switchEditMode}><FaEdit/> Edit</button>
             <div className="userInfo">
                 <h3>E-mail: <span className="userDetails">{selectedUser.email}</span></h3>
@@ -135,6 +155,28 @@ export default function ProfileView () {
                         <input type='password' value={passValue} autoComplete='new-password' placeholder='New Password' onChange={(e)=> setPassValue(e.target.value)} />
                         <button style={{fontSize: '1.5em'}} className="weekBtn" type="submit"><FaSave/></button>
                 </form>
+                </div>
+            </Modal>
+            <Modal
+                open={showMember}
+                onClose={()=> setShowMember(false)}
+            >
+                <div className="modalDiv previewDiv">
+                <h1>Membership Change</h1>
+                <div className="modalBody" style={{height: 'fit-content'}}>
+                    <TextField
+                            id="outlined-select-plan"
+                            select
+                            label="Plan"
+                            value={membership}
+                            type='text'
+                            onChange={changePlan}
+                            name='membership'
+                            >
+                                {memberships.map((item, index)=> <MenuItem key={item.name} value={item.name}>{item.name}: {item.price}</MenuItem>)}
+                        </TextField>
+                    <button className=" editBtn" onClick={savePlan}>Change</button>
+                </div>
                 </div>
             </Modal>
             <Modal
