@@ -95,11 +95,12 @@ export default function ProgCreate () {
     
 }
 
-export function GenerateWeek ({days,cycle, count, data, value, handleChange, inputValue, handleInputChange, setHandleProg, program}) { 
+export function GenerateWeek ({numberWeeks, days, cycle, count, data, value, handleChange, inputValue, handleInputChange, setHandleProg, program}) { 
     if(days && days.length > 0) {
+        console.log(count)
       return (
             <div className='weekContainer'>
-                <h3>Week {count +1}</h3>
+                {numberWeeks ? <h3>Week {`${count +1 + numberWeeks}`}</h3> : <h3>Week {`${count +1}`}</h3> }
                 <div className='daysContainer'>
                   {days.map((item, index)=> <GenerateDays cycle={cycle} setHandleProg={setHandleProg} program={program} weekInd={count} dayInd={index} key={index} dayCount={(7 * count) + index +1} data={data} value={value} handleChange={handleChange} inputValue={inputValue} handleInputChange={handleInputChange} />)}  
                 </div>
@@ -148,7 +149,7 @@ export function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd
             {program[weekInd][dayInd].map((item, index)=> <div key={index} >
                 <button className='weekBtn' value={index} onClick={(e, i)=> handleRest(e, index)}><FiBatteryCharging style={{pointerEvents: 'none'}}/></button>
 
-                {program[weekInd][dayInd][index].isRest ? <h2></h2> : 
+                {program[weekInd][dayInd][index].isRest ? <h2> </h2> : 
                 <Cycle cycleInd={index} setHandleProg={setHandleProg} program={program} weekInd={weekInd} dayInd={dayInd} />} 
                 </div>)} 
             <div className='add-removeBtn'>

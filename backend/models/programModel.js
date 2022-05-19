@@ -39,12 +39,12 @@ const programSchema = mongoose.Schema({
                 ref: 'User'
             },
             startDate: {
-                type: Date
+                type: Date,
             },
-            completed: {
-                type: [String],
+            completed: [{
+                type: String,
                 default: []
-            }
+            }]
         }
     },
    

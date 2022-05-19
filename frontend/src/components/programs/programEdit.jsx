@@ -160,7 +160,7 @@ export default function ProgEdit () {
             </Modal>
             {program.details.map((item, index)=> <GenerateWeekView key={index} weekInd={index} days={item} deleteWeek={(ind)=>deleteWeek(index)}/>)}
 
-            {prog.length > 0 && prog.map((item, index)=>  <GenerateWeek cycle={cycle} setHandleProg={setProg} program={prog} key={index} days={prog[index]} count={index} data={workouts.cooldowns}  value={value} handleChange={(e, val, ind)=>handleChange(e, val, index)} inputValue={inputValue} handleInputChange={handleInputChange} />)}
+            {prog.length > 0 && prog.map((item, index)=>  <GenerateWeek cycle={cycle} setHandleProg={setProg} program={prog} key={index} days={prog[index]} count={index} data={workouts.cooldowns}  value={value} handleChange={(e, val, ind)=>handleChange(e, val, index)} inputValue={inputValue} handleInputChange={handleInputChange} numberWeeks={program.details.length} />)}
 
             <button className='weekBtn' style={{ width: '100%', fontWeight: 'bolder'}} onClick={saveProg}><AiOutlineSchedule/> Save</button>
             {err && <div className='errMessage' >Please, Add at least One Week</div>}

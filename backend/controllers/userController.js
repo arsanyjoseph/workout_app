@@ -209,15 +209,15 @@ const updateUser = async (req, res) => {
             })
         }
 
-        const {type, title, description, createdAt} = req.body
-        if(type && title && createdAt) {
+        const {item} = req.body
+        if(item) {
             await user.updateOne({
                 $push: {
                     personalDetails: [{
-                        title: title,
-                        type: type,
-                        description: description,
-                        createdAt: createdAt
+                        title: item.title,
+                        type: item.type,
+                        description: item.description,
+                        createdAt: item.createdAt
                     }]
                 }
             })
@@ -364,8 +364,7 @@ const upload = multer({
 const uploadAvatar = async (req, res) => {
     const user = await User.findById(req.user._id)
     const oldAvatar = user.avatarLink
-    console.log(oldAvatar)
-    fs.unlink(`/uploads/${oldAvatar}`, ()=> console.log('success delete'))
+    fs.unlink(`/${oldAvatar}`, ()=> console.log('success delete'))
     try {
         await user.updateOne({
             avatarLink: req.file.filename
@@ -380,6 +379,14 @@ const uploadAvatar = async (req, res) => {
    
 }
 
+const uploadProgressPics = async (req, res) => {
+    try {
+        console.log(req.files)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     getAllUsers,
@@ -390,6 +397,7 @@ module.exports = {
     logInUser,
     uploadAvatar,
     upload,
-    getUserData
+    getUserData,
+    uploadProgressPics
 }
 

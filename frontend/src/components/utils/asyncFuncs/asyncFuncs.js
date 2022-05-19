@@ -56,7 +56,6 @@ const updateItem = async (url, id, data, token, setState) => {
     if (setState) {
         setState(response.data)
     }
-    console.log(response.data)
     return response.data
 }
 

@@ -140,10 +140,15 @@ const getProgByUser = async (req, res)=> {
             return
         })
         if(cycleId) {
-            console.log('success')
-            res.status(200).json({
-                message: 'scuuss'
-            })
+            await prog.updateOne({
+                assignedUser: {
+                completed: {
+                        $push: [`${cycleId}`]
+                }
+            }})
+
+            const newProg = await Program.findOne({'assignedUser.userId': id })
+            res.status(200).json(newProg)
         } else {
             res.status(200).json(newArr)
         }

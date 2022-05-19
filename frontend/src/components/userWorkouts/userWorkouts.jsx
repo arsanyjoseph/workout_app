@@ -5,8 +5,8 @@ import extractData from '../utils/extractData'
 import {Modal} from '@mui/material'
 
 import {BsBatteryCharging} from 'react-icons/bs'
-import {MdDoneOutline} from 'react-icons/md'
-
+import {MdDoneOutline, MdUpload} from 'react-icons/md'
+import axios from 'axios'
 import { getCooldowns, getExercises, getWarmups } from "../../features/workouts/workoutSlice";
 
 import './userWorkouts.css'
@@ -18,6 +18,42 @@ export default function UserWorkouts () {
     const [todayWorkout, setTodayWorkout] = useState([])
     const [showPreview, setShowPreview] = useState(false)
     const [item, setItem] = useState({})
+    const [progressPics, setProgressPics] = useState(false)
+    const [picsArray, setPicsArray] = useState([])
+    const [files, setFiles] = useState([])
+
+    const uploadProgressPics = async (url, token, formData, setState)=> {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'content-type': 'multipart/form-data'
+            }
+        }
+        const response = await axios.post(url,formData, config)
+        setState(response.data)
+        return response.data
+    }
+    const onImgChange = (e)=> {
+        e.preventDefault()
+        setPicsArray([...picsArray, e.target.files])
+    }
+
+    const onImgUpload = (e) => {
+        e.preventDefault()
+        let formData = new FormData();
+        for (const pic of picsArray) {
+            formData.append('progressPics', pic)
+          }
+        uploadProgressPics('/api/users/progresspics/', user.token, formData, setFiles)
+    }
+
+    const OpenProgressPics = ()=> {
+        setProgressPics(true)
+    }
+
+    const closeProgressPics = ()=> {
+        setProgressPics(false)
+    }
 
     const handleModalOpen = (e, type)=> {
         const WoId = e.target.value
@@ -32,6 +68,7 @@ export default function UserWorkouts () {
 
     const markComplete = (e)=> {
         const cycleId = e.target.value
+        console.log(cycleId)
         asyncFunc.updateItem('/api/programs/users/', user.id, {cycleId: cycleId }, user.token)
     }
     useEffect(()=> {
@@ -77,6 +114,7 @@ export default function UserWorkouts () {
                         <h1>Rest</h1>
                         <BsBatteryCharging/>
                     </>}
+                    <button className='weekBtn' onClick={OpenProgressPics}><MdUpload style={{fontSize: '1.5em'}}/></button>
                     </div>
                 )}
 
@@ -92,6 +130,20 @@ export default function UserWorkouts () {
                         <iframe width='100%' height='100%' src={asyncFunc.linkVid(item.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
                     </div>}
                     
+                </div>
+            </Modal>
+
+            <Modal
+                open={progressPics}
+                onClose={closeProgressPics}
+            >
+                <div className="modalDiv previewDiv">
+                    <h1>Progress Uploads</h1>
+                    <form class='formLogin' style={{alignItem: 'center',}}  method='POST' enctype="multipart/form-data" onSubmit={onImgUpload}>
+                        <label for='file' className='weekBtn'><MdUpload style={{fontSize: '1.5em'}}/></label>
+                        <input type='file' multiple='multiple' hidden accept='image/*' name='progressPics' id='file' onChange={onImgChange} />
+                        <button type='submit' className='weekBtn' style={{margin: '0 auto'}}>Save</button>
+                    </form>
                 </div>
             </Modal>
             {todayWorkout.length === 0 && <h1 style={{ textAlign: 'center'}}>No Program Assigned Yet</h1>}

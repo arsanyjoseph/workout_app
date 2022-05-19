@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 
 import './userView.css'
@@ -7,11 +7,13 @@ import './userView.css'
 import CircularIndeterminate from "../spinner"
 import NavDash from './nav'
 import Calendar from "./userCalendar"
+import ItemsTable from "./itemsTable";
 
-import handleDate from '../utils/dateHandler'
 import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import extractType from "../utils/userDataType"
 import extractData from "../utils/extractData";
+import { getAllUsers } from "../../features/users/usersSlice";
+import handleErr from '../utils/errorAlert'
 
 import { Modal } from "@mui/material"
 
@@ -23,6 +25,7 @@ import {BsBatteryCharging} from 'react-icons/bs'
 
 export default function UserView () {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const url = '/api/users/'
     const {user} = useSelector((state)=> state.auth)
     const {workouts} = useSelector((state)=> state.workouts)
@@ -33,19 +36,18 @@ export default function UserView () {
     const [newMode, setNewMode] = useState(false)
     const [eventModal, setEventModal] = useState(false)
     const [noId, setNoId] = useState(false)
+    const [err, setErr] = useState(false)
 
     const [name, setName] = useState('')
     const [itemsArr, setItemsArr] = useState([])
     const [calEvents, setCalEvents] = useState([])
     const [itemView, setItemView] = useState({})
-    //Convert Name to lowerCase
-    let lowerName = ''
 
     const [item, setItem] = useState({
         type: '',
         title: '',
         description: '',
-        createdAt: new Date,
+        createdAt: new Date(),
     })
     const [userPersonal, setUserPersonal] = useState(false)
     const [redirect, setRedirect] = useState(null)
@@ -57,14 +59,19 @@ export default function UserView () {
     //Show Personal Info Assign/View
     const handleOpenModal = (e)=> {
         setName(e.target.value)
-        lowerName = name.toLowerCase()
-        const typeArr = extractType(userSelected.personalDetails, lowerName)
-        setItemsArr(typeArr)
+        setItemsArr(userSelected.personalDetails)
         setUserPersonal(true)
     }
 
     const handleCloseModal = (e)=> {
         setItemsArr([])
+        setName('')
+        setItem({
+            type: '',
+            title: '',
+            description: '',
+            createdAt: new Date(),
+        })
         setUserPersonal(false)
     }
 
@@ -78,20 +85,22 @@ export default function UserView () {
 
     const handleSaveItem = (e)=> {
         e.preventDefault()
-        setItem((prevState)=> ({
-            ...prevState,
-                type: `${lowerName}`
-        }))
-        asyncFunc.updateItem(url, id, item,  user.token)
-        setNewMode(false)
+        if(item.type === '' || item.title === '') {
+            handleErr(setErr)
+        } else {
+            asyncFunc.updateItem(url, id, {item: item}, user.token)
+            dispatch(getAllUsers(user.token))
+            setNewMode(false)
+            handleCloseModal()   
+        }
     }
 
     const toggleNewMode = ()=> {
         setItem({
-            type: `${lowerName}`,
+            type: `${name.toLowerCase()}`,
             title: '',
             description: '',
-            createdAt: new Date
+            createdAt: new Date(),
         })
         setNewMode(!newMode)
     }
@@ -126,11 +135,9 @@ export default function UserView () {
                 }
                 newArr.push(newItem)
             }
+            return newArr
         })
         setCalEvents(newArr)
-    }
-    const checkType = ()=> {
-        console.log(itemsArr)
     }
 
     const handleEventClick = (arg)=> {
@@ -159,7 +166,7 @@ export default function UserView () {
                 convertNames(data)
             })
         }
-    },[])
+    },[itemsArr, dispatch])
 
     if(!userSelected.firstName || calEvents.length === 0) {
         return <>
@@ -211,15 +218,10 @@ export default function UserView () {
             open={userPersonal}
             onClose={handleCloseModal}
         >
-                <div className="modalDiv previewDiv">
+                <div className="modalDiv">
                     <h1>{name}</h1>
                     <div className="itemsCont">
-                        {itemsArr.length > 0 && itemsArr.map((item, index)=> <div key={index} className="itemCont">
-                            <h3>{`${index + 1} - `}{item.title} :</h3>
-                            <p> {item.description}</p>
-                            <h6>Created @: {handleDate(item.createdAt)}</h6>
-                        </div>)}
-                        <button onClick={checkType}>Test</button>
+                        {itemsArr.length > 0 && extractType(itemsArr, name.toLowerCase()).length > 0 ? <ItemsTable data={extractType(itemsArr, name.toLowerCase())} /> : <h2>No Items Found</h2>}
                     </div>
                     {newMode && <form className="newItemForm">
                         <input type='text' name="title" placeholder={`${name} Title`} value={item.title} onChange={(e,setState)=> handleChangeItem(e, setItem)}/>
@@ -227,6 +229,7 @@ export default function UserView () {
                         <button className="weekBtn" onClick={handleSaveItem}><MdSave/></button>
                     </form>}
                     <button className="weekBtn" style={{float: 'right'}} onClick={toggleNewMode}><MdLibraryAdd/></button>
+                    {err && <div className='errMessage' style={{fontSize: 'medium', textAlign: 'center'}}>Add a Title</div>}
                 </div>
         </Modal>
         </div>

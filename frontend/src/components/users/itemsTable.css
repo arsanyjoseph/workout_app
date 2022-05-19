@@ -1,0 +1,12 @@
+.itemsTableCont {
+    width: 100%;
+}
+
+.itemsTableCont > table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.itemsTableRow > td {
+    border-bottom: 1px solid var(--grey);
+}
