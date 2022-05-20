@@ -35,3 +35,13 @@
 .metricsContainer > input {
     width: 50%;
 }
+
+.metricsContainer > span {
+    color: black;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.metricsContainer > span:hover {
+    color: var(--blue);
+}

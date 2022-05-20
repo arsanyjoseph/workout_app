@@ -1,8 +1,9 @@
 const MetricSet = require('../models/metricSetsModel')
+const {handleDate} = require('../utils/dateHandler')
 
 const getAllMetricSets = async (req, res) => {
     try {
-        const metricsSets = await MetricSet.find().sort([['name', 1]])
+        const metricsSets = await MetricSet.find().sort([['createdAt', -1]])
         res.status(200).json(metricsSets)
     } catch (error) {
         console.log(error)
@@ -22,12 +23,12 @@ const getMetricSet = async (req, res) => {
 
 const createMetricSet = async (req, res) => {
     try {
-        const {name, metrics} = req.body
-        const checkMetric = await MetricSet.find({name: name})
+        const {metricSet} = req.body
+        const checkMetric = await MetricSet.find({name: metricSet.name})
         if(checkMetric.length === 0) {
             const newMetricSet = await MetricSet.create({
-                name: name,
-                metrics: metrics,
+                name: metricSet.name,
+                metrics: metricSet.metrics,
                 createdById: req.user._id,
                 createdAt: Date.now()
             })
@@ -38,8 +39,43 @@ const createMetricSet = async (req, res) => {
     }
 }
 
-const updateMetricSet = (req, res) => {
-    res.status(200).json({MetricSet : req.params.id})
+const updateMetricSet = async (req, res) => {
+    try {
+        const {metricSet, assignData} = req.body
+        const {id} = req.params
+        if(!id) {
+            res.status(400).json({
+                message: "Please, Provide an Id"
+            })
+        }
+        const oldMetricSet = await MetricSet.findById(id)
+        if(!oldMetricSet) {
+            res.status(400).json({
+                message: "No Metric Set"
+            })
+        }
+        if(metricSet) {
+            await oldMetricSet.updateOne({
+                name: metricSet.name,
+                metrics: [...metricSet.metrics]
+            })
+        }
+
+        if(assignData) {
+            await oldMetricSet.updateOne({
+                $push : {
+                  usersAssigned: [{
+                    userId: assignData.userId,
+                    date: assignData.date
+                }]  
+                }
+            })
+        }
+        const modMetricSet = await MetricSet.findById(id)
+        res.status(200).json(modMetricSet)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 const deleteMetricSet = async (req, res) => {
@@ -54,11 +90,31 @@ const deleteMetricSet = async (req, res) => {
     
 }
 
+const getUsersMS = async (req, res) => {
+    try {
+        const {id} = req.params
+        const {date} = req.body
+        console.log(new Date(date + 86400000))
+        if(id) {
+          const metricSets = await MetricSet.find({ usersAssigned : {
+            $elemMatch: {
+                userId: id,
+            }
+        }}) 
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 module.exports = {
     getAllMetricSets,
     getMetricSet,
     createMetricSet,
     updateMetricSet,
-    deleteMetricSet
+    deleteMetricSet,
+    getUsersMS
 }
 

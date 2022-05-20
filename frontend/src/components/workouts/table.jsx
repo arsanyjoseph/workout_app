@@ -13,7 +13,6 @@ export default function Table ({data}) {
                         <th className='tableHead'>Name</th>
                         <th className='tableHead'>Created By</th>
                         <th className='tableHead'>Created At</th>   
-                        <th className='tableHead'>Details</th>   
                     </tr>
                 </thead>
                 <tbody>
@@ -43,8 +42,7 @@ function GenerateTR (data) {
             <tr className='tableData' key={index}>
                 <td><button className='names' onClick={handleClick} value={item._id}>{item.name}</button></td>
                 <td>{idName}</td>
-                <td>{creationDate}</td>
-                <td className='assignedUsers'>details</td>
+                <td className='assignedUsers'>{creationDate}</td>
             </tr>
                 )  
             })}

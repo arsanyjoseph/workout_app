@@ -10,3 +10,8 @@
 .itemsTableRow > td {
     border-bottom: 1px solid var(--grey);
 }
+
+.itemsTableRow:hover {
+    background-color: rgb(217, 217, 217);
+    font-weight: bold;
+}

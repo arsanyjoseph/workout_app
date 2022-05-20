@@ -1,0 +1,20 @@
+.metricRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items:center;
+    justify-content: center;
+}
+
+.metricRow * {
+    margin: 1em;
+}
+
+.editModeDiv, .viewModeDiv {
+    margin: 1em;
+    border: 1px solid black;
+    padding: 1em;
+    border-radius: 5px;
+    background-color: rgb(217, 217, 217);
+    box-shadow: 1px 1px 1px 1px var(--grey);
+}

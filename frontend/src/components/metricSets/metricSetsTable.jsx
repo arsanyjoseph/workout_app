@@ -4,7 +4,7 @@ import searchArray from '../utils/extractName'
 import '../workouts/table.css'
 import { useNavigate } from 'react-router-dom'
 
-export default function UserGroupTable ({data}) {
+export default function MetricSetTable ({data}) {
     return (
         <div className='tableContainer'>
             <table>
@@ -44,7 +44,11 @@ function GenerateTR (data) {
                 <td><button className='names' onClick={handleClick} value={item._id}>{item.name}</button></td>
                 <td>{idName}</td>
                 <td>{creationDate}</td>
-                <td className='assignedUsers'>{item.usersAssigned.length > 0 ? item.usersAssigned.map((i, index)=> <span key={index + i.userId}>{searchArray(i, users) + ', '}</span> ) : 'No Users Assigned Yet'}</td>
+                <td className='assignedUsers'>
+                    {item.usersAssigned.length > 0 && item.usersAssigned.length <= 3 && item.usersAssigned.map((i, index)=> <span key={index + i.userId}>{searchArray(i.userId, users) + ', '}</span> )}
+                    {item.usersAssigned.length === 0 && <span>No Users Assigned</span> }
+                    {item.usersAssigned.length > 3 && <span style={{fontWeight: 'bold'}}>Many Users Assigned ...</span>}  
+                </td>
             </tr>
                 )  
             })}

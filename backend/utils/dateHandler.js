@@ -1,7 +1,6 @@
-
-const handleDate2 = (i) => {
+const handleDate = (i) => {
     date = new Date(i)
     return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate()
 }
 
-export default handleDate2
+module.exports = {handleDate}

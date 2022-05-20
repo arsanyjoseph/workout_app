@@ -34,6 +34,7 @@ import NoMatch from './components/nomatch/nomatch'
 
 import MetricSets from './components/metricSets/metricSets'
 import MetricSetCreate from './components/metricSets/metricSetCreate';
+import MetricSetView from './components/metricSets/metricSetView';
 
 import UserWorkouts from './components/userWorkouts/userWorkouts';
 
@@ -84,6 +85,7 @@ function App() {
             <Route path='library/new' element={<LibraryCreate/>} />
 
             <Route path='metricsets' element={<MetricSets/>} />
+            <Route path='metricsets/:id' element={<MetricSetView/>} />
             <Route path='metricsets/new' element={<MetricSetCreate/>} />
 
           </Route>

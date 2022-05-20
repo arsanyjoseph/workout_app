@@ -44,7 +44,11 @@ function GenerateTR (data) {
                 <td><button className='names' onClick={handleClick} value={item._id}>{item.name}</button></td>
                 <td>{idName}</td>
                 <td>{creationDate}</td>
-                <td className='assignedUsers'>{item.usersId.length > 0 ? item.usersId.map((i, index)=> <span key={index + i.userId}>{searchArray(i, users) + ', '}</span> ) : 'No Users Assigned Yet'}</td>
+                <td className='assignedUsers'>
+                    {item.usersId.length > 0 && item.usersId.length <= 3 && item.usersId.map((i, index)=> <span key={index + i.userId}>{searchArray(i, users) + ', '}</span> )}
+                    {item.usersId.length === 0 && <span>No Users Assigned</span>}
+                    {item.usersId.length > 3 && <span>Many Users Assigned....</span>}
+                </td>
             </tr>
                 )  
             })}

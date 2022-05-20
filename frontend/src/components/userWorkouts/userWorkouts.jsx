@@ -16,6 +16,7 @@ export default function UserWorkouts () {
     const {user} = useSelector((state)=> state.auth)
     const {workouts} = useSelector((state)=> state.workouts)
     const [todayWorkout, setTodayWorkout] = useState([])
+    const [todayMetricSet, setTodayMetricSet] = useState([])
     const [showPreview, setShowPreview] = useState(false)
     const [item, setItem] = useState({})
     const [progressPics, setProgressPics] = useState(false)
@@ -71,6 +72,7 @@ export default function UserWorkouts () {
         console.log(cycleId)
         asyncFunc.updateItem('/api/programs/users/', user.id, {cycleId: cycleId }, user.token)
     }
+
     useEffect(()=> {
         if(user) {
             dispatch(getExercises(user.token))
@@ -79,6 +81,8 @@ export default function UserWorkouts () {
 
             asyncFunc.getTodayUser('/api/programs/today/user/', user.id, {date: Date.now()}, user.token, setTodayWorkout )
             .then((data)=> setTodayWorkout(data))
+
+            asyncFunc.getTodayUser('/api/metricsets/today/user/', user.id, {date: Date.now()}, user.token, setTodayMetricSet).then((data)=> setTodayMetricSet(data))
         }
     },[])
 

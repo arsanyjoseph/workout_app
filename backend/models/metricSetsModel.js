@@ -46,7 +46,7 @@ const metricSetSchema = mongoose.Schema({
                 type: Date
             },
             answers: {
-                type: []
+                type: [{}]
             }
         }]
     }
