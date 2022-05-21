@@ -17,7 +17,7 @@ const {secure} = require('../middleware/authenticate')
 
 router.post('/login', logInUser)
 router.post('/upload',secure, upload.single('avatarImg'), uploadAvatar)
-router.post('/progresspics',secure, upload.array('progressPics', 2), uploadProgressPics)
+router.post('/progresspics/:id',secure, upload.array('progressPics', 2), uploadProgressPics)
 router.get('/:id', secure, getUser)
 
 router.get('/data/:id/:type', secure, getUserData)

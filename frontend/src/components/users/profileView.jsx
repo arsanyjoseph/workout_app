@@ -9,7 +9,7 @@ import CircularIndeterminat from '../spinner'
 import './profileView.css'
 import ImageAvatars from "../avatar"
 import {FcApproval, FcDisapprove} from 'react-icons/fc'
-import { MdChangeCircle, MdMoreTime} from 'react-icons/md'
+import { MdChangeCircle, MdMoreTime, MdReadMore} from 'react-icons/md'
 import {Si1Password} from 'react-icons/si'
 import {IoArrowBackCircle} from 'react-icons/io5'
 import {FaEdit, FaSave} from 'react-icons/fa'
@@ -28,6 +28,7 @@ export default function ProfileView () {
     const [passValue, setPassValue] = useState('')
     const [showMember, setShowMember] = useState(false)
     const [membership, setMembership] = useState('')
+    const [morePersonal, setMorePersonal] = useState(false)
     const {id} = useParams()
     const url = '/api/users/'
     const [formData, setFormData] = useState({
@@ -108,6 +109,13 @@ export default function ProfileView () {
     const addTime = (e)=> {
         e.preventDefault()
         asyncFunc.updateItem(url, id, {extendTime: 2592000000}, user.token, setSelectedUser)
+    }
+
+    const handleMorePersonal = ()=> {
+        setMorePersonal(true)
+    }
+    const closeMorePersonal = ()=> {
+        setMorePersonal(false)
     }
     useEffect(()=> {
         if(!selectedUser.firstName) {
@@ -284,8 +292,30 @@ export default function ProfileView () {
                 <button className="weekBtn" style={{float: 'right', fontSize: '2em', margin: '0.5em'}} onClick={updateProfile}><FaSave/></button>
                 </div>
             </Modal>
+            <Modal
+                open={morePersonal}
+                onClose={closeMorePersonal}
+            >
+                <div className="modalDiv" style={{ width: '75%'}}>
+                    <h1>More Personal Info</h1>
+                    <div className="morePersonalModalBody">
+                        {selectedUser.personalInfo.isInjured ? <h2>- Injured with: <span className="userDetails">{selectedUser.personalInfo.injury}</span></h2> : <h2>- No Injury</h2>}
+
+                        <h2>- Training Place: <span className="userDetails">{selectedUser.personalInfo.trainPlace}</span></h2>
+
+                        <h2>- {selectedUser.firstName}'s Target: <span className="userDetails">{selectedUser.personalInfo.target}</span></h2>
+
+                        <h2>- Training Days: <span className="userDetails">{selectedUser.personalInfo.trainDays} days/Week</span></h2>
+
+                        {selectedUser.personalInfo.isOtherSport ? <h2>- Other Sport/s: <span className="userDetails">{selectedUser.personalInfo.otherSport}</span></h2> : <h2>- No Other Sport/s</h2>}
+
+                        <h2>- Shooting Pics: {selectedUser.personalInfo.isShootPics ? <span className="userDetails">True</span> : <span className="userDetails">False</span>}</h2>
+                    </div>
+                </div>
+            </Modal>
             <div className="buttons">
                 <span className="weekBtn" style={{fontSize: '4em'}} onClick={handleBackBtn}><IoArrowBackCircle/></span>
+                <span className="weekBtn" style={{fontSize: '4em'}} onClick={handleMorePersonal}><MdReadMore/></span>
             </div>
         </div>
     )

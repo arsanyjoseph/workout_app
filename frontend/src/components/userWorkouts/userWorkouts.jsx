@@ -19,13 +19,42 @@ export default function UserWorkouts () {
     const [todayMetricSet, setTodayMetricSet] = useState([])
     const [showPreview, setShowPreview] = useState(false)
     const [item, setItem] = useState({})
+    const [msModal, setMsModal] = useState(false)
+    const [msItem, setMsItem] = useState({})
     const [progressPics, setProgressPics] = useState(false)
     const [picsArray, setPicsArray] = useState([])
+    const [cycleId, setCycleId] = useState('')
     const [files, setFiles] = useState([])
 
+    const openMsModal = (e)=> {
+        e.preventDefault()
+        let ind = e.target.value
+        let newArr = []
+        let answer = ''
+        todayMetricSet[ind].metrics.map(()=> {
+            newArr.push(answer)
+        })
+        setMsItem(todayMetricSet[ind])
+        setMsModal(true)
+    }
+
+    const closeMsModal = (e)=> {
+        setMsItem({})
+        setMsModal(false)
+    }
+
+    const submitAnswers = (e)=> {
+        e.preventDefault()
+        asyncFunc.updateItem('/api/metricsets/', msItem._id, {answerUpdate : msItem.usersAssigned}, user.token)
+        closeMsModal()
+    }
+    const handleAnswer = (e, index)=> {
+        e.preventDefault()
+        msItem.usersAssigned.userAnswers[index] = e.target.value
+    }
     const uploadProgressPics = async (url, token, formData, setState)=> {
         const config = {
-            headers: {
+            headers: {  
                 'Authorization': `Bearer ${token}`,
                 'content-type': 'multipart/form-data'
             }
@@ -36,23 +65,27 @@ export default function UserWorkouts () {
     }
     const onImgChange = (e)=> {
         e.preventDefault()
-        setPicsArray([...picsArray, e.target.files])
+        const newArr = Object.entries(e.target.files)
+        setPicsArray(newArr)
     }
 
     const onImgUpload = (e) => {
         e.preventDefault()
         let formData = new FormData();
-        for (const pic of picsArray) {
-            formData.append('progressPics', pic)
-          }
-        uploadProgressPics('/api/users/progresspics/', user.token, formData, setFiles)
+        picsArray.map((item)=> {
+            formData.append('progressPics', item[1])
+        })
+        uploadProgressPics(`/api/users/progresspics/${cycleId}`, user.token, formData, setFiles)
+        closeProgressPics()
     }
 
-    const OpenProgressPics = ()=> {
+    const OpenProgressPics = (e, i)=> {
+        setCycleId(i)
         setProgressPics(true)
     }
 
     const closeProgressPics = ()=> {
+        setCycleId('')
         setProgressPics(false)
     }
 
@@ -69,7 +102,6 @@ export default function UserWorkouts () {
 
     const markComplete = (e)=> {
         const cycleId = e.target.value
-        console.log(cycleId)
         asyncFunc.updateItem('/api/programs/users/', user.id, {cycleId: cycleId }, user.token)
     }
 
@@ -112,13 +144,14 @@ export default function UserWorkouts () {
                     </div>
                     <div>
                         <h2>Coach says: "{item.notes}"</h2>
+                        <button className='weekBtn' onClick={(e)=>OpenProgressPics(e, item._id)}><MdUpload style={{fontSize: '1.5em'}}/></button>
                     </div>
                     </>}
                     {item.isRest && <>
                         <h1>Rest</h1>
                         <BsBatteryCharging/>
                     </>}
-                    <button className='weekBtn' onClick={OpenProgressPics}><MdUpload style={{fontSize: '1.5em'}}/></button>
+                    
                     </div>
                 )}
 
@@ -133,7 +166,6 @@ export default function UserWorkouts () {
                     <div className='vidContainer'> 
                         <iframe width='100%' height='100%' src={asyncFunc.linkVid(item.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
                     </div>}
-                    
                 </div>
             </Modal>
 
@@ -143,14 +175,45 @@ export default function UserWorkouts () {
             >
                 <div className="modalDiv previewDiv">
                     <h1>Progress Uploads</h1>
-                    <form class='formLogin' style={{alignItem: 'center',}}  method='POST' enctype="multipart/form-data" onSubmit={onImgUpload}>
-                        <label for='file' className='weekBtn'><MdUpload style={{fontSize: '1.5em'}}/></label>
-                        <input type='file' multiple='multiple' hidden accept='image/*' name='progressPics' id='file' onChange={onImgChange} />
+                    <form className='formLogin' style={{alignItem: 'center',}}  method='POST' encType="multipart/form-data" onSubmit={onImgUpload}>
+                        <label htmlFor='file' className='weekBtn'><MdUpload style={{fontSize: '1.5em'}}/></label>
+                        <input type='file' multiple hidden accept='image/*' name='progressPics' id='file' onChange={onImgChange} />
+                        
                         <button type='submit' className='weekBtn' style={{margin: '0 auto'}}>Save</button>
                     </form>
                 </div>
             </Modal>
             {todayWorkout.length === 0 && <h1 style={{ textAlign: 'center'}}>No Program Assigned Yet</h1>}
+            </div>
+            <div className="userMSCont">
+            <h4>Today's Metrics</h4>
+                {todayMetricSet.length > 0
+                     && todayMetricSet.map((item, index)=> <>
+                     <h1 key={index}>{item.name}</h1>
+                     <button className='weekBtn' value={index} onClick={openMsModal}>Show</button>
+                     </>)
+                }
+                {todayMetricSet.length === 0 && <h1>No Metric Sets Today</h1>}
+                <Modal
+                open={msModal}
+                onClose={closeMsModal}
+            >
+                <>
+                {msItem.name && <div className="modalDiv previewDiv">
+                    <h1>Metrics</h1>
+                    <h2>{msItem.name}</h2>
+                    {msItem.metrics.map((item, index)=> <div key={index} className='viewMS'>
+                            <h2>{item.metric}</h2>
+                            <p>measured in</p>
+                            <h2>{item.unit}</h2> 
+                            {msItem.usersAssigned.userAnswers.length === 0 && 
+                            <input className='metricSetInput smallInput' placeholder='You' type='number' value={msItem.usersAssigned.userAnswers[index]} onChange={(e)=>handleAnswer(e, index)}/>}
+                            {msItem.usersAssigned.userAnswers.length > 0 && <span className='userAnswer'>{msItem.usersAssigned.userAnswers[index]}</span>}
+                        </div>)}
+                    {msItem.usersAssigned.userAnswers.length === 0 && <button className='weekBtn' value={msItem._id} onClick={submitAnswers} >Submit</button>}
+                </div>}
+                </>
+            </Modal>
             </div>
         </div>
     ) 

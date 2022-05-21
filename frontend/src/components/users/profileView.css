@@ -80,3 +80,15 @@
     min-width: 10em;
     margin: 1em;
 }
+.morePersonalModalBody {
+    display: flex;
+    flex-direction: column;
+}
+.morePersonalModalBody > h2 {
+    background-color: rgb(220, 220, 220);
+    width: fit-content;
+    padding: 0.25em;
+    box-shadow: 1px 1px 1px 1px var(--grey);
+    border-radius: 5px;
+    margin: 0.25em 1em;
+}

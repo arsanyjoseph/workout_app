@@ -109,6 +109,7 @@ const getTodayUser = async (url, id, data, token, setState) => {
     }
     return response.data
 }
+
 const asyncFunc = {
     createItem,
     getItem,

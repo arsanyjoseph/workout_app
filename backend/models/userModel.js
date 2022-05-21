@@ -123,8 +123,12 @@ const userSchema = mongoose.Schema({
             name: {
                 type: String
             },
-            time: {
+            createdAt: {
                 type: Date
+            },
+            cycleId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Program'
             }
         }],
         default: []

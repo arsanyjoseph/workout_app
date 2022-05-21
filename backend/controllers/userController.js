@@ -361,6 +361,7 @@ const upload = multer({
     }
 })
 
+
 const uploadAvatar = async (req, res) => {
     const user = await User.findById(req.user._id)
     const oldAvatar = user.avatarLink
@@ -381,7 +382,22 @@ const uploadAvatar = async (req, res) => {
 
 const uploadProgressPics = async (req, res) => {
     try {
-        console.log(req.files)
+        const user = await User.findById(req.user._id)
+        const {files} = req
+        const {id} = req.params
+        const date = new Date()
+        files.map(async (item)=> {
+           await user.updateOne({
+            $push : {
+                progressPics: [{
+                    name: item.filename,
+                    createdAt: date,
+                    cycleId: id
+                }]
+            }
+        }) 
+        })
+        res.status(200).json(user)
     } catch (error) {
         console.log(error)
     }

@@ -38,6 +38,11 @@ export default function UserView () {
     const [noId, setNoId] = useState(false)
     const [err, setErr] = useState(false)
 
+    const [showMS, setShowMS] = useState(false)
+    const [msArr, setMsArr] = useState([])
+    const [viewAll ,setViewAll] = useState(false)
+    const [allMs, setAllMs] = useState([])
+
     const [name, setName] = useState('')
     const [itemsArr, setItemsArr] = useState([])
     const [calEvents, setCalEvents] = useState([])
@@ -54,6 +59,17 @@ export default function UserView () {
     //Showing Side Bar
     const showNavdash = ()=> {
         setToggleMenu(!toggleMenu)
+    }
+
+    const handleShowMS = ()=> {
+        asyncFunc.getTodayUser('/api/metricsets/today/user/', id, {date: Date.now()}, user.token, setMsArr).then((data)=> setMsArr(data))
+        setShowMS(true)
+    }
+
+    const handleViewAll = (e)=> {
+        e.preventDefault()
+        asyncFunc.getItemsByUserId('/api/metricsets/all/user/', {id: id}, user.token, setAllMs)
+        setViewAll(true)
     }
 
     //Show Personal Info Assign/View
@@ -184,8 +200,8 @@ export default function UserView () {
                 <CgMenuGridR style={{fontSize: '2em', pointerEvents: 'none'}}/>
             </div>
             <div className="userContainer">
-                <NavDash setEvents={(e)=>handleOpenModal(e)} show={toggleMenu}/>
-                <div className="userContent" style={{backgroundColor: 'var(--grey)', color: 'black', borderRadius: '5px', padding: '1em'}}>
+                <NavDash setEvents={(e)=>handleOpenModal(e)} show={toggleMenu} showMS={handleShowMS}/>
+                <div className="userContent">
                     {calEvents.length > 0 && <Calendar events={calEvents} handleClick={handleEventClick}/>}
                 </div>
             </div>
@@ -214,26 +230,48 @@ export default function UserView () {
                 </div>
 
             </Modal>
-        <Modal
-            open={userPersonal}
-            onClose={handleCloseModal}
-        >
-                <div className="modalDiv">
-                    <h1>{name}</h1>
-                    <div className="itemsCont">
-                        {itemsArr.length > 0 && extractType(itemsArr, name.toLowerCase()).length > 0 ? <ItemsTable data={extractType(itemsArr, name.toLowerCase())} /> : <h2>No Items Found</h2>}
+            <Modal
+                open={userPersonal}
+                onClose={handleCloseModal}
+            >
+                    <div className="modalDiv">
+                        <h1>{name}</h1>
+                        <div className="itemsCont">
+                            {itemsArr.length > 0 && extractType(itemsArr, name.toLowerCase()).length > 0 ? <ItemsTable data={extractType(itemsArr, name.toLowerCase())} /> : <h2>No Items Found</h2>}
+                        </div>
+                        {newMode && <form className="newItemForm">
+                            <input type='text' name="title" placeholder={`${name} Title`} value={item.title} onChange={(e,setState)=> handleChangeItem(e, setItem)}/>
+                            <textarea type='text' name="description" placeholder={`${name} Description`} value={item.description} onChange={(e,setState)=> handleChangeItem(e, setItem)}/>
+                            <button className="weekBtn" onClick={handleSaveItem}><MdSave/></button>
+                        </form>}
+                        <button className="weekBtn" style={{float: 'right'}} onClick={toggleNewMode}><MdLibraryAdd/></button>
+                        {err && <div className='errMessage' style={{fontSize: 'medium', textAlign: 'center'}}>Add a Title</div>}
                     </div>
-                    {newMode && <form className="newItemForm">
-                        <input type='text' name="title" placeholder={`${name} Title`} value={item.title} onChange={(e,setState)=> handleChangeItem(e, setItem)}/>
-                        <textarea type='text' name="description" placeholder={`${name} Description`} value={item.description} onChange={(e,setState)=> handleChangeItem(e, setItem)}/>
-                        <button className="weekBtn" onClick={handleSaveItem}><MdSave/></button>
-                    </form>}
-                    <button className="weekBtn" style={{float: 'right'}} onClick={toggleNewMode}><MdLibraryAdd/></button>
-                    {err && <div className='errMessage' style={{fontSize: 'medium', textAlign: 'center'}}>Add a Title</div>}
-                </div>
-        </Modal>
+            </Modal>
+            <Modal
+                open={showMS}
+                onClose={()=>setShowMS(false)}
+                >   
+                    <div className="modalDiv" style={{marginTop: '8em', textAlign: 'center'}}>
+                        <h1>Metric Sets</h1>
+                        <button className="weekBtn" style={{fontSize: 'small', margin: '0 auto'}} onClick={handleViewAll}>View All Metrics</button>
+                        <div className="msModalBody">
+                            {!viewAll && msArr.map((item, index)=> <div className="msCont"  key={index}>
+                                <h2>{item.name}:</h2>
+                                <span>
+                                    {item.metrics.map((it,ind)=> <h5 className="msDetails">{it.metric}: {item.usersAssigned.userAnswers[ind]} {it.unit}</h5>)}
+                                </span>
+                            </div>)}
+                            {viewAll && allMs.map((item, index)=> <div className="msCont"  key={index}>
+                                <h2>{item.name}:</h2>
+                                <span>
+                                    {item.metrics.map((it,ind)=> <h5 className="msDetails">{it.metric}:  {it.unit}</h5>)}
+                                </span>
+                            </div> )}
+                        </div>
+                    </div>
+            </Modal>
         </div>
         ) 
     }
-    
 }

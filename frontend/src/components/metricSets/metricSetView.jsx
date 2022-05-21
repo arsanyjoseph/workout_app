@@ -12,6 +12,7 @@ import ComboBox from '../programs/autoComplete'
 import { MdAddLink } from "react-icons/md"
 
 import { Box, Modal, Avatar } from "@mui/material"
+import handleErr from "../utils/errorAlert"
 
 
 export default function MetricSetView () {
@@ -25,6 +26,7 @@ export default function MetricSetView () {
     const [userId, setUserId] = useState(null)
     const [userInputValue, setUserInputValue] = useState('')
     const [assignDate, setAssignDate] = useState(Date.now())
+    const [err, setErr] = useState(false)
     const url = '/api/metricsets/'
     const metricInfo = {
         metric: '',
@@ -107,10 +109,13 @@ export default function MetricSetView () {
         }))
     }
     const handleSave = (e)=> {
+        if(metricSet.name.length === 0 || metricSet.metrics.length ===0) {
+            handleErr(setErr)
+        } else {
         e.preventDefault()
         asyncFunc.updateItem(url, id, {metricSet: metricSet}, user.token, setMetricSet)
         setEditMode(false)
-    }
+    }}
 
     const handleBack = (e)=> {
         e.preventDefault()
@@ -169,6 +174,7 @@ export default function MetricSetView () {
                         </form>
                      {metricSet.metrics.map((item ,index)=> <GenerateForm key={index} value={item.metric} removeRow={(e)=> removeRow(e, index)} selectValue={item.unit} handleChange={(e, ind)=>handleChange(e,index)} handleSelect={(e, ind)=> handleSelect(e, index)} />)}
                      <button className="weekBtn" onClick={handleSave}>Save</button>
+                     {err && <div className='errMessage' >Please, Fill Mandatory Fields</div>}
                 </div>}
                 </div>
             </div>

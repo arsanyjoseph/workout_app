@@ -32,24 +32,12 @@ const metricSetSchema = mongoose.Schema({
             },
             date: {
                 type: Date
+            },
+            userAnswers: {
+                type: [String]
             }
         }],
     },
-    usersAnswers: {
-        type: [{
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-                required: true,
-            },
-            date: {
-                type: Date
-            },
-            answers: {
-                type: [{}]
-            }
-        }]
-    }
 }, {
     timestamps: true,
 })

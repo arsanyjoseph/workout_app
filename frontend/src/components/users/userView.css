@@ -34,6 +34,10 @@
     width: auto;
     flex: 3;
     margin: 1em 1em;
+    background-color: var(--grey);
+    color: black;
+    border-radius: 5px;
+    padding: 1em;
 }
 
 .userName {
@@ -93,4 +97,27 @@
     align-items: center;
     justify-content: center;
     padding: 1em;
+}
+
+.msModalBody {
+    padding: 1em;
+}
+.msCont {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: rgb(220, 220, 220);
+    margin-top: 0.5em;
+    padding: 1em;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 1px var(--grey);
+}
+
+.msDetails {
+    background-color: rgb(52, 52, 52);
+    color: white;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin: 0.5em 1em;
 }
