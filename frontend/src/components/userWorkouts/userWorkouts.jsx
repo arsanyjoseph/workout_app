@@ -17,14 +17,19 @@ export default function UserWorkouts () {
     const {workouts} = useSelector((state)=> state.workouts)
     const [todayWorkout, setTodayWorkout] = useState([])
     const [todayMetricSet, setTodayMetricSet] = useState([])
+    const [todayNP, setTodayNP] = useState([])
     const [showPreview, setShowPreview] = useState(false)
     const [item, setItem] = useState({})
     const [msModal, setMsModal] = useState(false)
+    const [npModal, setNpModal] = useState(false)
     const [msItem, setMsItem] = useState({})
+    const [npItem, setNpItem] = useState({})
+    const [showNPInputs, setShowNPInputs] = useState(false)
     const [progressPics, setProgressPics] = useState(false)
     const [picsArray, setPicsArray] = useState([])
     const [cycleId, setCycleId] = useState('')
     const [files, setFiles] = useState([])
+    const [newProg, setNewProg] = useState({})
 
     const openMsModal = (e)=> {
         e.preventDefault()
@@ -42,7 +47,29 @@ export default function UserWorkouts () {
         setMsItem({})
         setMsModal(false)
     }
-
+    const openNpModal = (e)=> {
+        e.preventDefault()
+        let ind = e.target.value
+        setNpItem(todayNP[ind])
+        setNpModal(true)
+    }
+    const closeNpModal = ()=> {
+        setNpItem({})
+        setNpModal(false)
+    }
+    const changeNPInputs = (e)=> {
+        e.preventDefault()
+        const name = e.target.name
+        npItem.userInputs[name] = parseInt(e.target.value)
+        setNpItem({...npItem})
+    }
+    const submitNPInputs = (e)=> {
+        e.preventDefault()
+        npItem.userInputs.isSubmit = true
+        asyncFunc.updateItem('/api/nutritionplans/', npItem._id, {userAnswers: npItem.userInputs}, user.token, setNpItem)
+        closeNpModal()
+    }
+    
     const submitAnswers = (e)=> {
         e.preventDefault()
         asyncFunc.updateItem('/api/metricsets/', msItem._id, {answerUpdate : msItem.usersAssigned}, user.token)
@@ -102,7 +129,7 @@ export default function UserWorkouts () {
 
     const markComplete = (e)=> {
         const cycleId = e.target.value
-        asyncFunc.updateItem('/api/programs/users/', user.id, {cycleId: cycleId }, user.token)
+        asyncFunc.updateItem('/api/programs/users/', user.id, {cycleId: cycleId }, user.token, setNewProg)
     }
 
     useEffect(()=> {
@@ -115,6 +142,8 @@ export default function UserWorkouts () {
             .then((data)=> setTodayWorkout(data))
 
             asyncFunc.getTodayUser('/api/metricsets/today/user/', user.id, {date: Date.now()}, user.token, setTodayMetricSet).then((data)=> setTodayMetricSet(data))
+
+            asyncFunc.getTodayUser('/api/nutritionplans/today/user/', user.id, {date: Date.now()}, user.token, setTodayNP).then((data)=> setTodayNP(data))
         }
     },[])
 
@@ -151,7 +180,6 @@ export default function UserWorkouts () {
                         <h1>Rest</h1>
                         <BsBatteryCharging/>
                     </>}
-                    
                     </div>
                 )}
 
@@ -211,6 +239,55 @@ export default function UserWorkouts () {
                             {msItem.usersAssigned.userAnswers.length > 0 && <span className='userAnswer'>{msItem.usersAssigned.userAnswers[index]}</span>}
                         </div>)}
                     {msItem.usersAssigned.userAnswers.length === 0 && <button className='weekBtn' value={msItem._id} onClick={submitAnswers} >Submit</button>}
+                </div>}
+                </>
+            </Modal>
+            </div>
+
+            <div className="userMSCont">
+            <h4>Today's Nutrition Plan</h4>
+                {todayNP.length > 0
+                     && todayNP.map((item, index)=> <>
+                     <h1 key={index}>{item.name}</h1>
+                     <button className='weekBtn' value={index} onClick={openNpModal}>Show</button>
+                     </>)
+                }
+                {todayNP.length === 0 && <h1>No Nutrition Plan Today</h1>}
+                <Modal
+                open={npModal}
+                onClose={closeNpModal}
+            >
+                <>
+                {npItem.name && <div className="modalDiv previewDiv" style={{width: '50%', minWidth: 'fit-content'}}>
+                    <h1>Plan</h1>
+                    <h2>{npItem.name}</h2>
+                    <div className="detailsCont" style={{width: '100%', height: 'fit-content', margin: '0 auto'}}>
+                        <div className="detailsNP">
+                            <h5>Plan</h5>
+                            <span>Carbs: {npItem.plan.carb} gm</span><br/>
+                            <span>Fats: {npItem.plan.fat} gm</span><br/>
+                            <span>Proteins: {npItem.plan.protein} gm</span> 
+                        </div>
+                        {npItem.userInputs.isSubmit && 
+                        <div className="detailsNP">
+                            <h5>{user.firstName} Inputs</h5>
+                            <span>Carbs: {npItem.userInputs.carb} gm</span><br/>
+                            <span>Fats: {npItem.userInputs.fat} gm</span><br/>
+                            <span>Proteins: {npItem.userInputs.protein} gm</span> 
+                        </div>}
+                        {!npItem.userInputs.isSubmit && 
+                        <div className="detailsNP">
+                            <h5>{user.firstName} Inputs</h5>
+                            <span style={{color: 'red'}}>No Submit</span>
+                        </div>}
+                    </div>
+                    {!npItem.userInputs.isSubmit && <button className='weekBtn' onClick={()=>setShowNPInputs(!showNPInputs)}>Input</button>}
+                    {showNPInputs && !npItem.userInputs.isSubmit && <div className='npInputs' style={{height: 'fit-content'}}>
+                        <input className='metricSetInput ' name='carb' placeholder='Carbs' type='number' value={npItem.userInputs.carb} onChange={changeNPInputs}/>
+                        <input className='metricSetInput ' name='fat' placeholder='Fats' type='number' value={npItem.userInputs.fat} onChange={changeNPInputs}/>
+                        <input className='metricSetInput ' name='protein' placeholder='Proteins' type='number' value={npItem.userInputs.protein} onChange={changeNPInputs}/>
+                        <button className='weekBtn' onClick={submitNPInputs}>Submit</button>
+                    </div>}
                 </div>}
                 </>
             </Modal>

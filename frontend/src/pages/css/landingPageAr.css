@@ -1,0 +1,18 @@
+
+
+/*Quote Section (Words)*/
+.quoteDetailsA {
+        width: 30%;
+        font-size: larger;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        color: white;
+}
+
+.quoteDetailsA > aside {
+        padding-right: 1em;
+        font-size: x-large;
+        border-right: 4px solid var(--blue);
+        text-align: right;
+}

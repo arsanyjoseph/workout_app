@@ -12,7 +12,7 @@ export default function GroupsList ({id, token, url}) {
     },[id, token, url])
     return (
         <div>
-            {groups.length > 0 ? groups.map((item, index)=> <span className="deleteBtn" key={index} onClick={()=> navigate(`/dashboard/usergroups/${item._id}`) }>{item.name}, </span>) : 'No User Group Assigned'}
+            {groups.length > 0 ? groups.map((item, index)=> <span className="deleteBtn" style={{color: 'black'}} key={index} onClick={()=> navigate(`/dashboard/usergroups/${item._id}`) }>{item.name}, </span>) : 'No User Group Assigned'}
         </div>
     )
 }

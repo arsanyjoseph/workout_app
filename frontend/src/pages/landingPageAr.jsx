@@ -1,5 +1,6 @@
 import Header from '../components/header'
 import Footer from '../components/footer/footer'
+import './css/landingPageAr.css'
 import './css/landingPage2.css'
 import { FaArrowDown } from "react-icons/fa";
 import { useSelector } from 'react-redux';
@@ -46,11 +47,11 @@ export default function LandingPageAr () {
     return <>
     <div className='landingContainer'>
         <div className='gradientContainer'>
-             <Header/>
+             <Header isAr={false}/>
             <div className="showContainer" id='banner'>
-                <h1>Welcome to Calisthenics World</h1>
-                <p>Start Your Journey Safely, <a href='/login'>Join Us</a></p>
-                <p>Explore More</p>
+                <h1>أهلًا بك في عالم ال Calethenics</h1>
+                <p>ابدأ رحلتك بأمان، <a href='/register'>انضم إلينا</a></p>
+                <p>اعرف المزيد</p>
                 <a className='arrowIcon' onClick={()=>scrollFunc('personal')}><FaArrowDown/></a>
             </div>  
         </div>
@@ -59,15 +60,15 @@ export default function LandingPageAr () {
                 <div className='personalImg'>
                     <img src="../assets/about/me3.jpg" alt="M.Alaa" />
                 </div>
-                <div  ref={ref} className={visible ? 'quoteDetails showCard' : 'quoteDetails'}>
+                <div  ref={ref} className={visible ? 'quoteDetailsA showCard' : 'quoteDetailsA'}>
                     <aside>
-                        <h1>Provide Impairing Training And Best Fitness Motivations</h1>
-                        <p>Hey everyone! I am Mohammed, your new Trainer. I am ISA a certified strength, conditioning and sports nutrition Specialist. I started Calisthenincs back in 2015 with zero knowledge.</p>
+                        <h1>توفير تدريبات لذوي الارادة و تحفيز اللياقة البدنية</h1>
+                        <p>السلام عليكم، أنا - محمد - مدربكم الجديد... وأنا -بإذن الله - متخصص في مجال التغذية الرياضية وتدريبات القوة واللياقة البدنية. بدأت رحلتي في 2015 بدون أي سابق خبرة.</p>
                     </aside>
                     <aside>
-                        <h1>How Did I start ?</h1>
-                        <p>I spent quite time confused about where to begin, trying a bunch of different ways to get on top of my fitness and life. </p>
-                        <p>But now -by My Coaching- you will never be left frustrated about your transformation journey, calisthenincs skills and nutrition. Because We are Different, every Client has a customized plan. Each will have a great potential with a clear plan</p>
+                        <h1>كيف بدأت ؟</h1>
+                        <p>قضيت فترة ليست بقليلة في حيرة من أين أبدأ... لجأت إلى طرق عديدة للوصول إلى قمة لياقتي البدنية.</p>
+                        <p>لكن الآن - بمساعدتي - لن تُترك أنت تعاني نفس حيرتي في مسار التحول إلى كامل لياقتك ومهاراتك البدنية و نظامك الغذائي. ولأننا مختلفون، فكل متدرب يحظى ببرنامج شخصي خصيصًا له يتناسب مع قدراته البدنية والاجتماعية.</p>
                     </aside>
                 </div>
             </div>
@@ -85,7 +86,7 @@ export default function LandingPageAr () {
             </div>
         </section> 
         <footer>
-                <Footer/>
+                <Footer isAr={true}/>
         </footer>
     </div>
     </>

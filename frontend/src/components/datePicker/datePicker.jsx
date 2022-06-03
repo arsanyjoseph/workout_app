@@ -13,6 +13,7 @@ export default function MaterialUIPickers({label, value, handleChange}) {
           inputFormat="dd/MM/yyyy"
           value={value}
           onChange={handleChange}
+          disableMaskedInput={true}
           renderInput={(params) => <TextField {...params} />}
         />
     </LocalizationProvider>

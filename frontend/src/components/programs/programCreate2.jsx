@@ -2,12 +2,11 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
 import './programCreate.css'
-import {IoMdAddCircleOutline} from 'react-icons/io' 
+import {IoMdAddCircleOutline, IoMdRemoveCircleOutline} from 'react-icons/io' 
 import {MdOutlineDeleteSweep} from 'react-icons/md'
 import {AiOutlineSchedule} from 'react-icons/ai'
 import CircularIndeterminate from '../spinner'
 import Cycle from './cycle'
-import {IoMdRemoveCircleOutline} from 'react-icons/io'
 import {FiBatteryCharging} from 'react-icons/fi'
 import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 import handleErr from '../utils/errorAlert'
@@ -34,11 +33,11 @@ export default function ProgCreate () {
         setInputValue(newValue)
     }
     const cycle = {
-        warmup: '',
-        cooldown: '',
+        warmup: null,
+        cooldown: null,
         exercise: [],
-        isRest: false,
-        notes: ''
+        isRest: true,
+        notes: null
     }
     const day = [cycle]
     const week = [day, day, day, day, day, day, day]
@@ -73,7 +72,6 @@ export default function ProgCreate () {
     }
 
     useEffect(()=> {
-        console.log(prog)
     },[prog])
     if(prog && prog.length > 0) {
       return (
@@ -102,7 +100,7 @@ export function GenerateWeek ({numberWeeks, days, cycle, count, data, value, han
             <div className='weekContainer'>
                 {numberWeeks ? <h3>Week {`${count +1 + numberWeeks}`}</h3> : <h3>Week {`${count +1}`}</h3> }
                 <div className='daysContainer'>
-                  {days.map((item, index)=> <GenerateDays cycle={cycle} setHandleProg={setHandleProg} program={program} weekInd={count} dayInd={index} key={index} dayCount={(7 * count) + index +1} data={data} value={value} handleChange={handleChange} inputValue={inputValue} handleInputChange={handleInputChange} />)}  
+                  {days.map((item, index)=> <GenerateDays cycle={cycle} setHandleProg={setHandleProg} program={program} weekInd={count} dayInd={index} key={index} dayCount={numberWeeks ? ((7 * numberWeeks) + index +1) : ((7 * count) + index +1)} data={data} value={value} handleChange={handleChange} inputValue={inputValue} handleInputChange={handleInputChange} />)}  
                 </div>
             </div>
         )  
@@ -133,12 +131,12 @@ export function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd
 
     const handleRest = (e, i)=> {
         e.preventDefault()
-        let newCycle = program[weekInd][dayInd].map((item, index)=> index == parseInt(e.target.value) ? {...item,
+        let newCycle = program[weekInd][dayInd].map((item, index)=> index == i && {...item,
             isRest: !item.isRest,
             warmup: null,
             cooldown: null,
             exercise: [],
-        }: item)
+        })
         program[weekInd][dayInd] = newCycle
         setHandleProg([...program])
     }

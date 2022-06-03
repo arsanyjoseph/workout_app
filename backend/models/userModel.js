@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const moment = require('mongoose')
 
 const userSchema = mongoose.Schema({
     firstName: {
@@ -31,7 +32,6 @@ const userSchema = mongoose.Schema({
     extendTime: {
         type: Date,
         required: true,
-        default: Date.now() + 604800000
     },
     age: {
         type: Number,
@@ -54,7 +54,6 @@ const userSchema = mongoose.Schema({
     lastLogin: {
         type: Date,
         required: true,
-        default: Date.now()
     },
     height: {
         type: Number,
@@ -132,23 +131,6 @@ const userSchema = mongoose.Schema({
             }
         }],
         default: []
-    },
-    nutritionPlan: {
-        type: [{
-            carb: {
-                type: Number
-            },
-            fat: {
-                type: Number
-            },
-            protein: {
-                type:Number
-        }}],
-        default:[{
-            carb: null,
-            fat: null,
-            protein: null
-        }]
     }, 
 }, {
     timestamps: true,

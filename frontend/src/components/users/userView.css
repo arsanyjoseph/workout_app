@@ -121,3 +121,66 @@
     padding: 0.5em;
     margin: 0.5em 1em;
 }
+.ppDiv {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 80%;
+    margin: 0 auto;
+}
+
+.ppDiv > .buttons {
+    margin: 0.25em;
+}
+.npCont {
+    width: 100%;
+}
+
+.npCont > h2 {
+    border: 1px solid black;
+    width: fit-content;
+    padding: 0.25em;
+    margin: 0.25em auto;
+    border-radius: 5px;
+    background-color: rgb(212, 212, 212);
+}
+.detailsNP {
+    padding: 0.25em;
+    border-left: 0.5px solid var(--grey);
+    border-radius: 5px;
+}
+.detailsNP > h5 {
+    margin: 0;
+    color: var(--blue);
+}
+
+.detailsCont {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 0.5em;
+}
+
+.deleteBtn {
+    color: red;
+}
+
+.npCont > .deleteBtn {
+    float: right;
+    font-size: larger;
+}
+
+.ppDiv > .imgCont {
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    width: 50px;
+}
+
+.modalDiv {
+    max-height: 80%;
+}

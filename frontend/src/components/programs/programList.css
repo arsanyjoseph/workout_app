@@ -1,0 +1,5 @@
+.coolDownListContainer > .MuiAutocomplete-root {
+    width: 20em;
+    margin: 0 auto;
+    margin-bottom: 1em;
+}

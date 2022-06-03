@@ -7,7 +7,7 @@ import TemporaryDrawer from '../../src/components/drawer'
 import CustomizedMenus from './settingsIcon'
 import DownTimer from './countdownTimer/countdownTimer'
 
-export default function Header({name, validate, notif, user}) {
+export default function Header({name, validate, notif, user, isAr}) {
     useEffect(()=> {
 
     },[])
@@ -30,9 +30,12 @@ export default function Header({name, validate, notif, user}) {
                         <TemporaryDrawer/>
                     </li>}
                 </ul> : <ul>
-                    <li>
+                    {isAr === true && <li>
                         <Link className='linkStyle' to='/ar'>ع</Link>
-                    </li>
+                    </li>}
+                    {isAr === false &&<li>
+                        <Link className='linkStyle' to='/'>E</Link>
+                    </li>}
                     <li>
                         <Link className='linkStyle' to='/login'><BiLogIn/> Login  </Link>
                     </li>

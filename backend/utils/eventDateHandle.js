@@ -1,8 +1,10 @@
+const moment = require('moment')
+
 const eventDateHandler = (date , dayIndex)=> {
-    let start = new Date(date)
-    let day = start.getDate() + 1 + dayIndex
-    let month = start.getMonth() + 1
-    let year = start.getFullYear()
+    let start = moment(date)
+    let day = start.date() + dayIndex
+    let month = start.month() + 1
+    let year = start.year()
 
     if(day < 10) {
         day = '0' + day
@@ -11,7 +13,6 @@ const eventDateHandler = (date , dayIndex)=> {
     if (month < 10) {
         month = '0' + month
     }
-    
     return `${year}-${month}-${day}`
 }
 

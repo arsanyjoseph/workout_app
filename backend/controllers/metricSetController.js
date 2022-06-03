@@ -1,5 +1,6 @@
 const MetricSet = require('../models/metricSetsModel')
 const {handleDate} = require('../utils/dateHandler')
+const moment = require('moment')
 
 const getAllMetricSets = async (req, res) => {
     try {
@@ -26,11 +27,12 @@ const createMetricSet = async (req, res) => {
         const {metricSet} = req.body
         const checkMetric = await MetricSet.find({name: metricSet.name})
         if(checkMetric.length === 0) {
+            const createdAt = moment.utc().format()
             const newMetricSet = await MetricSet.create({
                 name: metricSet.name,
                 metrics: metricSet.metrics,
                 createdById: req.user._id,
-                createdAt: Date.now()
+                createdAt: createdAt
             })
             res.status(201).json(newMetricSet)
         }
@@ -62,11 +64,12 @@ const updateMetricSet = async (req, res) => {
         }
 
         if(assignData) {
+            const dateUTC = moment.utc(assignData.date)
             await oldMetricSet.updateOne({
                 $push : {
                   usersAssigned: [{
                     userId: assignData.userId,
-                    date: assignData.date
+                    date: dateUTC
                 }]  
                 }
             })
@@ -113,6 +116,7 @@ const getUsersMS = async (req, res) => {
     try {
         const {id} = req.params
         const {date} = req.body
+        const dateUTC = moment.utc(date)
         let newArr = []
         if(id) {
           const metricSets = await MetricSet.find({ usersAssigned : {
@@ -120,11 +124,10 @@ const getUsersMS = async (req, res) => {
                 userId: id,
             }
         }})
+        
         metricSets.map((item)=> {
-            let setDate = handleDate(date)
             item.usersAssigned.map((it, index)=> {
-                let itDate = handleDate(it.date)
-                if(itDate === setDate) {
+                if(moment(it.date).isSame(dateUTC, 'day') && it.userId == id) {
                     let newItem = {
                         _id: item._id,
                         name: item.name,
@@ -138,9 +141,9 @@ const getUsersMS = async (req, res) => {
                 }
             })
         })
-        }
+        
         res.status(200).json(newArr)
-    } catch (error) {
+    }} catch (error) {
         console.log(error)
     }
 }
@@ -154,7 +157,25 @@ const getAllUserMs = async (req, res) => {
                   userId: id,
               }
           }})
-          res.status(200).json(metricSets)
+          let newMSs = []
+          if(metricSets.length > 0) {
+          metricSets.map((ms,index)=> {
+              ms.usersAssigned.map((it, ind)=> {
+                  if(it.userId == id) {
+                    let newMs = {
+                        createdAt: ms.createdAt,
+                        createdById: ms.createdById,
+                        metrics: ms.metrics,
+                        name: ms.name,
+                        updatedAt: ms.updatedAt,
+                        _id: ms._id,
+                        usersAssigned: ms.usersAssigned[ind]
+                    }
+                    newMSs.push(newMs)
+                  }
+              })
+          })}
+          res.status(200).json(newMSs)
         }} catch (error) {
         console.log(error)
     }

@@ -7,11 +7,13 @@ const {
     updateProgram,
     deleteProgram,
     getProgByUser,
-    getTodayUser
+    getTodayUser,
+    checkComplete
 } = require('../controllers/programController')
 
 const {secure} = require('../middleware/authenticate')
 
+router.get('/cycles/:id', secure, checkComplete)
 router.post('/today/user/:id', secure, getTodayUser)
 router.get('/users/:id', secure, getProgByUser)
 router.put('/users/:id', secure, getProgByUser)

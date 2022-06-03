@@ -28,7 +28,7 @@ app.use('/api/usergroups', require('./routes/userGroupRoutes'))
 
 app.use('/api/metricsets', require('./routes/metricSetRoutes'))
 
-app.use('/api/notifications', require('./routes/notificationRoutes'))
+app.use('/api/nutritionplans', require('./routes/nutritionPlanRoutes'))
 
 app.get('/*', (req,res)=> {
     res.sendFile(path.resolve(path.join(__dirname, '../'), 'frontend', 'build', 'index.html' ))

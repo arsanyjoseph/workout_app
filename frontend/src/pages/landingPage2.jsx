@@ -46,7 +46,7 @@ export default function LandingPage2 () {
     return <>
     <div className='landingContainer'>
         <div className='gradientContainer'>
-             <Header/>
+             <Header isAr={true}/>
             <div className="showContainer" id='banner'>
                 <h1>Welcome to Calisthenics World</h1>
                 <p>Start Your Journey Safely, <a href='/register'>Join Us</a></p>
@@ -85,7 +85,7 @@ export default function LandingPage2 () {
             </div>
         </section> 
         <footer>
-                <Footer/>
+                <Footer isAr={false}/>
         </footer>
     </div>
     </>

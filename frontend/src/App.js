@@ -37,7 +37,7 @@ import MetricSetCreate from './components/metricSets/metricSetCreate';
 import MetricSetView from './components/metricSets/metricSetView';
 
 import UserWorkouts from './components/userWorkouts/userWorkouts';
-
+import NutritionPlan from './components/nutritionPlan/nutritionPlan';
 function App() {
   return (
     <>
@@ -66,6 +66,7 @@ function App() {
             <Route path='users/' element={<Users/>} />
             <Route path='users/:id' element={<UserView/>} />
             <Route path='users/:id/view' element={<ProfileView/>} />
+            <Route path='users/:id/np' element={<NutritionPlan/>} />
 
             <Route path='usergroups/' element={<UserGroup/>} />
             <Route path='usergroups/:id' element={<UserGroupView/>} />

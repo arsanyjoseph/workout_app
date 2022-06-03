@@ -5,6 +5,8 @@ const multer = require('multer')
 const storage = require('../multer/config')
 const checkFileType = require('../multer/fileCheck')
 const fs = require('fs')
+const moment = require('moment')
+const path = require('path')
 
 //getAllUsers
 const getAllUsers = async (req, res) => {
@@ -47,7 +49,7 @@ const getUser = async (req, res) => {
 
 //Register User
 const createUser = async (req, res) => {
-    const {firstName, lastName, email, password, height, weight, gender, location, age, personalInfo, membership } = req.body
+    const {firstName, lastName, email, password, height, weight, gender, location, age, personalInfo, membership, phoneNumber } = req.body
     if (!firstName || !lastName || !email || !password || !personalInfo) {
         res.status(400)
         res.status(400).json({
@@ -61,7 +63,8 @@ const createUser = async (req, res) => {
         //Check If No Users Registered
         if(checkLength.length === 0) {
             const salt = await bcrypt.genSalt(10)
-            const hashedPass = await bcrypt.hash(password, salt) 
+            const hashedPass = await bcrypt.hash(password, salt)
+            const expireDate = moment.utc().add(10, 'y') 
             const newUser = await User.create({
                 firstName: firstName,
                 lastName: lastName,
@@ -70,10 +73,13 @@ const createUser = async (req, res) => {
                 height: height,
                 weight: weight,
                 gender: gender,
+                phoneNumber: phoneNumber,
                 isPending: false,
                 isAdmin: true,
                 location: location,
                 age: age,
+                lastLogin: moment.utc().format(),
+                extendTime: moment.utc().format(),
                 membership: membership,
                 personalInfo: {
                     isInjured: personalInfo.isInjured,
@@ -96,6 +102,7 @@ const createUser = async (req, res) => {
                 isPending: newUser.isPending,
                 age: newUser.age,
                 location: newUser.location,
+                phoneNumber: newUser.phoneNumber,
                 extendTime: newUser.extendTime,
                 height: newUser.height,
                 weight: newUser.weight,
@@ -128,7 +135,10 @@ const createUser = async (req, res) => {
             weight: weight,
             gender: gender,
             location: location,
+            phoneNumber: phoneNumber,
             age: age,
+            lastLogin: moment.utc().format(),
+            extendTime: moment.utc().format(),
             membership: membership,
             personalInfo: {
                 isInjured: personalInfo.isInjured,
@@ -149,7 +159,9 @@ const createUser = async (req, res) => {
             token: generateToken(newUser._id),
             isAdmin: newUser.isAdmin,
             isPending: newUser.isPending,
+            phoneNumber: newUser.phoneNumber,
             membership: newUser.membership,
+            extendTime: newUser.extendTime,
             personalInfo: {
                 isInjured: personalInfo.isInjured,
                 injury: personalInfo.injury,
@@ -204,20 +216,22 @@ const updateUser = async (req, res) => {
         }
 
         if(lastLogin) {
+            const lastLoginUTC = moment.utc(lastLogin)
             await user.updateOne({
-                lastLogin: lastLogin
+                lastLogin: lastLoginUTC
             })
         }
 
         const {item} = req.body
         if(item) {
+            const itemDateUTC = moment.utc(item.createdAt)
             await user.updateOne({
                 $push: {
                     personalDetails: [{
                         title: item.title,
                         type: item.type,
                         description: item.description,
-                        createdAt: item.createdAt
+                        createdAt: itemDateUTC
                     }]
                 }
             })
@@ -236,9 +250,9 @@ const updateUser = async (req, res) => {
         }
 
         if(extendTime) {
-            const modTime = user.extendTime.getTime()
+            const modTime = moment(user.extendTime).add(30, 'd')
             await user.updateOne({
-                extendTime: extendTime + modTime
+                extendTime: modTime
             })
         }
 
@@ -363,10 +377,11 @@ const upload = multer({
 
 
 const uploadAvatar = async (req, res) => {
-    const user = await User.findById(req.user._id)
-    const oldAvatar = user.avatarLink
-    fs.unlink(`/${oldAvatar}`, ()=> console.log('success delete'))
-    try {
+  try {  
+        const user = await User.findById(req.user._id)
+        const oldAvatar = user.avatarLink
+        const pathImg = path.join(__dirname, '../', 'uploads/')
+        await fs.unlink(`${pathImg}${oldAvatar}`, ()=> console.log('Old Avatar deleted'))
         await user.updateOne({
             avatarLink: req.file.filename
         })
@@ -385,7 +400,7 @@ const uploadProgressPics = async (req, res) => {
         const user = await User.findById(req.user._id)
         const {files} = req
         const {id} = req.params
-        const date = new Date()
+        const date = moment.utc().format()
         files.map(async (item)=> {
            await user.updateOne({
             $push : {

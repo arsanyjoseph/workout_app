@@ -47,11 +47,11 @@ export default function ProgEdit () {
     const [inputValue, setInputValue] = useState('');
 
     const cycle = {
-        warmup: '',
-        cooldown: '',
+        warmup: null,
+        cooldown: null,
         exercise: [],
-        isRest: false,
-        notes: ''
+        isRest: true,
+        notes: null
     }
     const day = [cycle]
     const week = [day, day, day, day, day, day, day]
@@ -105,8 +105,12 @@ export default function ProgEdit () {
     }
 
     const deleteWeek = (index)=> {
-        console.log(index)
-        asyncFunc.updateItem(url, id, {weekIndex: index}, user.token, setProgram).then(()=> navigate(`/dashboard/programs/${id}`))
+        const arrItem = program.details.splice(index, 1)
+        setProg((prevState)=> ({
+            ...prevState,
+                details: [...program.details]
+        }))
+        asyncFunc.updateItem(url, id, {newProgram: program}, user.token, setProgram).then(()=> navigate(`/dashboard/programs/${id}`))
     }
     useEffect(()=> {
         if(id) {

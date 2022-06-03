@@ -41,10 +41,10 @@ const programSchema = mongoose.Schema({
             startDate: {
                 type: Date,
             },
-            completed: [{
-                type: String,
+            completed: {
+                type: [String],
                 default: []
-            }]
+            }
         }
     },
    

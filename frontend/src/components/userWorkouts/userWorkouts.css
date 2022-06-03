@@ -4,6 +4,7 @@
     width: 90%;
     border-radius: 5px;
     height: 80%;
+    padding-bottom: 2em;
 }
 
 .userHomeContainer > h1 {
@@ -62,4 +63,16 @@
     padding: 0.75em;
     border-radius: 5px;
     border: 1px solid var(--grey);
+}
+
+.npInputs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+.npInputs > input {
+    margin: 0.25em;
+    width: 5em;
 }

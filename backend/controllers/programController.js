@@ -1,5 +1,6 @@
 const Program = require ('../models/programModel')
 const {eventDateHandler} = require('../utils/eventDateHandle')
+const moment = require('moment')
 const getAllPrograms = async (req, res) => {
     try {
         const programs = await Program.find().sort([['createdAt', -1]])
@@ -51,15 +52,16 @@ const createProgram = async (req, res) => {
 const updateProgram = async (req, res) => {
    try {
        const {id} = req.params
-       const {startDate, userId, prog, weekIndex} = req.body
+       const {startDate, userId, prog, newProgram, cycleId} = req.body
 
        const program = await Program.findById(id)
 
        if (startDate && userId) {
+           const startDateUTC = moment.utc(startDate)
        await program.updateOne({
            assignedUser: {
                userId: userId,
-               startDate: startDate
+               startDate: startDateUTC
            }
        }) 
        }
@@ -70,12 +72,12 @@ const updateProgram = async (req, res) => {
            })
        }
 
-       if(weekIndex) {
-           const newDetails = program.details.splice(weekIndex, 1)
+       if(newProgram) {
            await program.updateOne({
-               details: [...newDetails]
+               details: [...newProgram.details]
            })
        }
+       
        const modifyItem = await Program.findById(id)
        res.status(200).json(modifyItem)
    } catch (error) {
@@ -109,12 +111,13 @@ const getProgByUser = async (req, res)=> {
         const {id} = req.params
         const {cycleId} = req.body
         const prog = await Program.findOne({'assignedUser.userId': id })
+        if(prog){
         const {startDate} = prog.assignedUser
         let newArr = []
         prog.details.map((week, weekInd)=> {
             week.map((day, dayInd) => {
                 day.map((cycle, cycleInd) => {
-                    const indexDay = (7 * weekInd) + dayInd + 1
+                    const indexDay = (7 * weekInd) + dayInd
                     const wu = {
                         title: cycle.warmup ? 'WarmUp' : 'Rest',
                         date: eventDateHandler(startDate, indexDay),
@@ -140,18 +143,23 @@ const getProgByUser = async (req, res)=> {
             return
         })
         if(cycleId) {
-            await prog.updateOne({
-                assignedUser: {
-                completed: {
-                        $push: [`${cycleId}`]
-                }
-            }})
+            const checkCycle = Program.find({'assignedUser.userId': id }, {'assignedUser.completed': cycleId})
+            if(!checkCycle) {
+                await prog.updateOne({
+                    $push : {
+                        'assignedUser.completed': [cycleId]
+                    }
+                })
+                const newProg = await Program.findOne({'assignedUser.userId': id })
+                res.status(200).json(newProg)
+    
+            } else {
+                res.json({messgae: "Already Completed"})
+            }
 
-            const newProg = await Program.findOne({'assignedUser.userId': id })
-            res.status(200).json(newProg)
         } else {
             res.status(200).json(newArr)
-        }
+        }}
     } catch (error) {
         console.log(error)
     }
@@ -171,10 +179,11 @@ const getTodayUser = async (req, res) => {
                 newArr.push(day)
             })
         })
-
-        const diff = Math.ceil((date - startDate)/86400000)
-        if(diff > 0) {
-            res.status(200).json(newArr[diff - 1])
+        const dateUTC = moment.utc(date)
+        const startM = moment(startDate)
+        const diff = dateUTC.diff(startM, 'days')
+        if(diff >= 0) {
+            res.status(200).json(newArr[diff])
         } else {
             res.status(200).json({
                 message: 'No program Assigned yet'
@@ -186,6 +195,16 @@ const getTodayUser = async (req, res) => {
     }
 }
 
+const checkComplete = async (req, res) => {
+    try {
+        const {id} = req.params
+        const checkCycleComplete = await Program.find()
+        console.log(checkCycleComplete)
+    } catch (error) {
+      console.log(error)  
+    }
+}
+
 module.exports = {
     getAllPrograms,
     getProgram,
@@ -193,6 +212,7 @@ module.exports = {
     updateProgram,
     deleteProgram,
     getProgByUser,
-    getTodayUser
+    getTodayUser,
+    checkComplete
 }
 
