@@ -141,9 +141,9 @@ export default function CustomizedMenus(props) {
           {props.notif && <span className='notifNumber'><span>{props.notif}</span></span>}
         </MenuItem>
 
-        <MenuItem onClick={()=> navigate('/home/library')} disableRipple>
+        <MenuItem onClick={()=> navigate('/home/reference')} disableRipple>
           <MdVideoLibrary style={{fontSize: 'large'}}/>
-          <span style={{marginLeft: '0.8em'}}>Library</span>
+          <span style={{marginLeft: '0.8em'}}>Reference</span>
         </MenuItem>
 
         <MenuItem onClick={handleClose} disableRipple>

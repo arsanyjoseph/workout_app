@@ -8,9 +8,7 @@ import CustomizedMenus from './settingsIcon'
 import DownTimer from './countdownTimer/countdownTimer'
 
 export default function Header({name, validate, notif, user, isAr}) {
-    useEffect(()=> {
-
-    },[])
+    
     return (
         <header className='header'>
             <div className='logo'>

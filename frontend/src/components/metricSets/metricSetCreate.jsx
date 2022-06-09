@@ -71,8 +71,8 @@ export default function MetricSetCreate () {
             <div className="formBody">
                 <form className='metricSetForm'>
                     <input className="metricSetInput" type='text' name="name" placeholder='** Name' value={name} onChange={handleName}/>
-                    <h3>Details<span className='weekBtn' style={{marginLeft: '0.5em'}} onClick={addMetric}><MdAddLink/></span></h3>
-
+                    <h3>Add<span className='weekBtn' style={{marginLeft: '0.5em'}} onClick={addMetric}><MdAddLink/></span></h3>
+a
                     {metrics.length > 0 && metrics.map((item, index)=> <GenerateForm key={index} value={item.metric} removeRow={(e)=> removeRow(e, index)} handleChange={(e, ind)=>handleChange(e,index)} handleSelect={(e, ind)=> handleSelect(e, index)}/>)}
                     <div className="buttons">
                       <button className='weekBtn' onClick={()=> navigate('/dashboard/metricsets')}><IoArrowBackCircle/></button> 

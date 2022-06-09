@@ -79,7 +79,7 @@ const createUser = async (req, res) => {
                 location: location,
                 age: age,
                 lastLogin: moment.utc().format(),
-                extendTime: moment.utc().format(),
+                extendTime: expireDate,
                 membership: membership,
                 personalInfo: {
                     isInjured: personalInfo.isInjured,

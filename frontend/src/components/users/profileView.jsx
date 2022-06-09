@@ -15,10 +15,13 @@ import {IoArrowBackCircle} from 'react-icons/io5'
 import {FaEdit, FaSave} from 'react-icons/fa'
 import { Box, Modal, TextField, FormControl, InputLabel, OutlinedInput, MenuItem, InputAdornment } from "@mui/material"
 import DownTimer from "../countdownTimer/countdownTimer"
+import { useDispatch } from "react-redux"
+import { getAllUsers, reset } from '../../features/users/usersSlice';
 
 
 export default function ProfileView () {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const locationHook = useLocation()
     const {user} = useSelector((state)=> state.auth)
     const [selectedUser, setSelectedUser] = useState({})
@@ -117,12 +120,18 @@ export default function ProfileView () {
     const closeMorePersonal = ()=> {
         setMorePersonal(false)
     }
+    const removeUser = ()=> {
+        asyncFunc.handleDelete(url, id, user.token)
+        dispatch(getAllUsers(user.token))
+        dispatch(reset())
+        navigate('/dashboard/users')
+    }
     useEffect(()=> {
         if(!selectedUser.firstName) {
             asyncFunc.getItem(url, id, user.token, setSelectedUser)
         }
+        return ()=> setSelectedUser({})
     },[])
-
     if(!selectedUser.firstName) {
         return <CircularIndeterminat />
     }
@@ -130,7 +139,7 @@ export default function ProfileView () {
     return (
         <div className="profileContainer">
             <ImageAvatars imgSrc={'/' + selectedUser.avatarLink} name={selectedUser.firstName} />
-            <h1>{selectedUser.firstName + ' ' + selectedUser.lastName}</h1>
+            <h1>{selectedUser.firstName + ' ' + selectedUser.lastName}<span className="weekBtn" onClick={removeUser}>delete</span></h1>
             {user.isAdmin && <span className="weekBtn" onClick={addTime}><MdMoreTime style={{fontSize: '1.5em'}}/></span>}
             <DownTimer user={selectedUser} />
             <h2 style={{fontWeight: 800}} className={selectedUser.isPending ? 'suspended' : 'approved'}>

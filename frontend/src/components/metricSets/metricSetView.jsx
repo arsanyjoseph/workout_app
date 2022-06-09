@@ -171,7 +171,7 @@ export default function MetricSetView () {
                 <div className="editModeDiv">
                         <form className='metricSetForm'>
                             <input className="metricSetInput" type='text' name="name" placeholder='** Name' value={metricSet.name} onChange={changeName}/>
-                            <h3>Details<span className='weekBtn' style={{marginLeft: '0.5em'}} onClick={addMetric}><MdAddLink/></span></h3>
+                            <h3>Add<span className='weekBtn' style={{marginLeft: '0.5em'}} onClick={addMetric}><MdAddLink/></span></h3>
                         </form>
                      {metricSet.metrics.map((item ,index)=> <GenerateForm key={index} value={item.metric} removeRow={(e)=> removeRow(e, index)} selectValue={item.unit} handleChange={(e, ind)=>handleChange(e,index)} handleSelect={(e, ind)=> handleSelect(e, index)} />)}
                      <button className="weekBtn" onClick={handleSave}>Save</button>

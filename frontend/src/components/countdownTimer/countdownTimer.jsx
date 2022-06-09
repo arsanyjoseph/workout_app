@@ -31,12 +31,14 @@ export default function DownTimer ({user}) {
     }
 
     useEffect(()=> {
-       const timer =  startTimer();
+       if(user) {
+         const timer =  startTimer();
 
-       return ()=> clearInterval(timer)
+       return ()=> clearInterval(timer)  
+       }
     })
 
-    if(!user.extendTime) {
+    if(!user || !user.extendTime) {
         return (
             <div className="timerContainer">
             <h1>0</h1>
@@ -46,12 +48,15 @@ export default function DownTimer ({user}) {
         </div> 
         )
     }
-    return (
+    if(user && user.extendTime) {
+       return (
         <div className="timerContainer">
             <h1>{timerDays}</h1>
             <h1>{timerHours}</h1>
             <h1>{timerMinutes}</h1>
             <h1>{timerSeconds}</h1>
         </div>
-    )
+    ) 
+    }
+    
 }

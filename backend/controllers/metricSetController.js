@@ -180,6 +180,19 @@ const getAllUserMs = async (req, res) => {
         console.log(error)
     }
 }
+
+const getAnswers = async (req, res)=> {
+    try {
+       const {userId, id} = req.params
+       const ms = await MetricSet.findById(id)
+       const answers = ms.usersAssigned.filter((item, index)=> item.userId == userId)
+       const dates = answers.map((item, index)=> item.date)
+       res.status(200).json(answers)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     getAllMetricSets,
     getMetricSet,
@@ -187,6 +200,7 @@ module.exports = {
     updateMetricSet,
     deleteMetricSet,
     getUsersMS,
-    getAllUserMs
+    getAllUserMs,
+    getAnswers
 }
 

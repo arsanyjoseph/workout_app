@@ -3,6 +3,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import asyncFunc from '../utils/asyncFuncs/asyncFuncs'
 import extractData from '../utils/extractData'
 import {Modal} from '@mui/material'
+import moment from 'moment'
 
 import {BsBatteryCharging} from 'react-icons/bs'
 import {MdDoneOutline, MdUpload} from 'react-icons/md'
@@ -17,19 +18,18 @@ export default function UserWorkouts () {
     const {workouts} = useSelector((state)=> state.workouts)
     const [todayWorkout, setTodayWorkout] = useState([])
     const [todayMetricSet, setTodayMetricSet] = useState([])
-    const [todayNP, setTodayNP] = useState([])
+    const [todayNP, setTodayNP] = useState({})
     const [showPreview, setShowPreview] = useState(false)
     const [item, setItem] = useState({})
     const [msModal, setMsModal] = useState(false)
-    const [npModal, setNpModal] = useState(false)
     const [msItem, setMsItem] = useState({})
-    const [npItem, setNpItem] = useState({})
-    const [showNPInputs, setShowNPInputs] = useState(false)
     const [progressPics, setProgressPics] = useState(false)
     const [picsArray, setPicsArray] = useState([])
     const [cycleId, setCycleId] = useState('')
     const [files, setFiles] = useState([])
     const [newProg, setNewProg] = useState({})
+
+    const day = moment().day()
 
     const openMsModal = (e)=> {
         e.preventDefault()
@@ -46,28 +46,6 @@ export default function UserWorkouts () {
     const closeMsModal = (e)=> {
         setMsItem({})
         setMsModal(false)
-    }
-    const openNpModal = (e)=> {
-        e.preventDefault()
-        let ind = e.target.value
-        setNpItem(todayNP[ind])
-        setNpModal(true)
-    }
-    const closeNpModal = ()=> {
-        setNpItem({})
-        setNpModal(false)
-    }
-    const changeNPInputs = (e)=> {
-        e.preventDefault()
-        const name = e.target.name
-        npItem.userInputs[name] = parseInt(e.target.value)
-        setNpItem({...npItem})
-    }
-    const submitNPInputs = (e)=> {
-        e.preventDefault()
-        npItem.userInputs.isSubmit = true
-        asyncFunc.updateItem('/api/nutritionplans/', npItem._id, {userAnswers: npItem.userInputs}, user.token, setNpItem)
-        closeNpModal()
     }
     
     const submitAnswers = (e)=> {
@@ -143,7 +121,13 @@ export default function UserWorkouts () {
 
             asyncFunc.getTodayUser('/api/metricsets/today/user/', user.id, {date: Date.now()}, user.token, setTodayMetricSet).then((data)=> setTodayMetricSet(data))
 
-            asyncFunc.getTodayUser('/api/nutritionplans/today/user/', user.id, {date: Date.now()}, user.token, setTodayNP).then((data)=> setTodayNP(data))
+            asyncFunc.getTodayUser('/api/nutritionplans/today/user/', user.id, {date: Date.now()}, user.token, setTodayNP).then((data)=> {
+                if(data == null || !data._id) {
+                    setTodayNP({})
+                } else {
+                    setTodayNP(data)
+                }
+            })
         }
     },[])
 
@@ -163,8 +147,8 @@ export default function UserWorkouts () {
                     </div>
                     <div>
                         <span className='titleSpan'>Exercise/s:</span>
-                        {item.exercise.map((i, index)=> <>
-                            <button className='weekBtn homeWO' key={index} value={i} onClick={(e, type)=>handleModalOpen(e, 'exercise')}>{extractData(i, workouts.exercises)}</button>
+                        {item.exercise.map((i, ind)=> <>
+                            <button className='weekBtn homeWO' key={ind} value={i} onClick={(e, type)=>handleModalOpen(e, 'exercise')}>{extractData(i, workouts.exercises)}</button>
                         </>)}  
                     </div>
                     <div>
@@ -245,52 +229,16 @@ export default function UserWorkouts () {
             </div>
 
             <div className="userMSCont">
-            <h4>Today's Nutrition Plan</h4>
-                {todayNP.length > 0
-                     && todayNP.map((item, index)=> <>
-                     <h1 key={index}>{item.name}</h1>
-                     <button className='weekBtn' value={index} onClick={openNpModal}>Show</button>
-                     </>)
+                <h4>Today's Nutrition Plan</h4>
+                {(!todayNP || !todayNP._id) && <h1>No Nutrition Plan Today</h1>}
+                {todayNP && todayNP._id
+                        && <>
+                            <h3>Carbs: {todayNP.plan[day].carb} gm</h3>
+                            <h3>Fats: {todayNP.plan[day].fat} gm</h3>
+                            <h3>Proteins: {todayNP.plan[day].protein} gm</h3>
+                            <h3>Total Calories: {}</h3>
+                        </>
                 }
-                {todayNP.length === 0 && <h1>No Nutrition Plan Today</h1>}
-                <Modal
-                open={npModal}
-                onClose={closeNpModal}
-            >
-                <>
-                {npItem.name && <div className="modalDiv previewDiv" style={{width: '50%', minWidth: 'fit-content'}}>
-                    <h1>Plan</h1>
-                    <h2>{npItem.name}</h2>
-                    <div className="detailsCont" style={{width: '100%', height: 'fit-content', margin: '0 auto'}}>
-                        <div className="detailsNP">
-                            <h5>Plan</h5>
-                            <span>Carbs: {npItem.plan.carb} gm</span><br/>
-                            <span>Fats: {npItem.plan.fat} gm</span><br/>
-                            <span>Proteins: {npItem.plan.protein} gm</span> 
-                        </div>
-                        {npItem.userInputs.isSubmit && 
-                        <div className="detailsNP">
-                            <h5>{user.firstName} Inputs</h5>
-                            <span>Carbs: {npItem.userInputs.carb} gm</span><br/>
-                            <span>Fats: {npItem.userInputs.fat} gm</span><br/>
-                            <span>Proteins: {npItem.userInputs.protein} gm</span> 
-                        </div>}
-                        {!npItem.userInputs.isSubmit && 
-                        <div className="detailsNP">
-                            <h5>{user.firstName} Inputs</h5>
-                            <span style={{color: 'red'}}>No Submit</span>
-                        </div>}
-                    </div>
-                    {!npItem.userInputs.isSubmit && <button className='weekBtn' onClick={()=>setShowNPInputs(!showNPInputs)}>Input</button>}
-                    {showNPInputs && !npItem.userInputs.isSubmit && <div className='npInputs' style={{height: 'fit-content'}}>
-                        <input className='metricSetInput ' name='carb' placeholder='Carbs' type='number' value={npItem.userInputs.carb} onChange={changeNPInputs}/>
-                        <input className='metricSetInput ' name='fat' placeholder='Fats' type='number' value={npItem.userInputs.fat} onChange={changeNPInputs}/>
-                        <input className='metricSetInput ' name='protein' placeholder='Proteins' type='number' value={npItem.userInputs.protein} onChange={changeNPInputs}/>
-                        <button className='weekBtn' onClick={submitNPInputs}>Submit</button>
-                    </div>}
-                </div>}
-                </>
-            </Modal>
             </div>
         </div>
     ) 

@@ -115,7 +115,6 @@ export default function ProgEdit () {
     useEffect(()=> {
         if(id) {
             asyncFunc.getItem(url, id, user.token, setProgram)
-            console.log(program)
         }
 
         return ()=> {

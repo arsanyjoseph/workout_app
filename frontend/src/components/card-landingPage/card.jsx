@@ -21,7 +21,7 @@ export default function ImgMediaCard({name, paragraph, src}) {
         <Typography gutterBottom variant="h5" component="div">
           {name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{fontSize: 'large', fontWeight: 'bolder'}}>
           {paragraph}
         </Typography>
       </CardContent>

@@ -192,6 +192,7 @@ export default function Register () {
                         type="text"
                         value={target}
                         name='target'
+                        required
                         />
                         <br/>
                         <TextField
@@ -200,6 +201,8 @@ export default function Register () {
                         type="text"
                         value={trainPlace}
                         name='trainPlace'
+                        required
+
                         />
                         <TextField
                         id="outlined-trainDays-input"
@@ -207,6 +210,7 @@ export default function Register () {
                         type="number"
                         value={trainDays}
                         name='trainDays'
+                        required
                         />
                         <FormControlLabel control={<Switch name='isInjured' checked={isInjured} />} label="Injury ?" />
                         {isInjured && <TextField
@@ -273,6 +277,7 @@ export default function Register () {
                         type="text"
                         value={firstName}
                         name='firstName'
+                        required
                         />
                         <TextField
                         id="outlined-lastName-input"
@@ -280,6 +285,7 @@ export default function Register () {
                         type="text"
                         value={lastName}
                         name='lastName'
+                        required
                         />
                         <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
                         <InputLabel htmlFor="outlined-adornment-age">Age</InputLabel>
@@ -290,6 +296,7 @@ export default function Register () {
                                 label='age'
                                 type='number'
                                 name='age'
+                                required
                             />
                         </FormControl>
                         <TextField
@@ -298,6 +305,7 @@ export default function Register () {
                         type="number"
                         value={phoneNumber}
                         name='phoneNumber'
+                        required
                         />
                         <TextField
                         id="outlined-email-input"
@@ -306,6 +314,7 @@ export default function Register () {
                         value={email}
                         name='email'
                         autoComplete='username'
+                        required
                         />
                         <FormControl sx={{ m: 1, width: '25ch' }} color = 'primary' variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
@@ -315,6 +324,7 @@ export default function Register () {
                                 value={password}
                                 onChange={handleChange('password')}
                                 autoComplete='current-password'
+                                required
                                 endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
@@ -341,6 +351,7 @@ export default function Register () {
                                 label='weight'
                                 type='number'
                                 name='weight'
+                                required
                             />
                         </FormControl>
                         <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
@@ -353,6 +364,7 @@ export default function Register () {
                                 label='height'
                                 type='number'
                                 name='height'
+                                required
                             />
                         </FormControl>
                         <TextField
@@ -363,6 +375,7 @@ export default function Register () {
                             type='text'
                             onChange={(e, setState)=> handleInputs(e, setFormData)}
                             name='gender'
+                            required
                             >
                                 <MenuItem key='male' value='male'>Male</MenuItem>
                                 <MenuItem key='female' value='female'>Female</MenuItem>                       
@@ -376,6 +389,7 @@ export default function Register () {
                             type='text'
                             onChange={(e, setState)=> handleInputs(e, setFormData)}
                             name='location'
+                            required
                             >
                                 {countries.map((item, index)=> <MenuItem key={index} value={item.label}>{item.label}</MenuItem>)}
                         </TextField>

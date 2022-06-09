@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import moment from 'moment';
+import axios from 'axios'
 
 
 import './userView.css'
@@ -10,6 +11,7 @@ import CircularIndeterminate from "../spinner"
 import NavDash from './nav'
 import Calendar from "./userCalendar"
 import ItemsTable from "./itemsTable";
+import ChartInfo from "../chart/chart";
 
 import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import extractType from "../utils/userDataType"
@@ -23,10 +25,10 @@ import { Modal } from "@mui/material"
 import {CgMenuGridR}  from 'react-icons/cg'
 import {MdLibraryAdd, MdSave} from 'react-icons/md'
 import {BsBatteryCharging} from 'react-icons/bs'
-import {TiDelete} from 'react-icons/ti'
+import {AiOutlineLineChart} from 'react-icons/ai'
 
-import MaterialUIPickers from '../datePicker/datePicker'
 import ImgMediaCard from "../card-landingPage/card";
+import NPCard from "../nutritionPlan/nutritionPlanCard";
 
 export default function UserView () {
     const navigate = useNavigate()
@@ -47,14 +49,22 @@ export default function UserView () {
     const [msArr, setMsArr] = useState([])
     const [viewAll ,setViewAll] = useState(false)
     const [allMs, setAllMs] = useState([])
-
+    const [showChart, setShowChart] = useState(false)
+    const [chartOptions, setChartOptions] = useState({
+        chart: {
+            id: 'basic-line'
+        },
+        xaxis: {
+            categories: []
+        },
+    })
+    const [series, setSeries] = useState([])
     const [showPP, setShowPP] = useState(false)
     const [viewAllPP, setViewAllPP] = useState(false)
     const [todayPics, setTodayPics] = useState([])
 
     const [showNP, setShowNP] = useState(false)
-    const [npItems, setNPItems] = useState([])
-    const [dateNP, setDateNp] = useState(new Date())
+    const [npItem, setNPItem] = useState({})
 
     const [name, setName] = useState('')
     const [itemsArr, setItemsArr] = useState([])
@@ -68,7 +78,6 @@ export default function UserView () {
         createdAt: new Date(),
     })
     const [userPersonal, setUserPersonal] = useState(false)
-    const [redirect, setRedirect] = useState(null)
     
     //Showing Side Bar
     const showNavdash = ()=> {
@@ -131,42 +140,23 @@ export default function UserView () {
         setNewMode(!newMode)
     }
 //Nutrition Plan Funcs
-    const handleNPViewToday = ()=> {
-        setViewAll(false)
-        asyncFunc.getTodayUser('/api/nutritionplans/today/user/', userSelected._id, {date: new Date() }, user.token, setNPItems)
-        console.log(npItems)
-    }
-    //Handle Date for Search
-    const changeDateNP = (newVal) => {
-        setDateNp(newVal)
-    }
+      
     //Open Modal
     const handleShowNP = ()=> {
+        let data = {}
+        asyncFunc.getTodayUser('/api/nutritionplans/today/user/', userSelected._id, data,  user.token).then((data)=> {
+            if(data == null || !data._id) {
+                setNPItem({})
+            } else {
+                setNPItem(data)
+            }
+        })
         setShowNP(true)
     }
     //Close Modal
     const closeNP = ()=> {
-        setNPItems([])
+        setNPItem({})
         setShowNP(false)
-    }
-    const deleteNP = (e) => {
-        const npId = e.target.value
-       asyncFunc.handleDelete('/api/nutritionplans/', npId, user.token )
-       npItems.map((item, index)=> {
-           if(item._id == npId) {
-               npItems.splice(index, 1)
-               setNPItems([...npItems])
-           }
-       } )
-    }
-
-    const handleNPView = ()=> {
-        setNPItems([])
-        asyncFunc.getTodayUser('/api/nutritionplans/today/user/', userSelected._id, {date: dateNP }, user.token, setNPItems)
-        if(npItems.length === 0) {
-            handleErr(setErr)
-        }
-        console.log(npItems)
     }
 
     const handleNPAdd = ()=> {
@@ -174,18 +164,61 @@ export default function UserView () {
     }
 
     //Ms
+    const getAnswers = async (url, token)=> {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+        const response = await axios.get(url , config)
+        return response.data
+    }
+    const handleShowChart = (e, it)=> {
+        const titles = it.metrics.map((item, index)=> item.metric)
+        getAnswers(`/api/metricsets/chart/${it._id}/${userSelected._id}`, user.token).then((data)=> {
+            const dates = data.map((item, index)=> handleDate(item.date))
+            chartOptions.xaxis.categories = dates
+            setChartOptions({...chartOptions})
+            const seriesArr = titles.map((item, index)=> {
+                const title = item
+                const dataValue = data.map((it, ind)=> {
+                    const numer = it.userAnswers[index] ? parseInt(it.userAnswers[index]) : 0
+                    return numer
+                })
+                const seriesItm = {
+                    name: title,
+                    data: dataValue
+                }
+                return seriesItm
+            })
+            setSeries([...seriesArr])
+        }).then(()=> setShowChart(true) )
+        
+    }
+
+    const closeChart= ()=> {
+        setSeries([])
+        setChartOptions({
+            chart: {
+                id: 'basic-line'
+            },
+            xaxis: {
+                categories: []
+            },
+        })
+        setShowChart(false)
+    }
+
     const handleViewAll = (e)=> {
         e.preventDefault()
         asyncFunc.getItemsByUserId('/api/metricsets/all/user/', {id: id}, user.token, setAllMs)
         setViewAll(true)
-        console.log(allMs)
     }
 
     const handleTodayView = (e)=> {
         e.preventDefault()
         setViewAll(false)
     }
-
 
     const convertNames = (data) => {
         let newArr = []
@@ -342,21 +375,33 @@ export default function UserView () {
                         <div className="msModalBody">
                             {!viewAll && msArr.map((item, index)=> <div className="msCont"  key={index}>
                                 <h2>{item.name}:</h2>
-                                <span>
-                                    {item.metrics.map((it,ind)=> <h5 key={it} className="msDetails">{it.metric}: {item.usersAssigned.userAnswers[ind]} {it.unit}</h5>)}
+                                <span key={index + item}>
+                                    {item.metrics.map((it,ind)=> <h5 key={ind + it} className="msDetails">{it.metric}: {item.usersAssigned.userAnswers[ind]} {it.unit}</h5>)}
                                 </span>
                                 {item.usersAssigned.userAnswers.length === 0 && <span style={{color: 'red'}}>{userSelected.firstName} missed the MS</span>}
                             </div>)}
-                            {viewAll && allMs.map((item, index)=> <div className="msCont"  key={index}>
+                            {viewAll && allMs.map((item, index)=> <div className="msCont"  key={index + item}>
                                 <h2>{item.name}:</h2>
                                 <span>
-                                    {item.metrics.map((it,ind)=> <h5 key={it} className="msDetails">{it.metric}: {item.usersAssigned.userAnswers[ind]} {it.unit}</h5>)}
+                                    {item.metrics.map((it,ind)=> <h5 key={it + ind} className="msDetails">{it.metric}: {item.usersAssigned.userAnswers[ind]} {it.unit}</h5>)}
                                 </span>
                                 {item.usersAssigned.userAnswers.length === 0 && <span style={{color: 'red'}}>{userSelected.firstName} missed the MS</span>}
                                 <span className="weekBtn">{handleDate(item.usersAssigned.date)}</span>
+                                <button className="weekBtn chartBtn" onClick={(e, it)=>handleShowChart(e, item)} ><AiOutlineLineChart/></button>
                             </div> )}
                         </div>
                     </div>
+            </Modal>
+            <Modal
+            open={showChart}
+            onClose={closeChart}
+            >
+                <div className="modalDiv">
+                    <h1>Chart</h1>
+                    <div className="msModalBody" style={{textAlign: 'center'}}>
+                        <ChartInfo options={chartOptions} series={series}/>
+                    </div>
+                </div>
             </Modal>
             <Modal
                 open={showPP}
@@ -378,43 +423,15 @@ export default function UserView () {
                 open={showNP}
                 onClose={closeNP}
             >
-                <div className="modalDiv"  style={{overflowY: 'scroll'}}>
+                <div className="modalDiv"  style={{overflowY: 'scroll', marginTop: '5em', width: '90%'}}>
                     <h1>Nutrition Plan</h1>
-                    <div className="ppDiv">
+                    <div className="ppDiv" >
                         <div className="buttons">
-                            <button className="weekBtn" onClick={()=> {
-                                setViewAll(true)
-                                setNPItems([])
-                            }}>View by Date</button>
-                            <button className="weekBtn" onClick={handleNPViewToday}>View Today</button>
-                            <button className="weekBtn" onClick={handleNPAdd}>Add</button>
+                            {(!npItem || !npItem._id) && <button className="weekBtn" onClick={handleNPAdd}>Add</button>}
+                            {npItem && npItem._id && <button className="weekBtn">Edit</button>}
                         </div>
-                        {viewAll && <> <MaterialUIPickers label='Date' value={dateNP} handleChange={changeDateNP} /> <br/>
-                        <button className="weekBtn" onClick={handleNPView}>Search</button> </>}
-                        {npItems.map((item, index)=> <div key={index}  className="npCont">
-                            <h2>{item.name} <button className="deleteBtn" value={item._id} onClick={deleteNP}><TiDelete pointerEvents='none'/></button></h2>
-                            <div className="detailsCont">
-                                <div className="detailsNP">
-                                    <h5>Plan</h5>
-                                    <span>Carbs: {item.plan.carb} gm</span><br/>
-                                    <span>Fats: {item.plan.fat} gm</span><br/>
-                                    <span>Proteins: {item.plan.protein} gm</span> 
-                                </div>
-                                {item.userInputs.isSubmit && 
-                                <div className="detailsNP">
-                                    <h5>{userSelected.firstName} Inputs</h5>
-                                    <span>Carbs: {item.userInputs.carb} gm</span><br/>
-                                    <span>Fats: {item.userInputs.fat} gm</span><br/>
-                                    <span>Proteins: {item.userInputs.protein} gm</span> 
-                                </div>}
-                                {!item.userInputs.isSubmit && 
-                                <div className="detailsNP">
-                                    <h5>{userSelected.firstName} Inputs</h5>
-                                    <span style={{color: 'red'}}>No Submit</span>
-                                </div>}
-                            </div>                            
-                        </div>)}
-                        {npItems.length === 0 && err && <span style={{color: 'red'}}>No Plans</span>}
+                        {!npItem || !npItem._id && <h4>No Plan Added</h4>}
+                        {(npItem && npItem.plan) && <div className="npCont">{npItem.plan.map((it, ind)=> <NPCard key={ind} day={ind} item={it} />)}</div>}
                     </div>
                 </div>
             </Modal>

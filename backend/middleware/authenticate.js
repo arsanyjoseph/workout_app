@@ -23,7 +23,6 @@ const secure = async (req, res, next) => {
         res.status(400).json({
             message: "Failed to Authenticate"})
         throw new Error ('Failed to Authenticate')
-        console.log(req.headers)
     }
 }
 

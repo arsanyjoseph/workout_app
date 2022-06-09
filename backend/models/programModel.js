@@ -28,7 +28,9 @@ const programSchema = mongoose.Schema({
                 type: Boolean
             },
             notes: {
-                type: String
+                wu: String,
+                cd: String,
+                ex: String
             }
         }]]]
     },

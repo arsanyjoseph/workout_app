@@ -7,10 +7,12 @@ const {
     updateMetricSet,
     deleteMetricSet,
     getUsersMS,
-    getAllUserMs
+    getAllUserMs,
+    getAnswers
 } = require('../controllers/metricSetController')
 const {secure} = require('../middleware/authenticate')
 
+router.get('/chart/:id/:userId', secure, getAnswers)
 router.post('/all/user/', secure, getAllUserMs)
 router.post('/today/user/:id', secure, getUsersMS)
 router.get('/:id', secure, getMetricSet)

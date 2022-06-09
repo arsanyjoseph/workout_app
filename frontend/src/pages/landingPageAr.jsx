@@ -49,7 +49,7 @@ export default function LandingPageAr () {
         <div className='gradientContainer'>
              <Header isAr={false}/>
             <div className="showContainer" id='banner'>
-                <h1>أهلًا بك في عالم ال Calethenics</h1>
+                <h1>أهلًا بك في عالم الكاليستينيكس</h1>
                 <p>ابدأ رحلتك بأمان، <a href='/register'>انضم إلينا</a></p>
                 <p>اعرف المزيد</p>
                 <a className='arrowIcon' onClick={()=>scrollFunc('personal')}><FaArrowDown/></a>

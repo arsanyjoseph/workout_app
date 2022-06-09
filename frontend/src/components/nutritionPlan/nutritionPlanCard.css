@@ -1,0 +1,12 @@
+.npCardCont {
+    border: 0.5px solid var(--grey);
+    border-radius: 5px;
+    padding: 0.5em;
+    margin: 0.25em;
+    box-shadow: 1px 1px 1px 1px var(--grey);
+    background-color: rgb(220, 220, 220);
+}
+
+.npCardCont > h2 {
+    margin: 0.1em;
+}

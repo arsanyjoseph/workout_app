@@ -53,7 +53,7 @@ function App() {
             <Route path='' element={<UserWorkouts/>} />
             <Route path='editavatar/' element={<UploadAvatar/>} />
             <Route path='editprofile/:id' element={<ProfileView/>} />
-            <Route path='library' element={<LibraryView/>} />
+            <Route path='reference' element={<LibraryView/>} />
 
           </Route>
 
@@ -81,9 +81,8 @@ function App() {
             <Route path=':type/:id' element={<WorkoutView/>} />
             <Route path=':type/new' element={<WorkoutCreate/>} />
 
-            <Route path='library' element={<LibraryView/>} />
-            <Route path='library/:id' element={<LibraryCreate/>} />
-            <Route path='library/new' element={<LibraryCreate/>} />
+            <Route path='reference' element={<LibraryView/>} />
+            <Route path='reference/new' element={<LibraryCreate/>} />
 
             <Route path='metricsets' element={<MetricSets/>} />
             <Route path='metricsets/:id' element={<MetricSetView/>} />

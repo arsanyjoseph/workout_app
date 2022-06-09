@@ -8,8 +8,8 @@ export default function Footer({isAr}) {
         <div className='footerContainer'>
             <div className='contactContainer'>
                 <div className='contactSocial'>
-                    <h1>WorkOut App</h1>
-                    
+                    {!isAr && <h1>Follow Us</h1>}
+                    {isAr && <h1>تابعنا</h1>}
                     <div className='contactItem'>
                         <FaInstagram/>
                         <span><a href='https://www.instagram.com/calisthenicsengineer/?igshid=YmMyMTA2M2Y='>Instagram</a></span>
@@ -25,7 +25,7 @@ export default function Footer({isAr}) {
                 </div>}
                 {isAr && <div className='about' style={{ textAlign: 'right'}}>
                     <h1>من نحن ؟ </h1>
-                     <p> -Calisthenics -هي شكل من أشكال تدريبات القوة البدنية التي تتكون من مجموعة متنوعة من الحركات التي تحفز عديد من المجموعات العضلية مثل الوقوف والضغط......</p>
+                     <p> -الكاليستينيكس -هي شكل من أشكال تدريبات القوة البدنية التي تتكون من مجموعة متنوعة من الحركات التي تحفز عديد من المجموعات العضلية مثل الوقوف والضغط......</p>
                 </div>}
         </div>
         <a onClick={()=> scrollFunc('banner')}><FaAngleDoubleUp/></a>

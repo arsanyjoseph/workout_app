@@ -95,7 +95,6 @@ export default function ProgCreate () {
 
 export function GenerateWeek ({numberWeeks, days, cycle, count, data, value, handleChange, inputValue, handleInputChange, setHandleProg, program}) { 
     if(days && days.length > 0) {
-        console.log(count)
       return (
             <div className='weekContainer'>
                 {numberWeeks ? <h3>Week {`${count +1 + numberWeeks}`}</h3> : <h3>Week {`${count +1}`}</h3> }
@@ -119,6 +118,7 @@ export function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd
         e.preventDefault()
         program[weekInd][dayInd] = [...program[weekInd][dayInd], cycle]
         setHandleProg([...program])
+        console.log(program)
     }
 
     const handleRemoveCycle = (e)=> {
@@ -128,27 +128,12 @@ export function GenerateDays ({dayCount, setHandleProg, program, weekInd, dayInd
             setHandleProg([...program])
         }
     }
-
-    const handleRest = (e, i)=> {
-        e.preventDefault()
-        let newCycle = program[weekInd][dayInd].map((item, index)=> index == i && {...item,
-            isRest: !item.isRest,
-            warmup: null,
-            cooldown: null,
-            exercise: [],
-        })
-        program[weekInd][dayInd] = newCycle
-        setHandleProg([...program])
-    }
-
+    
     return (
         <div className='dayCont'>
             <h4>Day {dayCount}</h4>
             {program[weekInd][dayInd].map((item, index)=> <div key={index} >
-                <button className='weekBtn' value={index} onClick={(e, i)=> handleRest(e, index)}><FiBatteryCharging style={{pointerEvents: 'none'}}/></button>
-
-                {program[weekInd][dayInd][index].isRest ? <h2> </h2> : 
-                <Cycle cycleInd={index} setHandleProg={setHandleProg} program={program} weekInd={weekInd} dayInd={dayInd} />} 
+                <Cycle cycleInd={index} setHandleProg={setHandleProg} program={program} weekInd={weekInd} dayInd={dayInd} />
                 </div>)} 
             <div className='add-removeBtn'>
                 <button onClick={(e)=>handleRemoveCycle(e)}><IoMdRemoveCircleOutline/></button>

@@ -29,6 +29,7 @@ export default function ProgramList () {
             setItem(null)
             setItemInput('')
         }
+        return ()=> setProgs([])
     },[item])
 
     if (progs.length === 0) {

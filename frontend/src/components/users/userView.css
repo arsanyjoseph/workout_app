@@ -184,3 +184,21 @@
 .modalDiv {
     max-height: 80%;
 }
+
+.npCont {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.chartBtn {
+    background-color: grey;
+    border-radius: 5px;
+    padding: 0.5em;
+}
+
+#apexchartsbasicxline {
+    margin: 0 auto;
+}

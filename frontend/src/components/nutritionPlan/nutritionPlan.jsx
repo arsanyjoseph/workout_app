@@ -1,10 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import {IoMdAddCircleOutline} from 'react-icons/io' 
-import {MdOutlineDeleteSweep} from 'react-icons/md'
-import { FormControl, FormControlLabel, InputLabel, OutlinedInput, InputAdornment, Switch, Box } from "@mui/material"
+import { FormControl, InputLabel, OutlinedInput, InputAdornment, Switch, Box } from "@mui/material"
 import './nutritionPlan.css'
-import MaterialUIPickers from "../datePicker/datePicker"
+import {FaCopy, FaPaste} from 'react-icons/fa'
 import handleErr from "../utils/errorAlert"
 import asyncFunc from "../utils/asyncFuncs/asyncFuncs"
 import { useSelector } from "react-redux"
@@ -13,130 +11,124 @@ import { useNavigate } from "react-router-dom"
 export default function NutritionPlan() {
     const {id} = useParams()
     const navigate = useNavigate()
+
     const {user} = useSelector((state)=> state.auth)
-    const np = {
+    const [dayCopy, setDayCopy] = useState(null)
+    const [addMode, setAddMode] = useState(true)
+    const [plan, setPlan] = useState([{
         protein: 0,
         fat: 0,
         carb: 0
-    }
-    const [name, setName] = useState('')
-    const [plan, setPlan] = useState([np])
-    const [isRange, setIsRange] = useState(false)
-    const [startDate, setStartDate] = useState(new Date())
-    const [endDate, setEndDate] = useState(new Date())
+    }, {
+        protein: 0,
+        fat: 0,
+        carb: 0
+    }, {
+        protein: 0,
+        fat: 0,
+        carb: 0
+    }, {
+        protein: 0,
+        fat: 0,
+        carb: 0
+    }, {
+        protein: 0,
+        fat: 0,
+        carb: 0
+    }, {
+        protein: 0,
+        fat: 0,
+        carb: 0
+    }, {
+        protein: 0,
+        fat: 0,
+        carb: 0
+    }])
+    const [editPlan, setEditPlan] = useState([])
     const [err, setErr] = useState(false)
     const [message, setMessage] = useState('')
     const [success, setSuccess] = useState(false)
     
-    const changeTime = ()=> {
-        setIsRange(!isRange)
+    const handleChange = (e, item)=> {
+       item[e.target.name] = parseInt(e.target.value)
+       setPlan([...plan])
     }
-    const addDay = ()=> {
-        setPlan([...plan, np])
-        let endMillis = endDate.getTime()
-        let dayMillis = 86400000
-        setEndDate(new Date(endMillis + dayMillis))
+
+    const handleCopy = (e, item)=> {
+        setDayCopy(item)
     }
-    const removeDay = ()=> {
-        const newPlan = plan.splice(1-plan.length)
-        setPlan(newPlan)
-        let endMillis = endDate.getTime()
-        let dayMillis = 86400000
-        if(startDate.getTime() == endDate.getTime()) {
-            setEndDate(startDate)
-        } else {
-            setEndDate(new Date(endMillis - dayMillis))
-        }
-    }
-    const handlePlanName = (e)=> {
-        setName(e.target.value)
-    }
-    const handleChange = (e, index)=> {
-        e.preventDefault()
-        plan[index][e.target.name] = parseInt(e.target.value)
+    const handlePaste = (e, item)=> {
+        item.carb = dayCopy.carb
+        item.fat = dayCopy.fat
+        item.protein = dayCopy.protein
         setPlan([...plan])
     }
-
-    const handleDateChange = (newVal, setState)=> {
-        const selectedTime = newVal.getTime()
-        if(selectedTime < Date.now()) {
-            setState(Date.now())
-        } else {
-            setState(newVal)
-        }
-        console.log()
-    }
-
     const savePlan = ()=> {
-        if(!isRange) {
-            setEndDate(startDate)
+        let data = {
+            plan: plan,
+            userId: id
         }
-        if (name.length === 0 || !name ) {
-            setMessage('Please, Provide a Valid Name')
-            handleErr(setErr)
-        } else if(endDate.getTime() < startDate.getTime() && isRange) {
-            setMessage('Error!! Cannot set End Date before Start Date')
-            handleErr(setErr)
-        } else if (plan.length === 0) {
-            setMessage('Please, add at least 1 Day Plan')
-            handleErr(setErr)
-        } else {
-            let data = {
-                name: name,
-                startDate: startDate,
-                endDate: isRange ? endDate : startDate,
-                plan: plan,
-                userId: id,
-            }
-            asyncFunc.createItem('/api/nutritionplans/', data, user.token )
-            navigate(`/dashboard/users/${id}`)
-        }
+        asyncFunc.createItem('/api/nutritionplans/', data, user.token)
+        navigate(`/dashboard/users/${id}`)
     }
-    if(!success) {
+
+    const updatePlan = ()=> {
+        let data = {
+            plan: editPlan.plan,
+            id: editPlan._id
+        }
+        asyncFunc.updateItem(`/api/nutritionplans/`, editPlan._id, data, user.token)
+    }
+
+    useEffect(()=> {
+        asyncFunc.getTodayUser('/api/nutritionplans/today/user/', id, {},  user.token).then((data)=> {
+            if(data.plan && data.plan.length > 0) {
+                setEditPlan(data)
+                setAddMode(false)
+            }
+        })
+    },[addMode])
+    if(!success && addMode) {
     return (
         <div className="newCoolDownContainer progCreate">
             <h1>New Nutrition Plan</h1>
-            <form>
-                <input className='progName' type='text' placeholder='Plan Name' value={name} onChange={handlePlanName}/>
-            </form>
-            <div className='progController'>
-                <Box
-                    component="form"
-                    variant='standard'
-                    onChange={changeTime}
-                    sx={{color: 'black'}}
-                >
-                    <FormControlLabel control={<Switch name='isRange' checked={isRange} />} label={isRange ? 'Time Range' : '1 Day'} />
-                </Box>
-                <br/>
-                {isRange && <> <button className='weekBtn' onClick={addDay}><IoMdAddCircleOutline/></button>
-                <button className='weekBtn' onClick={removeDay}><MdOutlineDeleteSweep/></button></>}
-            </div>
             <div className="daysPlan">
-                {plan.map((item, index)=> <DayPlan key={index} count={index} carb={item.carb} fat={item.fat} protein={plan[index].protein} handleChange={(e, ind)=>handleChange(e, index)} /> )}
+                {plan.map((item, index)=> <DayPlan key={index} count={index} carb={item.carb} fat={item.fat} protein={item.protein} handleCopy={(e, i)=>handleCopy(e, item)} handlePaste={(e, i)=>handlePaste(e, item)} calories={item.carb*2} isCopy={dayCopy !== null} handleChange={(e, i)=>handleChange(e, item)} /> )}
             </div>
-            <div>
-                <MaterialUIPickers label={isRange ? 'Start Date' : 'Date'} value={startDate} handleChange={(newVal)=> handleDateChange(newVal, setStartDate)} />
-                {isRange && <MaterialUIPickers label='End Date' value={endDate} handleChange={(newVal)=> handleDateChange(newVal, setEndDate)} />}
-            </div>
+            
             <button className="weekBtn" onClick={savePlan}>Save</button>
             {err && <div className='errMessage userAssignErr' >{message}</div>}
         </div>
     )
-}   if (success) {
+} 
+    if (success) {
     return(
         <div className="newCoolDownContainer progCreate">
             <h1>Nutrition Plans</h1>
-            <h3 style={{color: 'green'}}>{name} Created Successfully </h3>
+            <h3 style={{color: 'green'}}> Created Successfully </h3>
         </div>
     )
 }
+    if (!addMode) {
+        return (
+            <div className="newCoolDownContainer progCreate">
+            <h1>Edit Nutrition Plan</h1>
+            <div className="daysPlan">
+                {editPlan.plan.map((item, index)=> <DayPlan key={index} count={index} carb={item.carb} fat={item.fat} protein={item.protein} handleCopy={(e, i)=>handleCopy(e, item)} handlePaste={(e, i)=>handlePaste(e, item)} calories={item.carb*2} isCopy={dayCopy !== null} handleChange={(e, i)=>handleChange(e, item)} /> )}
+            </div>
+            <button className="weekBtn" onClick={updatePlan}>Save</button>
+            {err && <div className='errMessage userAssignErr' >{message}</div>}
+        </div>
+        )
+    }
 }
 
-function DayPlan ({count, carb, fat, protein, handleChange}) {
+function DayPlan ({count, carb, fat, protein, calories, handleChange, handleCopy, isCopy, handlePaste}) {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
     return (
         <div className="dayPlanCont">
-            <h4>Day {count + 1}</h4>
+            <h4>{days[count]}</h4> <span className="weekBtn" style={{ fontSize: 'large'}} onClick={handleCopy}>Copy <FaCopy/></span>
+            {isCopy && <span className="weekBtn" style={{ fontSize: 'large'}} onClick={handlePaste}>Paste<FaPaste/></span>}
             <FormControl sx={{ m: 1, width: '15ch' }} variant="outlined">
                 <InputLabel htmlFor="outlined-adornment-protein">Proteins</InputLabel>
                 <OutlinedInput
@@ -173,6 +165,7 @@ function DayPlan ({count, carb, fat, protein, handleChange}) {
                     onChange={handleChange}
                 />
             </FormControl>
+            <span style={{color: 'black'}}>Calories: {calories}</span>
         </div>
     )
 }
