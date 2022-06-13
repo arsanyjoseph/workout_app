@@ -8,7 +8,7 @@ export default function NPCard ({day, item}) {
             <h5>Carbs: {item.carb} gm</h5>
             <h5>Fats: {item.fat} gm</h5>
             <h5>Proteins: {item.protein} gm</h5>
-            <h5>Total Calories: 50gm</h5>
+            <h5>Total Calories: {(item.carb * 4) + (item.protein * 4) + (item.fat * 9)}</h5>
         </div>
     )
 }

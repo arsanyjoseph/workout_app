@@ -94,16 +94,15 @@ export default function Cycle ({weekInd, dayInd, setHandleProg, cycleInd, progra
     }
     useEffect(()=> {
         if(warmup && cooldown && exercise.length > 0) {
-            let newCycle = program[weekInd][dayInd].map((item, index)=> index == cycleInd && {...item,
-                isRest: isRest,
+            let newCycle = program[weekInd][dayInd].map((item, index)=> index === cycleInd ? {...item,
                 warmup: warmup._id,
                 cooldown: cooldown._id,
                 exercise: exercise.map((item)=> {
                     return item._id
                 }),
-                notes: notes
-            })
-            
+                notes: notes,
+                isRest: isRest,
+            } : item)
             program[weekInd][dayInd] = newCycle
             setHandleProg([...program])
             setSuccess(true)

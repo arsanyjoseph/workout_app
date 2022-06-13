@@ -363,7 +363,7 @@ const deleteUser = async (req, res) => {
 //Generate JWT
 const generateToken = (id) => {
     return jwt.sign({id}, process.env.JWT_SECRET, {
-        expiresIn: '3d'
+        expiresIn: '30d'
     })
 }
 

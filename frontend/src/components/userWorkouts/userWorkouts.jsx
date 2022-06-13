@@ -26,6 +26,7 @@ export default function UserWorkouts () {
     const [progressPics, setProgressPics] = useState(false)
     const [picsArray, setPicsArray] = useState([])
     const [cycleId, setCycleId] = useState('')
+    const [cycle, setCycle] = useState({})
     const [files, setFiles] = useState([])
     const [newProg, setNewProg] = useState({})
 
@@ -94,7 +95,8 @@ export default function UserWorkouts () {
         setProgressPics(false)
     }
 
-    const handleModalOpen = (e, type)=> {
+    const handleModalOpen = (e, type, it)=> {
+        setCycle(it)
         const WoId = e.target.value
         asyncFunc.getItem(`/api/workouts/${type}/`, WoId, user.token, setItem).then((data)=> setItem(data))
         setShowPreview(true)
@@ -102,6 +104,7 @@ export default function UserWorkouts () {
 
     const handleModalClose = (e)=> {
         setItem({})
+        setCycle({})
         setShowPreview(false)
     }
 
@@ -143,20 +146,19 @@ export default function UserWorkouts () {
                     <button className='weekBtn' value={item._id} onClick={markComplete}><MdDoneOutline pointerEvents='none'/></button>
                     <div>
                         <span className='titleSpan'>WarmUp:</span>
-                        <button className='weekBtn homeWO' value={item.warmup} onClick={(e, type)=>handleModalOpen(e, 'warmup')}>{extractData(item.warmup, workouts.warmups)}</button>
+                        <button className='weekBtn homeWO' value={item.warmup} onClick={(e, type, it)=>handleModalOpen(e, 'warmup', item)}>{extractData(item.warmup, workouts.warmups)}</button>
                     </div>
                     <div>
                         <span className='titleSpan'>Exercise/s:</span>
                         {item.exercise.map((i, ind)=> <>
-                            <button className='weekBtn homeWO' key={ind} value={i} onClick={(e, type)=>handleModalOpen(e, 'exercise')}>{extractData(i, workouts.exercises)}</button>
+                            <button className='weekBtn homeWO' key={ind} value={i} onClick={(e, type, it)=>handleModalOpen(e, 'exercise', item)}>{extractData(i, workouts.exercises)}</button>
                         </>)}  
                     </div>
                     <div>
                         <span className='titleSpan'>CoolDown:</span>
-                        <button className='weekBtn homeWO' value={item.cooldown} onClick={(e, type)=>handleModalOpen(e, 'cooldown')}>{extractData(item.cooldown, workouts.cooldowns)}</button>
+                        <button className='weekBtn homeWO' value={item.cooldown} onClick={(e, type, it)=>handleModalOpen(e, 'cooldown', item)}>{extractData(item.cooldown, workouts.cooldowns)}</button>
                     </div>
                     <div>
-                        <h2>Coach says: "{item.notes}"</h2>
                         <button className='weekBtn' onClick={(e)=>OpenProgressPics(e, item._id)}><MdUpload style={{fontSize: '1.5em'}}/></button>
                     </div>
                     </>}
@@ -174,10 +176,16 @@ export default function UserWorkouts () {
                 <div className="modalDiv previewDiv">
                     <h1>{item.name}</h1>
                     <h2>{item.instruction}</h2>
+                    {(cycle && cycle.notes) && <h3>
+                        {item.type === 'warmup' && cycle.notes.wu}
+                        {item.type === 'cooldown' && cycle.notes.cd}
+                        {item.type === 'exercise' && cycle.notes.ex}
+                        </h3>}
                     {item.link && 
                     <div className='vidContainer'> 
                         <iframe width='100%' height='100%' src={asyncFunc.linkVid(item.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
                     </div>}
+                    
                 </div>
             </Modal>
 
@@ -236,7 +244,7 @@ export default function UserWorkouts () {
                             <h3>Carbs: {todayNP.plan[day].carb} gm</h3>
                             <h3>Fats: {todayNP.plan[day].fat} gm</h3>
                             <h3>Proteins: {todayNP.plan[day].protein} gm</h3>
-                            <h3>Total Calories: {}</h3>
+                            <h3>Total Calories: {(todayNP.plan[day].protein * 4) + (todayNP.plan[day].carb * 4) + (todayNP.plan[day].fat * 9) }</h3>
                         </>
                 }
             </div>

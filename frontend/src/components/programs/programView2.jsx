@@ -33,7 +33,6 @@ export default function ProgView () {
 
     const [program, setProgram] = useState({})
     const [showUsers, setShowUsers] = useState(false)
-    const [showPreview, setShowPreview] = useState(false)
     const [startDate, setStartDate] = useState(Date.now())
     const [userId, setUserId] = useState(null)
     const [userIdInput, setUserIdInput] = useState('')
@@ -74,8 +73,7 @@ export default function ProgView () {
     }
     useEffect(()=> {
         if(id) {
-            asyncFunc.getItem(url, id, user.token, setProgram)
-            console.log(program)
+            asyncFunc.getItem(url, id, user.token, setProgram).then((data)=> console.log(data))
         }
 
         return ()=> setProgram({})
@@ -172,11 +170,15 @@ function GenerateCycle ({cycleIndex, cycle, handleShowPreview}) {
                 <div className="modalDiv previewDiv">
                     <h1>{item.name}</h1>
                     <h2>{item.instruction}</h2>
+                    {(cycle && cycle.notes) && <h3>
+                        {item.type === 'warmup' && cycle.notes.wu}
+                        {item.type === 'cooldown' && cycle.notes.cd}
+                        {item.type === 'exercise' && cycle.notes.ex}
+                        </h3>}
                     {item.link && 
                     <div className='vidContainer'> 
                         <iframe width='100%' height='100%' src={asyncFunc.linkVid(item.link)} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>       
                     </div>}
-                    
                 </div>
             </Modal>
             <button className='weekBtn' style={{ float: 'right', fontSize: 'large'}} onClick={()=> setShowCycle(!showCycle)}><CgMinimize/></button>
@@ -187,10 +189,9 @@ function GenerateCycle ({cycleIndex, cycle, handleShowPreview}) {
                  <h5>Warm Up:</h5>
                  <button className='previewBtn' value={cycle.warmup} onClick={(e, type)=> handlePreview(e, 'warmup')}>{extractData(cycle.warmup, workouts.warmups)}</button>
              </div>
-
              <div>
                  <h5>Exercise:</h5>
-                 {cycle.exercise.map((item, index)=> {
+                 {(cycle.exercise && cycle.exercise.length > 0) && cycle.exercise.map((item, index)=> {
                         const name = extractData(item, workouts.exercises)
                         return <button className='previewBtn' key={index} value={item} onClick={handlePreview}>{name}</button>
                     })}
@@ -201,13 +202,10 @@ function GenerateCycle ({cycleIndex, cycle, handleShowPreview}) {
                  <button className='previewBtn' value={cycle.cooldown} onClick={handlePreview}>{extractData(cycle.cooldown, workouts.cooldowns)}</button>
              </div>
             </>}
-
-
             {cycle.isRest && <>
                 {!showCycle && <h4>Rest</h4>}
                 <BsBatteryCharging/>
             </> }
-
         </div>
     )
 }

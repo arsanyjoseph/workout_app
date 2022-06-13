@@ -427,8 +427,7 @@ export default function UserView () {
                     <h1>Nutrition Plan</h1>
                     <div className="ppDiv" >
                         <div className="buttons">
-                            {(!npItem || !npItem._id) && <button className="weekBtn" onClick={handleNPAdd}>Add</button>}
-                            {npItem && npItem._id && <button className="weekBtn">Edit</button>}
+                            <button className="weekBtn" onClick={handleNPAdd}>{npItem && npItem._id ? 'Edit' : 'Add'}</button>
                         </div>
                         {!npItem || !npItem._id && <h4>No Plan Added</h4>}
                         {(npItem && npItem.plan) && <div className="npCont">{npItem.plan.map((it, ind)=> <NPCard key={ind} day={ind} item={it} />)}</div>}

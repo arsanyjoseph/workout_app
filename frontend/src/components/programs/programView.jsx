@@ -77,7 +77,6 @@ export default function ProgramView () {
         if(id) {
             asyncFunc.getItem(url, id, user.token, setProg)
         }
-        console.log(userAssign)
         return ()=> setProg({})
     },[])
 

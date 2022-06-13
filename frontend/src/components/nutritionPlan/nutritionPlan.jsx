@@ -78,6 +78,7 @@ export default function NutritionPlan() {
             id: editPlan._id
         }
         asyncFunc.updateItem(`/api/nutritionplans/`, editPlan._id, data, user.token)
+        navigate(`/dashboard/users/${id}`)
     }
 
     useEffect(()=> {
@@ -93,7 +94,7 @@ export default function NutritionPlan() {
         <div className="newCoolDownContainer progCreate">
             <h1>New Nutrition Plan</h1>
             <div className="daysPlan">
-                {plan.map((item, index)=> <DayPlan key={index} count={index} carb={item.carb} fat={item.fat} protein={item.protein} handleCopy={(e, i)=>handleCopy(e, item)} handlePaste={(e, i)=>handlePaste(e, item)} calories={item.carb*2} isCopy={dayCopy !== null} handleChange={(e, i)=>handleChange(e, item)} /> )}
+                {plan.map((item, index)=> <DayPlan key={index} count={index} carb={item.carb} fat={item.fat} protein={item.protein} handleCopy={(e, i)=>handleCopy(e, item)} handlePaste={(e, i)=>handlePaste(e, item)} calories={(item.carb * 4) + (item.protein * 4) + (item.fat * 9)} isCopy={dayCopy !== null} handleChange={(e, i)=>handleChange(e, item)} /> )}
             </div>
             
             <button className="weekBtn" onClick={savePlan}>Save</button>
@@ -114,7 +115,7 @@ export default function NutritionPlan() {
             <div className="newCoolDownContainer progCreate">
             <h1>Edit Nutrition Plan</h1>
             <div className="daysPlan">
-                {editPlan.plan.map((item, index)=> <DayPlan key={index} count={index} carb={item.carb} fat={item.fat} protein={item.protein} handleCopy={(e, i)=>handleCopy(e, item)} handlePaste={(e, i)=>handlePaste(e, item)} calories={item.carb*2} isCopy={dayCopy !== null} handleChange={(e, i)=>handleChange(e, item)} /> )}
+                {editPlan.plan.map((item, index)=> <DayPlan key={index} count={index} carb={item.carb} fat={item.fat} protein={item.protein} handleCopy={(e, i)=>handleCopy(e, item)} handlePaste={(e, i)=>handlePaste(e, item)} calories={(item.carb * 4) + (item.protein * 4) + (item.fat * 9)} isCopy={dayCopy !== null} handleChange={(e, i)=>handleChange(e, item)} /> )}
             </div>
             <button className="weekBtn" onClick={updatePlan}>Save</button>
             {err && <div className='errMessage userAssignErr' >{message}</div>}

@@ -46,9 +46,7 @@ const updateNP = async (req, res)=> {
         const {plan, id} = req.body
         const np = await NutritionPlan.findById(id)
         if(np) {
-            await NutritionPlan.updateOne({$set: {
-                'plan.$[]': []
-            } })
+            await np.updateOne({plan: [...plan] })
         }
         const modPlan = await NutritionPlan.findById(id)
         res.status(200).json(modPlan)
